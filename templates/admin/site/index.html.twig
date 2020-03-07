@@ -1,0 +1,79 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Administration des sites !{% endblock %}
+
+{#{% block header %}
+    {% include 'admin/partials/header.html.twig' %}
+{% endblock %}#}
+
+{% block body %}
+
+    <div class="container-fluid">
+        <h1 class="my-5">Gestion des sites</h1> 
+
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+                    <h3 class="card-title col-sm-12">Administration des Sites</h3>
+
+                    <div class="card-tools col-sm-12 mt-2">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+
+                            <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body table-responsive p-0" style="height: 500px;">
+                    <table class="table table-head-fixed table-hover dt-responsive text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Nom</th>
+                                <th>Entreprise</th>
+                                <th class="text-center">Modules</th>
+                                <th class="text-center">Actions</th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for site in pagination.data %}
+                                {% set nbmods = site.smartMods | length %}
+                                <tr>
+                                    <td>{{site.id}}</td>
+                                    <td>{{site.name}}</td>
+                                    <td>{{site.user.enterpriseName}}</td>
+                                    <td class="text-center">
+                                        <span class="badge badge-{% if nbmods <= 0 %}danger{% elseif nbmods <= 1  %}warning{% else %}success{% endif %} rounded">{{nbmods}}</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="{{ path('admin_sites_edit', {'slug': site.slug}) }}" class="btn btn-primary btn-sm rounded"><i class="fa fa-edit "></i></a>
+                                        <a href="{{ path('admin_sites_delete', {'id': site.id}) }}" class="btn btn-danger btn-sm rounded"><i class="fa fa-trash "></i></a>
+                                        <a href="{{ path('admin_sites_show', {'slug': site.slug}) }}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    
+                    </table>
+              </div>
+              <div class="card-footer clearfix">
+                    {#{% include 'admin/partials/pagination.html.twig' with {'route': 'admin_sites_index'} %}#}
+                    {{ pagination.display }}
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+        </div>
+        <!-- /.row -->
+
+    </div>
+{% endblock %}
+
+{#{% block footer %}
+    {% include 'admin/partials/footer.html.twig' %}
+{% endblock %}#}

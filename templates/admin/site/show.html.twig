@@ -1,0 +1,177 @@
+{% extends 'home.html.twig' %}
+
+
+{% block x_title %}
+    <h3>{{site.name}} General Report Activities <small>dashboard</small></h3>
+{% endblock %}
+
+{% block body %}
+    <!--<div class="row">
+        <div class="col-md-6 col-sm-6  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Line graph<small>Sessions</small></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Settings 1</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                        </li>
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-sm-6  ">
+            <div class="x_panel">
+                <div class="x_title">
+                <h2>Bar graph <small>Sessions</small></h2>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+                    <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">Settings 1</a>
+                        <a class="dropdown-item" href="#">Settings 2</a>
+                        </div>
+                    </li>
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                </ul>
+                <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                <canvas id="mybarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> -->
+    <div class="clearfix"></div>
+    <div class="col-md-12 col-sm-12  ">
+
+        <div class="x_panel">
+            <div class="x_content">
+                {% set modGrid = [] %}
+                {% set modFuel = [] %}
+                {#{% if modTab != NULL  %} {{dump(modTab[2].moduleId)}} {% endif %}#}
+                {% for mod in site.getSmartMods() %}
+                    {#{{dump(mod.modType)}}#}
+                    {% if mod.modType == 'GRID' %}
+                        {% set modGrid =  modGrid|merge([mod]) %}
+                    {% else %}
+                        {% set modFuel =  modFuel|merge([mod]) %}
+                    {% endif %} 
+                    {#{{loop.index0}}#}
+                {% endfor %}
+                {#{% if modGrid|length > 0 %}
+                    {{dump(modGrid|length)}}
+                {% endif %}#}
+                {% set is_grid = true %}
+                <ul class="nav nav-tabs bar_tabs" id="myTab" role="tablist">
+                    {% if modGrid|length > 0 %}
+                        <li class="nav-item">
+                            <a class="nav-link active" id="grid-tab" data-toggle="tab" href="#grid" role="tab" aria-controls="grid" aria-selected="true">GRID</a>
+                        </li>
+                    {% else %}
+                        {% set is_grid = false %}
+                    {% endif %}
+                    {% if modFuel|length > 0 %}
+                        <li class="nav-item">
+                            <a {% if is_grid == true %}class="nav-link"{% else %} class="nav-link active" {% endif %} id="fuel-tab" data-toggle="tab" href="#fuel" role="tab" aria-controls="fuel" aria-selected="false">FUEL</a>
+                        </li>
+                    {% endif %}
+                
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    {% if modGrid|length > 0 %}
+                        <div class="tab-pane fade show active" id="grid" role="tabpanel" aria-labelledby="grid-tab">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="card-box table-responsive">
+                                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                            <thead>
+                                            <tr>
+                                                <th>Module</th>
+                                                <th>Active Energy(kWh)</th>
+                                                <th>Energie Active (XAF)</th>
+                                                <th>Energie Reactive(kVARh)</th>
+                                                <th>Cosϕ</th>
+                                                <th>Smax(kVA)</th>
+                                                <th>Smoy(kVA)</th> 
+                                                
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for mod in modGrid %}
+                                                <tr>
+                                                <td>{{mod.modName}}</td>
+                                                <td>Nixon</td>
+                                                <td>System Architect</td>
+                                                <td>Edinburgh</td>
+                                                <td>61</td>
+                                                <td>2011/04/25</td>
+                                                <td>$320,800</td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% set is_grid = false %}
+                    {% endif %}
+
+                    {% if modFuel|length > 0 %} 
+                        <div {% if is_grid %}class="tab-pane fade"{% else %}class="tab-pane fade show active"{% endif %} id="fuel" role="tabpanel" aria-labelledby="fuel-tab">
+                            
+                            <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="card-box table-responsive">
+                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                                <thead>
+                                                <tr>
+                                                    <th>Module</th>
+                                                    <th>Energie Active(kWh) produite</th>
+                                                    <th>Litre consommée</th>
+                                                    <th>Temps de fonctionnement</th>
+                                                    
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                {% for mod in modFuel %}
+                                                    <tr>
+                                                    <td>{{mod.modName}}</td>
+                                                    <td>61</td>
+                                                    <td>2011/04/25</td>
+                                                    <td>$320,800</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </div>
+                        
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{%  endblock %}
+ 

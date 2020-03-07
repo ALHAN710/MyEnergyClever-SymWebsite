@@ -1,0 +1,30 @@
+{% extends 'bundles/TwigBundle/Exception/error404.html.twig' %}
+
+{% block title %}CECO | 403 Error Page {% endblock %}
+
+{% block code_error_page %} 403 Error Page {% endblock %}
+
+{% set color = 'danger' %}
+
+{% block code_error %} <h2 class="headline text-danger">403</h2> {% endblock %}
+
+{% block error_page %}<i class="fas fa-exclamation-triangle text-danger"></i> Oops! Access denied.{% endblock %}
+
+{% block error_message %}
+    <p>
+        An authorization is required to access this resource.
+        Meanwhile, you may <a href="javascript:history.back();">return to preview page</a> or try using the search form.
+    </p>
+    <form class="search-form">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control" placeholder="Search">
+
+            <div class="input-group-append">
+            <button type="submit" name="submit" class="btn btn-danger"><i class="fas fa-search"></i>
+            </button>
+            </div>
+        </div>
+        <!-- /.input-group -->
+    </form>
+{% endblock %}
+

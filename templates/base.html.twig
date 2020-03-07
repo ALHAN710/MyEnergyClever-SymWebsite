@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+      <!--  <title>SymBnB - {# {% block title %}Welcome!{% endblock %} #}</title> -->
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="stylesheet" href="/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/app.css">
+        <!-- Font Awesome -->
+        <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <!-- NProgress -->
+        <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
+        <!-- iCheck -->
+        <!-- <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet"> -->
+      
+        <!-- bootstrap-progressbar -->
+        <link href="/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+        <!-- JQVMap -->
+        <!--  <link href="/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/> -->
+        <!-- bootstrap-daterangepicker -->
+        <link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+        <!-- bootstrap-datetimepicker -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css.map">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+
+        <link rel="stylesheet" href="/css/bootstrap-datetimepicker-standalone.min.css">
+        <link rel="stylesheet" href="/css/bootstrap-datetimepicker-standalone.min.css.map">
+        <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css">
+
+        <!-- Custom Theme Style -->
+        <link href="/build/css/custom.css" rel="stylesheet">
+
+        {% block stylesheets %}{% endblock %}
+    </head>
+    <body>
+
+    {% block header %}  {% include 'partials/header.html.twig' %}   {% endblock %}     
+      {#  {{dump(app.flashes)}} #}
+
+        {% block body %}{% endblock %}
+
+        {% block footer %} {% include 'partials/footer.html.twig' %} {% endblock %}
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/util.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+
+        <!-- Custom Theme Scripts -->
+        <script src="/build/js/custom.js"></script>
+
+        {% block javascripts %}{% endblock %}
+    </body>
+</html>

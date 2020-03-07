@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!-- Meta, title, CSS, favicons, etc. -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	  <link rel="icon" href="/img/CeCo_favicon.jpg" type="image/ico" />
+
+    <title>{% block title %} CLEVER Power Control Solution {% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <!-- NProgress -->
+    <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
+    <!-- iCheck -->
+    <!-- <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet"> -->
+	
+    <!-- bootstrap-progressbar -->
+    <link href="/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!-- JQVMap -->
+    <!--  <link href="/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/> -->
+    <!-- bootstrap-daterangepicker -->
+    <link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- bootstrap-datetimepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css.map">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+
+    <link rel="stylesheet" href="/css/bootstrap-datetimepicker-standalone.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-datetimepicker-standalone.min.css.map">
+    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css">
+
+    <!-- Custom Theme Style -->
+    <link href="/build/css/custom.min.css" rel="stylesheet">
+  </head>
+
+  <body class="nav-md">
+    <div class="container body">
+      <div class="main_container">
+        <div class="col-md-3 left_col">
+          <div class="left_col scroll-view">
+            <!--<div class="navbar nav_title" style="border: 0;">
+              <a href="{#{{ path("homepage") }}#}" class="site_title"><i > <img src="/img/CeCo_favicon.jpg" alt="" class="img-circle"></i> <span>Gentelella Alela!</span></a>
+            </div>
+
+            <div class="clearfix"></div> -->
+
+            <!-- menu profile quick info class="fa fa-paw" -->
+            <div class="profile clearfix">
+              <div class="profile_pic">
+                <img src="/img/Logo_CeCo128x90.png" alt="..." class="img-circle profile_img">
+              </div>
+              <div class="profile_info">
+                <span>Welcome,</span>
+                <h2>{{user.enterpriseName}}</h2>
+              </div>
+            </div>
+            <!-- /menu profile quick info -->
+
+            <br />
+
+            <!-- sidebar menu -->
+            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+              <div class="menu_section">
+                
+                <h3>General</h3>
+                <ul class="nav side-menu">
+                  {% for site in user.sites %}
+                    {#{{dump(site)}}#}
+                    {% set url = path('sites_show',{'slug':site.slug}) %}
+                    <li {% if loop.index0 == 0 %} class="active" {% endif %} ><a><i class="fa fa-sitemap"></i> {{site.name}} <span class="fa fa-chevron-down"></span></a> 
+                      <ul class="nav child_menu">
+                        <li><a href="{{url}}">Site resume</a>
+                        {% set categorie = ['GRID', 'FUEL'] %}
+                        {% for cat in categorie %}
+                          <li><a>{{ cat }} POWER<span class="fa fa-chevron-down"></span></a>
+                            <ul class="nav child_menu">
+                              {% for type in site.smartMods %}
+                                {#{{dump(type)}}#}
+                                {% if type.modType == cat %}
+                                  <li class="sub_menu"><a>{{type.modName}}</a>
+                                  </li>
+                                {% endif %}
+                              {% endfor %}
+                              
+                            </ul>
+                          </li>
+                        {% endfor %}
+                      </ul> 
+                    </li>
+                  {% endfor %}
+                </ul> 
+                <!--</div> -->   
+
+              </div>
+              <!--       <div class="menu_section">
+                <h3>Live On</h3>
+                <ul class="nav side-menu">
+                  <li><a><i class="fa fa-bug"></i> Additional Pages <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="e_commerce.html">E-commerce</a></li>
+                      <li><a href="projects.html">Projects</a></li>
+                      <li><a href="project_detail.html">Project Detail</a></li>
+                      <li><a href="contacts.html">Contacts</a></li>
+                      <li><a href="profile.html">Profile</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-windows"></i> Extras <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="page_403.html">403 Error</a></li>
+                      <li><a href="page_404.html">404 Error</a></li>
+                      <li><a href="page_500.html">500 Error</a></li>
+                      <li><a href="plain_page.html">Plain Page</a></li>
+                      <li><a href="login.html">Login Page</a></li>
+                      <li><a href="pricing_tables.html">Pricing Tables</a></li>
+                    </ul>
+                  </li>
+                  <li><a><i class="fa fa-sitemap"></i> Multilevel Menu <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+						            <li><a href="#level1_1">Level One</a></li>
+                        <li><a>Level One<span class="fa fa-chevron-down"></span></a>
+                          <ul class="nav child_menu">
+                            <li class="sub_menu"><a href="level2.html">Level Two</a>
+                            </li>
+                            <li><a href="#level2_1">Level Two</a>
+                            </li>
+                            <li><a href="#level2_2">Level Two</a>
+                            </li>
+                          </ul>
+                        </li>
+                        <li><a href="#level1_2">Level One</a>
+                        </li>
+                    </ul>
+                  </li>                  
+                  <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
+                </ul>
+              </div> -->
+
+            </div>
+            <!-- /sidebar menu -->
+
+            <!-- /menu footer buttons -->
+            <div class="sidebar-footer hidden-small">
+              <!--<a data-toggle="tooltip" data-placement="top" title="Settings">
+                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                <ul class="nav navbar-right panel_toolbox">
+                    <li class="dropdown">
+                        /* <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="#">Add new site</a>
+                            <a class="dropdown-item" href="#">Settings 2</a>
+                        </div> */
+                    </li>
+                    
+                </ul>
+              </a>
+               <a data-toggle="tooltip" data-placement="top" title="FullScreen">
+                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
+              </a>
+              <a data-toggle="tooltip" data-placement="top" title="Lock">
+                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+              </a> 
+              <a data-toggle="tooltip" data-placement="top" title="Logout" href="{#{{ path("account_logout") }}#}">
+                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
+              </a> -->
+            </div>
+            <!-- /menu footer buttons -->
+          </div>
+        </div>
+
+        <!-- top navigation -->
+        <div class="top_nav">
+          <div class="nav_menu">
+              <div class="nav toggle">
+                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+              </div>
+              <nav class="nav navbar-nav">
+              {# {{ dump(app.user.getRoles()[0]) }} #}
+              <ul class=" navbar-right">
+                <li class="nav-item dropdown open" style="padding-left: 15px;">
+                  <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                    <img src="/img/img.jpg" alt="">{{user.email}}
+                  </a>
+                  <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                    
+                    {% if user.getRoles()[0] == "ROLE_ADMIN" %}
+                      <a href="{{path('sites_create')}}" class="dropdown-item"><i class="fa fa-plus-square pull-right"></i>Add New Site</a>
+                    {% endif %}
+                    <a class="dropdown-item"  href="{{ path('account_profile') }}"><i class="fa fa-user pull-right"></i> Profile</a>
+                    <!--<a class="dropdown-item"  href="javascript:;">
+                      <span class="badge bg-red pull-right">50%</span>
+                      <span>Settings</span>
+                    </a> -->
+                    <a class="dropdown-item"  href="{{ path('account_password') }}"><i class="fa fa-edit pull-right"></i> Edit Password</a>
+                    <a class="dropdown-item"  href="{{ path('account_logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                    
+                  </div>
+                </li>
+
+                <!--<li role="presentation" class="nav-item dropdown open">
+                  <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-envelope-o"></i>
+                    <span class="badge bg-green">6</span>
+                  </a>
+                  <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li> 
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="dropdown-item">
+                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                        <span>
+                          <span>John Smith</span>
+                          <span class="time">3 mins ago</span>
+                        </span>
+                        <span class="message">
+                          Film festivals used to be do-or-die moments for movie makers. They were where...
+                        </span>
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <div class="text-center">
+                        <a class="dropdown-item">
+                          <strong>See All Alerts</strong>
+                          <i class="fa fa-angle-right"></i>
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+                </li> -->
+
+              </ul>
+            </nav> 
+          </div> 
+        </div> 
+        <!-- /top navigation -->
+
+        <!-- page content -->
+        <div class="right_col" role="main">
+          <!-- top tiles -->
+          <div class="row" style="display: inline-block;" >
+            <div class="tile_count">
+              <div class="col-md-2 col-sm-4  tile_stats_count">
+              <!-- <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
+                <div class="count">2500</div>
+                <span class="count_bottom"><i class="green">4% </i> From last Week</span> -->
+              </div>
+               
+            </div>
+          </div> 
+          <!-- /top tiles -->
+
+          <div class="row"> <!--  -->
+            <div class="col-md-12 col-sm-12 ">
+            <!--  <div class="dashboard_graph"> -->
+              {% block row_x_title %}
+                <div class="row x_title">
+                  <div class="col-md-7">
+                    {% block x_title %}
+                      <h3>General Report Activities <small>Graph title sub-title</small></h3>
+                    {% endblock %}
+                      
+                  </div>
+                  <div class="col-md-5">
+                    <!-- <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
+                        <i class="fa fa-calendar"></i>
+                        <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
+                    </div>  -->
+                    <!--<div class="calendar-exibit">
+                            
+                      <fieldset>
+                        <div class="control-group">
+                          <div class="controls">
+                            <div class="col-md-11 xdisplay_inputx form-group row has-feedback">
+                              <input type="text" class="form-control has-feedback-left" id="single_cal1" placeholder="First Name" aria-describedby="inputSuccess2Status">
+                              <span class="fa fa-calendar-o form-control-feedback left" aria-hidden="true"></span>
+                              <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                            </div>
+                          </div>
+                        </div>
+                      </fieldset>
+                        
+                    </div>
+                    -->
+
+                    <div class="container">
+                      <div class="col-sm-6" style="height:130px;">
+                          <div class="form-group">
+                              <div class='input-group date' id='datetimepicker10'>
+                                  <input type='text' class="form-control" />
+                                  <span class="input-group-addon">
+                                      <span class="fa fa-calendar">
+                                      </span>
+                                  </span>
+                              </div>
+                          </div>
+                      </div>
+                      
+                  </div>
+
+                  </div>
+                </div>
+              {% endblock %}
+              {% block body %}
+                
+                <div class="col-md-12 col-sm-12 "> 
+                    <!--<div class="x_panel"> -->
+                        <!--<div class="x_title">
+                            <h2>General report<small>Dashboard</small></h2>
+                            
+                            <div class="clearfix"></div>
+                        </div> -->
+                        <!--<div class="x_content"> -->
+                           
+
+                    <!-- <div id="chart_plot_01" class="demo-placeholder"></div> -->
+                  <!--  <iframe class="col-md-12 col-sm-12" height="900" src="https://app.powerbi.com/view?r=eyJrIjoiNTgyN2I4NDctMTYwZi00ZjQ3LTkwZDYtZmQ4YmVjNzQ1ZTIwIiwidCI6IjJhZTE5YjZkLTVmOWUtNDIxOC1iY2ZiLTdhZDNmYTZiY2FhNCJ9" frameborder="0" allowFullScreen="true"></iframe> <!-- width="1200" height="500" -->
+                    
+                </div>
+              {% endblock %}
+            </div>
+
+          </div>
+          
+        </div>
+        <!-- /page content -->
+
+        <!-- footer content -->
+        <footer>
+          <div class="pull-right">
+            CLEVER Power Control Solution Interface Engineered By <a href="https://cleverelectric-company.com">CLEVER ELECTRIC Company Ltd</a>
+          </div>
+          <div class="clearfix"></div>
+        </footer>
+        <!-- /footer content -->
+      </div>
+    </div>
+
+    
+
+    <!-- jQuery -->
+    <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- FastClick -->
+    <script src="/vendors/fastclick/lib/fastclick.js"></script>
+    <!-- NProgress -->
+    <script src="/vendors/nprogress/nprogress.js"></script>
+    <!-- Chart.js -->
+ <!--   <script src="/vendors/Chart.js/dist/Chart.min.js"></script> -->
+    <!-- gauge.js -->
+ <!--   <script src="/vendors/gauge.js/dist/gauge.min.js"></script> -->
+    <!-- bootstrap-progressbar -->
+    <script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!-- iCheck -->
+ <!--   <script src="/vendors/iCheck/icheck.min.js"></script> -->
+    <!-- Skycons -->
+ <!--   <script src="/vendors/skycons/skycons.js"></script> -->
+    <!-- Flot -->
+  <!--  <script src="/vendors/Flot/jquery.flot.js"></script>
+    <script src="/vendors/Flot/jquery.flot.pie.js"></script>
+    <script src="/vendors/Flot/jquery.flot.time.js"></script>
+    <script src="/vendors/Flot/jquery.flot.stack.js"></script>
+    <script src="/vendors/Flot/jquery.flot.resize.js"></script> -->
+    <!-- Flot plugins -->
+ <!--   <script src="/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="/vendors/flot.curvedlines/curvedLines.js"></script> -->
+    <!-- DateJS -->
+<!--    <script src="/vendors/DateJS/build/date.js"></script> -->
+    <!-- JQVMap -->
+ <!--   <script src="/vendors/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script> -->
+    <!-- bootstrap-daterangepicker -->
+    <script src="/vendors/moment/min/moment.min.js"></script>
+    <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+    <!--  bootstrap-datetimepicker -->
+    <script src="/js/bootstrap-datetimepicker.min.js"></script>
+
+    <!-- Custom Theme Scripts -->
+    <script src="/build/js/custom.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker10').datetimepicker({
+                viewMode: 'years',
+                format: 'MM/YYYY'
+            });
+        });
+    </script>
+    {% block javascripts %}{% endblock %}
+	
+  </body>
+</html>

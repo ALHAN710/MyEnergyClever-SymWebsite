@@ -1,0 +1,76 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %} Edition d'un Site  {% endblock %}
+
+{% block header %}
+    {% include 'admin/partials/header.html.twig' %}
+{% endblock %}
+
+{% form_theme form 'admin/site/_collection.html.twig' %} 
+
+{% block body %}
+    <div class="container mx-1" >
+        <h1>Modification du Site : {{ site.name }}</h1>
+        
+        {{ form_start(form) }}
+
+            <div class="row align-middle" >
+                <div class="col">
+                    <div class="card bg-light">
+                        <div class="card-header">
+                            <h4 class="card-title">Corriger le site ?</h4>
+                        </div>
+                        <div class="card-body">
+                            {{form_row(form.name)}}
+                            {{form_row(form.slug)}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col">
+                    <div class="card bg-light">
+                        <div class="card-header">
+                            <h4 class="card-title">Corriger le modules du site ?</h4>
+                        </div>
+                        <div class="card-body">
+                            {{form_widget(form.smartMods)}}
+                        
+                        </div>
+                    </div>
+                </div> 
+                
+            </div>
+
+            <button type = "submit" class="btn btn-primary rounded pull-left mt-5 ml-auto">
+                <i class="fa fa-save"></i>
+                Enregistrer les modifications
+            </button>
+        {{ form_end(form) }}
+        
+
+       {#} {{form(form)}} #}
+    </div>
+
+{% endblock %}
+
+
+
+{#{% block form_row %}
+  
+    <div class="form-group">
+        {{form_label(form)}}
+        {{form_widget(form)}}
+    </div>
+{% endblock %}
+
+{% block text_widget %}
+    <input type="text" name="{{full_name}}" id="{{id}}" class="form-control">
+{% endblock %} 
+#}
+{#  {{dump()}} #}
+
+{% block javascripts %}
+    <script src="/js/site.js"> </script>
+{% endblock %}
