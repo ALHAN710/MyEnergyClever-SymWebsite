@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 /**
  * Contrôleur des Sites
  * 
- * @Security("is_granted('ROLE_USER') and (user == site.getUser() or is_granted('ROLE_ADMIN'))", message="Vous n'avez pas le droit d'accéder à cette ressource")
+ * @Security("user == site.getUser() or is_granted('ROLE_ADMIN')", message="Vous n'avez pas le droit d'accéder à cette ressource")
  * 
  */
 class SiteController extends AbstractController
@@ -141,6 +141,7 @@ class SiteController extends AbstractController
             'user' => $site->getUser()
         ]);
     }
+
 
     public function delete(Site $site, EntityManagerInterface $manager)
     {

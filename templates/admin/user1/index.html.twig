@@ -67,13 +67,13 @@
                                         </td>
                                         <td class="text-center">
                                             {% if user.sites|length > 0 %}
-                                                <a href="{{ path('sites_show', {'slug': site1.slug}) }}" target="_blank" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Voir les Sites"><i class="far fa-eye"></i> </a>
+                                                <a href="{{ path('sites_show', {'slug': site1.slug}) }}"  class="btn btn-info btn-xs rounded" data-toggle="tooltip" data-placement="top" title="Voir les Sites"><i class="far fa-eye"></i> </a>
                                             {% endif %}
-                                            <a href="{{ path('admin_sites_create', {'id': user.id}) }}" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Ajouter un site">
+                                            <a href="{{ path('admin_sites_create', {'id': user.id}) }}" class="btn btn-primary btn-xs rounded" data-toggle="tooltip" data-placement="top" title="Ajouter un site">
                                                 <i class="fa fa-plus-circle"></i>
                                                 
                                             </a>
-                                            <a href="{{ path('admin_user1_delete', {'id': user.id}) }}" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Supprimer l'utilisateur"><i class="fas fa-trash"></i> </a>
+                                            <a href="{{ path('admin_user1_delete', {'id': user.id}) }}" class="btn btn-danger btn-xs rounded" data-toggle="tooltip" data-placement="top" title="Supprimer l'utilisateur"><i class="fas fa-trash"></i> </a>
                                             
                                         </td>
                                     </tr>

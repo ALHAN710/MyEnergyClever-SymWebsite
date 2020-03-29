@@ -13,15 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+//use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+//use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 /**
  * Contrôleur des modules
  * 
- * @Security("is_granted('ROLE_USER') and (user == smartMod.getSite().getUser() or is_granted('ROLE_ADMIN'))", message="Vous n'avez pas le droit d'accéder à cette ressource")
+ * @Security("user == smartMod.getSite().getUser() or is_granted('ROLE_ADMIN')", message="Vous n'avez pas le droit d'accéder à cette ressource")
  * 
  */
 class SmartModController extends ApplicationController
@@ -31,8 +31,6 @@ class SmartModController extends ApplicationController
      * Permet d'afficher les graphes d'un module
      *
      * @Route("/smart/mod/{id<\d+>}/graphs", name="show_mod_graphs")
-     * 
-     * 
      * 
      * @return Response
      */
