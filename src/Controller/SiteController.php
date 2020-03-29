@@ -12,6 +12,12 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+/**
+ * Contrôleur des Sites
+ * 
+ * @Security("is_granted('ROLE_USER') and (user == site.getUser() or is_granted('ROLE_ADMIN'))", message="Vous n'avez pas le droit d'accéder à cette ressource")
+ * 
+ */
 class SiteController extends AbstractController
 {
     /** 
@@ -32,19 +38,20 @@ class SiteController extends AbstractController
      * 
      * @return Response
      */
-    public function create(Request $request, EntityManagerInterface $manager){
+    public function create(Request $request, EntityManagerInterface $manager)
+    {
         $site = new Site();
 
         //Permet d'obtenir un constructeur de formulaire
-     // Externaliser la création du formulaire avec la cmd php bin/console make:form
+        // Externaliser la création du formulaire avec la cmd php bin/console make:form
 
-    //  instancier un form externe
+        //  instancier un form externe
         $form = $this->createForm(SiteType::class, $site);
         $form->handleRequest($request);
         //dump($site);
-        
-        if( $form->isSubmitted() && $form->isValid() ){
-            foreach($site->getSmartMods() as $smartMod){
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($site->getSmartMods() as $smartMod) {
                 $smartMod->setSite($site);
                 $manager->persist($smartMod);
             }
@@ -58,17 +65,19 @@ class SiteController extends AbstractController
                 "Le site <strong>{$site->getName()}</strong> a bien été enregistré !"
             );
 
-            return $this->redirectToRoute('sites_show',[
+            return $this->redirectToRoute('sites_show', [
                 'slug' => $site->getSlug()
             ]);
         }
 
-        
-        return $this->render('site/new.html.twig',[
-            'form' => $form->createView(),
-            'user' => $this->getUser()
-        ]
-        ); 
+
+        return $this->render(
+            'site/new.html.twig',
+            [
+                'form' => $form->createView(),
+                'user' => $this->getUser()
+            ]
+        );
     }
 
     /**
@@ -79,15 +88,16 @@ class SiteController extends AbstractController
      * 
      * @return Response
      */
-    public function edit(Site $site, Request $request, EntityManagerInterface $manager){
-     
+    public function edit(Site $site, Request $request, EntityManagerInterface $manager)
+    {
+
         //  instancier un form externe
         $form = $this->createForm(SiteType::class, $site);
 
         $form->handleRequest($request);
 
-        if( $form->isSubmitted() && $form->isValid() ){
-            foreach($site->getSmartMods() as $smartMod){
+        if ($form->isSubmitted() && $form->isValid()) {
+            foreach ($site->getSmartMods() as $smartMod) {
                 $smartMod->setSite($site);
                 $manager->persist($smartMod);
             }
@@ -101,12 +111,12 @@ class SiteController extends AbstractController
                 "Les modifications du Site <strong>{$site->getName()}</strong> ont  bien été enregistrées !"
             );
 
-            return $this->redirectToRoute('sites_show',[
+            return $this->redirectToRoute('sites_show', [
                 'slug' => $site->getSlug()
             ]);
         }
 
-        return $this->render('site/edit.html.twig',[
+        return $this->render('site/edit.html.twig', [
             'form' => $form->createView(),
             'site' => $site,
             'user' => $site->getUser()
@@ -121,18 +131,19 @@ class SiteController extends AbstractController
      * @return Response
      */
     //public function show($slug, AdRepository $repo){
-    public function show(Site $site){
+    public function show(Site $site)
+    {
         //Je récupère le site qui correspond au slug !
         //$ad = $repo->findOneBySlug($slug);
 
-        return $this->render('site/show.html.twig',[
+        return $this->render('site/show.html.twig', [
             'site' => $site,
-            'user'=> $site->getUser()
+            'user' => $site->getUser()
         ]);
-
     }
-    
-    public function delete(Site $site, EntityManagerInterface $manager){
+
+    public function delete(Site $site, EntityManagerInterface $manager)
+    {
         $manager->remove($site);
         $manager->flush();
 

@@ -2,12 +2,20 @@
 
 namespace App\Controller;
 
+use App\Entity\User1;
+use App\Form\Registration1Type;
+use App\Form\AdminRegistration1Type;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class AdminAccountController extends AbstractController
 {
+
     /**
      * @Route("/admin/login", name="admin_account_login")
      */
@@ -29,7 +37,8 @@ class AdminAccountController extends AbstractController
      *
      * @return void
      */
-    public function logout(){
+    public function logout()
+    {
         //...
     }
 }
