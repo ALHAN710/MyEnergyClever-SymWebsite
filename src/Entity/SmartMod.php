@@ -35,7 +35,7 @@ class SmartMod
      */
     private $moduleId;
 
-   
+
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -66,9 +66,20 @@ class SmartMod
      */
     private $modName;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ApproFuel", mappedBy="smartMod", orphanRemoval=true)
+     */
+    private $approFuels;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $critiqFuelStock;
+
     public function __construct()
     {
         $this->dataMods = new ArrayCollection();
+        $this->approFuels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -88,17 +99,6 @@ class SmartMod
         return $this;
     }
 
-    public function getAssociatedSite(): ?string
-    {
-        return $this->associatedSite;
-    }
-
-    public function setAssociatedSite(string $associatedSite): self
-    {
-        $this->associatedSite = $associatedSite;
-
-        return $this;
-    }
 
     public function getInstallationType(): ?string
     {
@@ -175,6 +175,49 @@ class SmartMod
     public function setModName(string $modName): self
     {
         $this->modName = $modName;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ApproFuel[]
+     */
+    public function getApproFuels(): Collection
+    {
+        return $this->approFuels;
+    }
+
+    public function addApproFuel(ApproFuel $approFuel): self
+    {
+        if (!$this->approFuels->contains($approFuel)) {
+            $this->approFuels[] = $approFuel;
+            $approFuel->setSmartMod($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApproFuel(ApproFuel $approFuel): self
+    {
+        if ($this->approFuels->contains($approFuel)) {
+            $this->approFuels->removeElement($approFuel);
+            // set the owning side to null (unless already changed)
+            if ($approFuel->getSmartMod() === $this) {
+                $approFuel->setSmartMod(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getCritiqFuelStock(): ?float
+    {
+        return $this->critiqFuelStock;
+    }
+
+    public function setCritiqFuelStock(?float $critiqFuelStock): self
+    {
+        $this->critiqFuelStock = $critiqFuelStock;
 
         return $this;
     }

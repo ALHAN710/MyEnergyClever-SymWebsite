@@ -72,6 +72,26 @@ class DataMod
      */
     private $smartMod;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $s3phmax;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $liters;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $workingtime;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $stock;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -205,6 +225,54 @@ class DataMod
     public function setSmartMod(?SmartMod $smartMod): self
     {
         $this->smartMod = $smartMod;
+
+        return $this;
+    }
+
+    public function getS3phmax(): ?float
+    {
+        return $this->s3phmax;
+    }
+
+    public function setS3phmax(?float $s3phmax): self
+    {
+        $this->s3phmax = $s3phmax;
+
+        return $this;
+    }
+
+    public function getLiters(): ?float
+    {
+        return $this->liters;
+    }
+
+    public function setLiters(?float $liters): self
+    {
+        $this->liters = $liters;
+
+        return $this;
+    }
+
+    public function getWorkingtime(): ?string
+    {
+        return $this->workingtime;
+    }
+
+    public function setWorkingtime(?string $workingtime): self
+    {
+        $this->workingtime = $workingtime;
+
+        return $this;
+    }
+
+    public function getStock(): ?float
+    {
+        return $this->stock;
+    }
+
+    public function setStock(?float $stock): self
+    {
+        $this->stock = $stock;
 
         return $this;
     }

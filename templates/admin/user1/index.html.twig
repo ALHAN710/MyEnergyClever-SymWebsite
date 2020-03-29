@@ -12,15 +12,15 @@
               <div class="card-header">
                     <h3 class="card-title col-sm-12">Administration des Utilisateurs</h3>
 
-                    <div class="card-tools col-sm-12 mt-2">
-                        <div class="input-group input-group-sm" style="width: 150px;">
-                            <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
+                    <!--<div class="card-tools col-sm-12 mt-2">
+                        <div class="input-group input-group-sm float-right" style="width: 150px;">
+                            <input type="text" name="table_search" class="form-control " placeholder="Search">
 
                             <div class="input-group-append">
-                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
                             </div>
                         </div>
-                    </div>
+                    </div>-->
               </div>
               <!-- /.card-header -->
               <div class="card-body table-responsive p-0" style="height: 500px;">
@@ -43,10 +43,12 @@
                                         <td>{{user.EnterpriseName}}</td>
                                         <td class="text-center">
                                             {% set nbsite =  user.sites | length %}
+                                            
                                             <h5>
                                                 <span class="badge badge-{% if nbsite <= 0 %}danger{% elseif nbsite <= 1  %}warning{% else %}success{% endif %} rounded">{{nbsite}}
                                                 </span>
                                             </h5>
+                                                
                                         </td>
                                         <td class="text-center">
                                             {% set n = 0 %}
@@ -60,16 +62,19 @@
                                                 <span class="badge badge-{% if n <= 0 %}danger{% elseif n <= 1  %}warning{% else %}success{% endif %} rounded">{{n}}
                                                 </span>
                                             </h5>
+                                            
+                                            
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ path('admin_user1_delete', {'id': user.id}) }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> </a>
                                             {% if user.sites|length > 0 %}
-                                                <a href="{{ path('sites_show', {'slug': site1.slug}) }}" target="_blank" class="btn btn-info btn-sm"><i class="fa fa-eye"></i> </a>
+                                                <a href="{{ path('sites_show', {'slug': site1.slug}) }}" target="_blank" class="btn btn-info btn-xs" data-toggle="tooltip" data-placement="top" title="Voir les Sites"><i class="far fa-eye"></i> </a>
                                             {% endif %}
-                                            <a href="{{ path('admin_sites_create', {'id': user.id}) }}" class="btn btn-primary btn-sm">
+                                            <a href="{{ path('admin_sites_create', {'id': user.id}) }}" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Ajouter un site">
                                                 <i class="fa fa-plus-circle"></i>
-                                                site
+                                                
                                             </a>
+                                            <a href="{{ path('admin_user1_delete', {'id': user.id}) }}" class="btn btn-danger btn-xs" data-toggle="tooltip" data-placement="top" title="Supprimer l'utilisateur"><i class="fas fa-trash"></i> </a>
+                                            
                                         </td>
                                     </tr>
                                 {% endif %}
@@ -81,6 +86,9 @@
               <div class="card-footer clearfix">
                     {#{% include "admin/partials/pagination.html.twig" with {'route': 'admin_user1_index'} %}#}
                     {{ pagination.display }}
+                    <div class="pull-left">
+                        <a href="{{ path('admin_user1_create') }}" class="btn btn-primary " data-toggle="tooltip" data-placement="top" title="Ajouter un utilisateur"><i class="fa fa-plus-circle"></i> User</a>
+                    </div>
               </div>
               <!-- /.card-body -->
             </div>

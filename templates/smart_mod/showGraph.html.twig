@@ -1,0 +1,1635 @@
+
+{% extends 'home.html.twig' %}
+
+
+{% block x_title %}
+    <h5>{{smartMod.modName}} Graphs Report <strong>Activities</strong></h5>
+{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS 
+    <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="/mdb/css/mdb.min.css">
+    <!--<link rel="stylesheet" href="/js/Chart.min.css">-->
+    <!--<link rel="stylesheet" href="/css/spin.css">-->
+    <style>
+        
+        .x_panel{
+            background-color: rgba(250,249,245,0.4);
+        }    
+    </style>
+{% endblock %}
+
+{% block userEmail %}{% endblock %}
+
+{% block x_calendar %}
+<div class="container">
+    <div >
+    <div class="form-group">
+        <div class='input-group date' id='datetimepicker10'>
+        <input type='text' class="form-control" />
+        <span class="input-group-addon">
+            <span class="fas fa-calendar">
+            </span>
+        </span>
+        </div>
+    </div>
+    </div>
+    <!--<div class="col-sm-6" style="height:130px;">
+    <div class="form-group">
+        <div class='input-group date' id='datetimepicker6'>
+        <input type='text' class="form-control" />
+        <span class="input-group-addon">
+            <span class="fa fa-calendar">
+            </span>
+        </span>
+        </div>
+    </div>
+    </div>-->
+</div>
+{% endblock %}
+
+
+{% block body %}
+    
+    {% if smartMod.modType == 'GRID' %}
+        <div class="row" >
+            <div class="col-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Consommation électrique par <strong>Jour</strong></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <!--<li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Settings 1</a>
+                                    <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>-->
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div id="spinPowerConsumption">
+                            <!--<div class="spinner-border text-center" style="width: 2rem; height: 2rem;color: blue" role="status" aria-hidden="true">
+                                <span class="sr-only"></span>
+                            </div>-->
+                            <canvas id="PowerConsumption"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Courbe de <strong>Charge</strong></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <!--<li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Settings 1</a>
+                                    <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>-->
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content" id="CourbdeCharge_cont">
+                        <canvas id="CourbedeCharge"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+    {%  elseif smartMod.modType == 'FUEL' %}
+        <div class="row">
+            <div class="col-12">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Production électrique par <strong>Jour</strong></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <!--<li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Settings 1</a>
+                                    <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>-->
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <canvas id="PowerProduction"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Consommation carburant et temps de fonctionnement par <strong>Jour</strong></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <!--<li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Settings 1</a>
+                                    <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>-->
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <canvas id="CourbeCroisé"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Plan d'activité par <strong>Jour</strong></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <!--<li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Settings 1</a>
+                                    <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>-->
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <!--Big blue-->
+                        <div id="mdb-preloader" class="flex-center">
+                            <div class="preloader-wrapper active">
+                                <div class="spinner-layer spinner-blue-only">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="gap-patch">
+                                        <div class="circle"></div>
+                                    </div>
+                                    <div class="circle-clipper right">
+                                        <div class="circle"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--<div class="my-5 mx-5 flex-center">
+                            <img class="img-fluid" src="https://upload.wikimedia.org/wikipedia/commons/9/98/Andromeda_Galaxy_%28with_h-alpha%29.jpg" />
+                        </div>-->
+                        <canvas id="ActivityPlan"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+       <!-- <div class="row">
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Profil de <strong>Puissance</strong></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <canvas id="PowerProfile"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Profil de <strong>Tension</strong></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <canvas id="VoltageProfile"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Indice de <strong>déséquilibre</strong> de Charge</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <canvas id="IDCProfile"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12  ">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2>Indice de <strong>dissymétrie</strong> de Tension</h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                            </li>
+                            <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                                </div>
+                            </li>
+                            <li><a class="close-link"><i class="fa fa-close"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <canvas id="IDDProfile"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+    {% endif %}
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Profil de <strong>Puissance</strong> par phase</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <!--<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                             </div>
+                        </li>-->
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <canvas id="PowerProfile"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Profil de <strong>Tension</strong> par phase</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <!--<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                        </li>-->
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <canvas id="VoltageProfile"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Indice de <strong>déséquilibre</strong> de Charge</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <!--<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                        </li>-->
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <canvas id="IDCProfile"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="row" >
+        <div class="col-md-12 col-sm-12  ">
+            <div class="x_panel" >
+                <div class="x_title">
+                    <h2>Indice de <strong>dissymétrie</strong> de Tension</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <!--<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                        </li>-->
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" >
+                    <canvas id="IDDProfile"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> 
+        
+    <script>
+        //Chart.defaults.global.style.backgroundColor = "rgba(245,244,240,255)";
+        //Chart.defaults.global.defaultColor = "rgba(245,244,240,255)";
+        //Chart.defaults.global.height = 75;
+        var spinHtml = "<div class=\"spinner-border\" style=\"width: 3rem; height: 3rem;color: blue\" role=\"status\" aria-hidden=\"false\"><span class=\"sr-only\"></span></div> ";
+        function preloaderChart(id, status){
+            var element = $('#spinPowerConsumption');//convert string to JQuery element
+            if(status){
+                var html = element.html(spinHtml);
+                $( element ).slideUp( 300 ).delay( 1000 ).fadeIn( 400 );
+	            element.html(html);
+	
+            }
+            else element.find("div").remove();//remove span elements
+            console.log(element.html());
+                
+        }
+        
+        {% if smartMod.modType == 'GRID' %}
+            // Line chart
+            var CourbedeCharge_Linechart;
+            var PowerConsumption_Barchart;       
+
+            /*var $dat = ["2020-03-01 00:00:00",
+                        "2020-03-01 00:05:00",
+                        "2020-03-01 00:10:00",
+                        "2020-03-01 00:15:00",
+                        "2020-03-01 100:20:00"];
+            var $val = [82, 23, 66, 9, 99];*/
+            
+            /*var opts = {
+                lines: 11, // The number of lines to draw
+                length: 40, // The length of each line
+                width: 13, // The line thickness
+                radius: 28, // The radius of the inner circle
+                scale: 1, // Scales overall size of the spinner
+                corners: 0.9, // Corner roundness (0..1)
+                color: '#0000ff', // CSS color or array of colors
+                fadeColor: 'transparent', // CSS color or array of colors
+                speed: 2, // Rounds per second
+                rotate: 0, // The rotation offset
+                animation: 'spinner-line-fade-quick', // The CSS animation name for the lines
+                direction: 1, // 1: clockwise, -1: counterclockwise
+                zIndex: 2e9, // The z-index (defaults to 2000000000)
+                className: 'spinner', // The CSS class to assign to the spinner
+                top: '51%', // Top position relative to parent
+                left: '50%', // Left position relative to parent
+                shadow: '0 0 1px transparent', // Box-shadow for the lines
+                position: 'absolute' // Element positioning
+            };
+
+            var target = document.getElementById('CourbdeCharge_cont');
+            var spinner = new Spinner(opts).spin(target);
+            spinner.stop();*/
+                        
+            
+            if ($('#CourbedeCharge').length) {
+                var ctx = document.getElementById("CourbedeCharge");
+                ctx.height = 80;
+                ctx.style.backgroundColor = "rgba(245,244,240,255)";
+                CourbedeCharge_Linechart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: "Puissance apparente",
+                            backgroundColor: "rgba(55, 159, 255, 0.3)",
+                            borderColor: "rgba(163, 199, 231, 255)",
+                            borderWidth: 1,
+                            pointBorderColor: "rgba(163, 199, 231, 255)",
+                            pointBackgroundColor: "rgba(163, 199, 231, 255)",
+                            pointHoverBackgroundColor: "#fff",
+                            pointHoverBorderColor: "rgba(55, 159, 255,1)",//151,187,205,
+                            pointBorderWidth: 0,
+                            pointRadius: 1.5,
+                            pointStyle: 'circle',
+                            fill: false,
+                            data: [],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                display: true,
+                                type: 'time',
+                                distribution: 'linear',
+                                time: {
+                                    unit: 'hour',//'day'
+                                    displayFormats: {
+                                        //day: 'D MMM'
+                                        day: 'h:mm'
+                                    },
+                                    unitStepSize: 2
+                                },
+                                gridLines: {
+                                    //display:false,
+                                    drawOnChartArea: false
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: moment().format('DD MMMM').toString()//'Mars'
+                                }
+                            }],
+                            yAxes: [{
+                                display: true,
+                                gridLines: {
+                                    display:false,
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'S(kVA)'
+                                }
+                            }]
+                        },
+                        /*animation: {
+                            duration: 2000,
+                            onProgress: function(animation) {
+                                progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                            }
+                            onAnimationProgress: function() {
+                                console.log('Animation Progress');
+                            }
+                        }*/
+                    }
+
+                });
+
+            }
+
+            // Bar chart
+            if ($('#PowerConsumption').length) {
+
+                var ctx = document.getElementById("PowerConsumption");
+                ctx.height = 80;
+                ctx.style.backgroundColor = "rgba(245,244,240,255)";
+                PowerConsumption_Barchart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: [],//["2020-03-01", "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-03-06", "2020-03-07", "2020-03-08"],
+                        datasets: [{
+                            label: 'Energie(kWh)',
+                            backgroundColor: "rgba(252, 184, 183, 255)",//"rgba(240, 167, 135, 0.70)",//"#26B99A",
+                            data: [],//[82, 23, 66, 9, 99, 14, 12, 92]
+                        }]
+                    },
+
+                    options: {
+                        responsive: true,
+                        /*tooltips: {
+                            mode: 'label',
+                            callbacks: {
+                                title: function (tooltipItems, data) {
+                                    //console.log(data);
+                                    return data.labels[tooltipItems[0].index];//data.labels[tooltipItems[0].index];
+                                }
+                            }
+                        },*/
+                        onAnimationProgress: function(){
+                            console.log('On animation complete');
+                            preloaderChart('#spinPowerConsumption', true);
+                        },
+                        animation: {
+                            //duration: 1,
+					        //showTooltips: false,
+                            onAnimationComplete: function () {
+                                console.log('On animation complete');
+                                //preloaderChart('#spinPowerConsumption', true);
+                                var ctx = this.chart.ctx;
+                                ctx.font = this.scale.font;
+                                ctx.fillStyle = this.scale.textColor
+                                ctx.textAlign = "center";
+                                ctx.textBaseline = "bottom";
+
+                                this.datasets.forEach(function (dataset) {
+                                    dataset.points.forEach(function (points) {
+                                        ctx.fillText(points.value, points.x, points.y - 10);
+                                    });
+                                })
+                            },
+                            /*onProgress: function(animation) {
+                                progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                            }*/
+                        },
+                        scales: {
+                            xAxes: [{
+                                display: true,
+                                type: 'time',
+                                time: {
+                                    unit: 'day',
+                                    displayFormats: {
+                                        day: 'D MMM'
+                                    }
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: moment().format('MMMM')//'Mars'
+                                },
+                                /*gridLines: {
+                                    offsetGridLines: true
+                                },*/
+                                gridLines: {
+                                    //display:false,
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    /*callback: function (value) {
+                                        return value.substring(3, 0);
+                                    },*/
+                                    beginAtZero: true
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                display: true,
+                                gridLines: {
+                                    display:false
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: '(kWh)'
+                                }
+                            }]
+                        },
+                        /*plugins: {
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                formatter: Math.round,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }*/
+
+                    }
+                });
+
+            }
+                
+        {%  elseif smartMod.modType == 'FUEL' %}
+
+            // Line chart
+            //var VoltageProfile_Linechart;
+            //var PowerProfile_Linechart;
+            //var IDCProfile_Linechart;
+            //var IDDProfile_Linechart;
+            var PowerProduction_Barchart;
+            var CourbeCroisé_BarLinechart;
+            var ActivityPlan_Linechart;
+
+            // Bar chart
+            if ($('#PowerProduction').length) {
+
+                var ctx = document.getElementById("PowerProduction");
+                ctx.height = 80;
+                ctx.style.backgroundColor = "rgba(245,244,240,255)";
+                PowerProduction_Barchart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ["2020-03-01", "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-03-06", "2020-03-07", "2020-03-08"],
+                        datasets: [{
+                            label: 'Energie(kWh)',
+                            backgroundColor: "rgba(252, 184, 183, 255)",//"#26B99A",
+                            data: [82, 23, 66, 9, 99, 14, 12, 92]
+                        }]
+                    },
+
+                    options: {
+                        responsive: true,
+                        /*tooltips: {
+                            mode: 'label',
+                            callbacks: {
+                                title: function (tooltipItems, data) {
+                                    //console.log(data);
+                                    return data.labels[tooltipItems[0].index];//data.labels[tooltipItems[0].index];
+                                }
+                            }
+                        },*/
+                        scales: {
+                            xAxes: [{
+                                display: true,
+                                type: 'time',
+                                time: {
+                                    unit: 'day',
+                                    displayFormats: {
+                                        day: 'D MMM'
+                                    }
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: moment().format('MMMM')//'Mars'
+                                },
+                                gridLines: {
+                                    //display:false,
+                                    drawOnChartArea: false
+                                },
+                                ticks: {
+                                    /*callback: function (value) {
+                                        return value.substring(3, 0);
+                                    },*/
+                                    beginAtZero: true
+                                }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                },
+                                display: true,
+                                gridLines: {
+                                    display:false,
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: '(kWh)'
+                                }
+                            }]
+                        },
+                        /*plugins: {
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                formatter: Math.round,
+                                font: {
+                                    weight: 'bold'
+                                }
+                            }
+                        }*/
+
+                    }
+                });
+
+            }     
+                        
+            if ($('#CourbeCroisé').length) {
+                function epoch_to_hh_mm_ss(epoch) {
+                    return new Date(epoch*1000).toISOString().substr(12, 7)
+                }
+                var ctx = document.getElementById("CourbeCroisé");
+                ctx.height = 80;
+                ctx.style.backgroundColor = "rgba(245,244,240,255)";
+                CourbeCroisé_BarLinechart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: ["2020-03-01", "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-03-06", "2020-03-07", "2020-03-08"],
+                        datasets: [{
+                            type: 'bar',
+                            yAxisID: 'B',//any with same group will appear in the same axis, also this can be anything as long as you always refer to it with the same name
+                            label: "Working Time",
+                            backgroundColor: "rgb(252, 184, 183, 0.8)",//"rgba(135, 197, 255, 0.31)",//38, 185, 154,
+                            fill: false,
+                            data: [31, 74, 6, 39, 20, 85, 7, 21]
+                        }, {
+                            type: 'line',
+                            yAxisID: 'L',//any with same group will appear in the same axis, also this can be anything as long as you always refer to it with the same name
+                            label: "Conso carburant",
+                            backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(55, 159, 255, 0.3)",
+                            borderColor: "rgba(163, 199, 231, 255)",
+                            borderWidth: 1,
+                            pointBorderColor: "rgba(163, 199, 231, 255)",
+                            pointBackgroundColor: "rgba(163, 199, 231, 255)",
+                            pointHoverBackgroundColor: "#fff",
+                            pointHoverBorderColor: "rgba(55, 159, 255,1)",//151,187,205,
+                            pointBorderWidth: 1,
+                            pointRadius: 1.5,
+                            pointStyle: 'circle',
+                            fill: false,
+                            data: [82, 23, 66, 9, 99, 4, 2, 37],
+                        }],
+                                                
+                    },
+
+                    options: {
+                        responsive: true,
+                        Legend: true,
+                        /*animation: {
+                            duration: 2000,
+                            onProgress: function(animation) {
+                                progress.value = animation.currentStep / animation.numSteps;
+                            },
+                            onComplete: function() {
+                                window.setTimeout(function() {
+                                    progress.value = 0;
+                                }, 2000);
+                            }
+                        },*/
+                        tooltips: {
+                            mode: 'index',
+                            intersect: false,
+                        },
+                        hover: {
+                            mode: 'nearest',
+                            intersect: true
+                        },
+                        scales: {
+                            xAxes: [{
+                                display: true,
+                                type: 'time',
+                                time: {
+                                    unit: 'day',
+                                    displayFormats: {
+                                        day: 'D MMM'
+                                    },
+                                    //unitStepSize: 4
+                                },
+                                gridLines: {
+                                    //display:false,
+                                    drawOnChartArea: false
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: moment().format('MMMM').toString()//'Mars'
+                                }
+                            }],
+                            yAxes: [{
+                                id: 'B',
+                                type: 'linear',
+                                position: 'left',
+                                display: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Temps de fonctionnement(mins)'
+                                },
+                                gridLines: {
+                                    display:false,
+                                },
+                                ticks:{
+                                    //callback: console.log(this.formatSecsAsMins(3600)),//(v)=>this.formatSecsAsMins(v),
+                                    userCallback: function(v) { return epoch_to_hh_mm_ss(v) },
+                                    //stepSize:300, //add a tick every 5 minutes
+                                }
+                            }, {
+                                id: 'L',
+                                type: 'linear',
+                                position: 'right',
+                                display: true,
+                                gridLines: {
+                                    display:false,
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Conso carburant(Litre)'
+                                },
+                                
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(tooltipItem, data) { //tooltipItem.datasetIndex
+                                    console.log(tooltipItem.yLabel);
+                                    if(tooltipItem.datasetIndex !== 1) return data.datasets[tooltipItem.datasetIndex].label + ': ' + epoch_to_hh_mm_ss(tooltipItem.yLabel);
+                                    else return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel;
+                                }
+                            }
+                        }
+                    }
+
+                });
+
+            }
+            /*var $dat = ["2020-03-01 00:00:00",
+                        "2020-03-01 00:05:00",
+                        "2020-03-01 00:10:00",
+                        "2020-03-01 00:15:00",
+                        "2020-03-01 100:20:00"];
+            var $val = [82, 23, 66, 9, 99];*/
+            
+            if ($('#ActivityPlan').length) {
+                var ctx = document.getElementById("ActivityPlan");
+                ctx.height = 80;
+                ctx.style.backgroundColor = "rgba(245,244,240,255)";
+                ActivityPlan_Linechart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: "Puissance apparente triphasé",
+                            backgroundColor: "rgba(55, 159, 255, 0.3)",
+                            borderColor: "rgba(163, 199, 231, 255)",
+                            borderWidth: 1,
+                            pointBorderColor: "rgba(163, 199, 231, 255)",
+                            pointBackgroundColor: "rgba(163, 199, 231, 255)",
+                            pointHoverBackgroundColor: "#fff",
+                            pointHoverBorderColor: "rgba(55, 159, 255,1)",//151,187,205,
+                            pointBorderWidth: 0,
+                            //borderWidth: 1,
+                            pointRadius: 1.5,
+                            //pointStyle: 'line',
+                            fill: false,
+                            data: [],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            xAxes: [{
+                                display: true,
+                                type: 'time',
+                                time: {
+                                    unit: 'hour',//'day',
+                                    displayFormats: {
+                                        day: 'h:mm',//'D MMM'
+                                    },
+                                    unitStepSize: 1
+                                },
+                                gridLines: {
+                                    //display:false,
+                                    drawOnChartArea: false
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: moment().format('DD MMMM').toString()//'Mars'
+                                }
+                            }],
+                            yAxes: [{
+                                display: true,
+                                gridLines: {
+                                    display:false,
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'S(kVA)'
+                                }
+                            }]
+                        }
+                        
+                    }
+
+                });
+
+            }
+
+        {% endif %}
+
+        var VoltageProfile_Linechart;
+        var PowerProfile_Linechart;
+        var IDCProfile_Linechart;
+        var IDDProfile_Linechart;
+        
+        if ($('#PowerProfile').length) {
+
+            var ctx = document.getElementById("PowerProfile");
+            ctx.height = 80;
+            ctx.style.backgroundColor = "rgba(245,244,240,255)";
+                PowerProfile_Linechart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],//["January", "February", "March", "April", "May", "June", "July"],
+                    datasets: [{
+                        label: "SA",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(135, 197, 255, 0.31)",//38, 185, 154,
+                        borderColor: "rgb(252, 184, 183, 255)",//"rgba(63, 63, 63, 0.7)",//135, 197, 255
+                        borderWidth: 1,
+                        pointBorderColor: "rgb(252, 184, 183, 255)",//"rgba(63, 63, 63, 0.7)",
+                        pointBackgroundColor: "rgb(252, 184, 183, 255)",//"rgba(63, 63, 63, 0.7)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointBorderWidth: 1,
+                        pointRadius: 1.5,
+                        //pointStyle: 'line',
+                        fill: false,
+                        data: [],//[31, 74, 6, 39, 20, 85, 7]
+                    }, {
+                        label: "SB",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(55, 159, 255, 0.3)",
+                        borderColor: "rgb(251, 213, 158, 255)",//"rgba(55, 159, 255, 0.70)",
+                        borderWidth: 1,
+                        pointBorderColor: "rgb(251, 213, 158, 255)",//"rgba(55, 159, 255, 0.70)",
+                        pointBackgroundColor: "rgba(251, 213, 158, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(55, 159, 255,1)",//151,187,205,
+                        pointBorderWidth: 1,
+                        pointRadius: 1.5,
+                        //pointStyle: 'line',
+                        fill: false,
+                        data: [],//[82, 23, 66, 9, 99, 4, 2],
+                    }, {
+                        label: "SC",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(3, 88, 106, 0.31)",
+                        borderColor: "rgb(163, 199, 231, 255)",//"rgba(240, 167, 135, 0.70)",
+                        borderWidth: 1,
+                        pointBorderColor: "rgb(163, 199, 231, 255)",//"rgba(240, 167, 135, 0.70)",
+                        pointBackgroundColor: "rgb(163, 199, 231, 255)",//"rgba(240, 167, 135, 0.70)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(151,187,205,1)",
+                        pointBorderWidth: 1,
+                        pointRadius: 1.5,
+                        //pointStyle: 'line',
+                        fill: false,
+                        data: [],//[42, 53, 26, 59, 14, 12]
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    Legend: true,
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    hover: {
+                        mode: 'index',
+                        intersect: true
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            type: 'time',
+                            time: {
+                                unit: 'hour',//'day',
+                                displayFormats: {
+                                    day: 'h:mm'//'D MMM'
+                                },
+                                unitStepSize: 1
+                            },
+                            gridLines: {
+                                //display:false,
+                                drawOnChartArea: false,
+                                //color: "rgba(163, 199, 231, 0)"
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: moment().format('DD MMMM').toString()//'Mars'
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display:false,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'S(kVA)'
+                            }
+                        }]
+                    }                    
+                }
+
+            });
+
+        }
+
+        if ($('#VoltageProfile').length) {
+
+            var ctx = document.getElementById("VoltageProfile");
+            ctx.height = 80;
+                VoltageProfile_Linechart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "VA",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(135, 197, 255, 0.31)",//38, 185, 154,
+                        borderColor: "rgba(252, 184, 183, 255)",//135, 197, 255
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(252, 184, 183, 255)",
+                        pointBackgroundColor: "rgba(252, 184, 183, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointBorderWidth: 1,
+                        pointRadius: 1.5,
+                        //pointStyle: 'line',
+                        fill: false,
+                        data: []
+                    }, {
+                        label: "VB",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(55, 159, 255, 0.3)",
+                        borderColor: "rgba(251, 213, 158, 255)",
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(251, 213, 158, 255)",
+                        pointBackgroundColor: "rgba(251, 213, 158, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(55, 159, 255,1)",//151,187,205,
+                        pointBorderWidth: 1,
+                        pointRadius: 1.5,
+                        //pointStyle: 'line',
+                        fill: false,
+                        data: [],
+                    }, {
+                        label: "VC",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(3, 88, 106, 0.31)",
+                        borderColor: "rgba(163, 199, 231, 255)",
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(163, 199, 231, 255)",
+                        pointBackgroundColor: "rgba(163, 199, 231, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(151,187,205,1)",
+                        pointBorderWidth: 1,
+                        pointRadius: 1.5,
+                        //pointStyle: 'line',
+                        fill: false,
+                        data: []
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    Legend: true,
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            type: 'time',
+                            time: {
+                                unit: 'hour',//'day',
+                                displayFormats: {
+                                    day: 'h:mm'//'D MMM',
+                                },
+                                unitStepSize: 1
+                            },
+                            gridLines: {
+                                    //display:false,
+                                    drawOnChartArea: false
+                                },
+                            scaleLabel: {
+                                display: true,
+                                labelString: moment().format('DD MMMM').toString(),
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: '(Volts)'
+                            },
+                            gridLines: {
+                                    display:false,
+                                },
+                            ticks: {
+                                //max: 5,
+                                suggestedmin: 0,
+                                //stepSize: 50
+                            }
+                        }]
+                    },
+                    
+                }
+
+            });
+
+        }
+
+        if ($('#IDCProfile').length) {
+
+            var ctx = document.getElementById("IDCProfile");
+            ctx.height = 80;
+            IDCProfile_Linechart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],//["January", "February", "March", "April", "May", "June", "July"],
+                    datasets: [{
+                        label: "IDC",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(135, 197, 255, 0.31)",//38, 185, 154,
+                        borderColor: "rgba(252, 184, 183, 255)",//135, 197, 255
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(252, 184, 183, 255)",
+                        pointBackgroundColor: "rgba(252, 184, 183, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointBorderWidth: 1,
+                        pointRadius: 1.5,
+                        fill: false,
+                        data: [],//[31, 74, 6, 39, 20, 85, 7]
+                    }, {
+                        label: "IDC_Ref",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(55, 159, 255, 0.3)",
+                        borderColor: "rgba(251, 213, 158, 255)",
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(251, 213, 158, 255)",
+                        pointBackgroundColor: "rgba(251, 213, 158, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(240, 167, 135,1)",//151,187,205,
+                        pointBorderWidth: 1,
+                        pointRadius: 0,
+                        fill: false,
+                        data: [],//[20, 20, 20, 20, 20, 20, 20],
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            type: 'time',
+                            time: {
+                                unit: 'hour',//'day',
+                                displayFormats: {
+                                    day: 'h:mm'//'D MMM',
+                                },
+                                unitStepSize: 1
+                            },
+                            gridLines: {
+                                    //display:false,
+                                    drawOnChartArea: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: moment().format('DD MMMM').toString()//'Mars'
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display:false,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Valeur(%)'
+                            }
+                        }]
+                    }
+                    
+                }
+
+            });
+
+        }
+        if ($('#IDDProfile').length) {
+
+            var ctx = document.getElementById("IDDProfile");
+            ctx.height = 80;
+            IDDProfile_Linechart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],//["January", "February", "March", "April", "May", "June", "July"],
+                    datasets: [{
+                        label: "IDD",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(135, 197, 255, 0.31)",//38, 185, 154,
+                        borderColor: "rgba(252, 184, 183, 255)",//135, 197, 255
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(252, 184, 183, 255)",
+                        pointBackgroundColor: "rgba(252, 184, 183, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(220,220,220,1)",
+                        pointBorderWidth: 1,
+                        pointRadius: 1.5,
+                        fill: false,
+                        data: [],//[31, 74, 6, 39, 20, 85, 7]
+                    }, {
+                        label: "IDD_Ref",
+                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(55, 159, 255, 0.3)",
+                        borderColor: "rgba(251, 213, 158, 255)",
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(251, 213, 158, 255)",
+                        pointBackgroundColor: "rgba(251, 213, 158, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(240, 167, 135,1)",//151,187,205,
+                        pointBorderWidth: 1,
+                        pointRadius: 0,
+                        fill: false,
+                        data: [],//[20, 20, 20, 20, 20, 20, 20],
+                    }]
+                },
+
+                options: {
+                    responsive: true,
+                    Legend: true,
+                    tooltips: {
+                        mode: 'index',
+                        intersect: true,
+                    },
+                    hover: {
+                        mode: 'nearest',
+                        intersect: true
+                    },
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            type: 'time',
+                            time: {
+                                unit: 'hour',//'day',
+                                displayFormats: {
+                                    day: 'h:mm'//'D MMM',
+                                },
+                                unitStepSize: 1
+                            },
+                            gridLines: {
+                                //display:false,
+                                drawOnChartArea: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: moment().format('DD MMMM').toString()//'Mars'
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Valeur(%)'
+                            },
+                            gridLines: {
+                                display:false,
+                            },
+                            ticks: {
+                                //max: 5,
+                                min: -500,
+                                //suggestedmin: 0,
+                                //stepSize: 50
+                            }
+                        }]
+                    },
+                    
+                }
+
+            });
+
+        }
+           
+
+    /*[82, 23, 66, 9, 99, 4, 2, 82, 23, 66, 9, 99,
+                            82, 23, 66, 9, 99, 4, 2, 82, 23, 66, 9, 99,
+                            82, 23, 66, 9, 99, 4, 2, 82, 23, 66, 9, 99,
+                            82, 23, 66, 9, 99, 4, 2, 82, 23, 66, 9, 99,]
+    */
+    /* ["2020-03-01 00:00:00",
+                "2020-03-01 00:05:00",
+                "2020-03-01 00:10:00",
+                "2020-03-01 00:15:00",
+                "2020-03-01 00:20:00",
+                "2020-03-01 00:25:00",
+                "2020-03-01 00:30:00",
+                "2020-03-01 00:35:00",
+                "2020-03-01 00:40:00",
+                "2020-03-01 00:45:00",
+                "2020-03-01 00:50:00",
+                "2020-03-01 00:55:00",
+                "2020-03-01 01:00:00",
+                "2020-03-01 01:05:00",
+                "2020-03-01 01:10:00",
+                "2020-03-01 01:15:00",
+                "2020-03-01 01:20:00",
+                "2020-03-01 01:25:00",
+                "2020-03-01 01:30:00",
+                "2020-03-01 01:35:00",
+                "2020-03-01 01:40:00",
+                "2020-03-01 01:45:00",
+                "2020-03-01 01:50:00",
+                "2020-03-01 01:55:00",
+                "2020-03-01 02:00:00",
+                "2020-03-01 02:05:00",
+                "2020-03-01 02:10:00",
+                "2020-03-01 02:15:00",
+                "2020-03-01 02:20:00",
+                "2020-03-01 02:25:00",
+                "2020-03-01 02:30:00",
+                "2020-03-01 02:35:00",
+                "2020-03-01 02:40:00",
+                "2020-03-01 02:45:00",
+                "2020-03-01 02:50:00",
+                "2020-03-01 02:55:00",
+                "2020-03-01 03:00:00",
+                "2020-03-01 03:05:00",
+                "2020-03-01 03:10:00",
+                "2020-03-01 03:15:00",
+                "2020-03-01 03:20:00",
+                "2020-03-01 03:25:00",
+                "2020-03-01 03:30:00",
+                "2020-03-01 03:35:00",
+                "2020-03-01 03:40:00",
+                "2020-03-01 03:45:00",
+                "2020-03-01 03:50:00",
+                "2020-03-01 03:55:00",
+
+            ]*/
+
+    
+
+        
+    
+    
+    </script>
+
+{%  endblock %}
+
+{% block javascripts %}
+
+    <!-- jQuery -->
+    <!--<script type="text/javascript" src="/mdb/js/jquery.min.js"></script>-->
+    <!-- Bootstrap tooltips -->
+    <!--<script type="text/javascript" src="/mdb/js/popper.min.js"></script>-->
+    <!-- Bootstrap core JavaScript -->
+    <!--<script type="text/javascript" src="/mdb/js/bootstrap.min.js"></script>-->
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="/mdb/js/mdb.min.js"></script>
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js" integrity="sha256-nZaxPHA2uAaquixjSDX19TmIlbRNCOrf5HO1oHl5p70=" crossorigin="anonymous"></script>
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript.util/0.12.12/javascript.util.min.js" integrity="sha256-eiohPQlDytO6qQO+k+xX6LyVgfXcTzlPCy9t/VjceYo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js" integrity="sha256-PieqE0QdEDMppwXrTzSZQr6tWFX3W5KkyRVyF1zN3eg=" crossorigin="anonymous"></script>
+
+
+    <script>
+
+        
+
+        /*$(document).ready(function(){
+            $.ajax({
+                url : "http://localhost/chartjs/data.php",
+                type : "GET",
+                success : function(data){
+        
+                    var id = [];
+                    var valeur_ecg = [];
+        
+        
+                    for(var i in data) {
+                        id.push(data[i].id);
+                        valeur_ecg.push(data[i].valeur);
+                    }
+        
+                    var chartdata = {
+                        labels: id,
+                        datasets: [
+                            {
+                                label: "ECG",
+                                fill: false,
+                                lineTension: 1,
+                                backgroundColor: "rgba(59, 89, 152, 0.75)",
+                                borderColor: "rgba(59, 89, 152, 1)",
+                                pointHoverBackgroundColor: "rgba(59, 89, 152, 1)",
+                                pointHoverBorderColor: "rgba(250, 250, 250, 1)",
+                                data: valeur_ecg
+                            },
+                        ]
+                    };
+        
+                    var ctx = $("#mycanvas");
+        
+                    var LineGraph = new Chart(ctx, {
+                        type: 'line',
+                        data: chartdata
+                    });
+                },
+                error : function(data) {
+        
+                }
+            });
+        });*/
+        
+        /*var j = {0: {11:"1",12:"12"}, 1: "2", 2: "3", 3: "4"};
+        //console.log('Test');
+        console.log(Object.values(j[0]));*/
+        
+        
+        /*document.getElementById('refresh').addEventListener('click', function() {
+                
+            window.myLine.update();
+        });*/
+
+        function removeData(chart) {
+            chart.data.labels.pop();
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.pop();
+            });
+            chart.update();
+        }
+
+        
+        function addData(chart, label, data) {
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            chart.update();
+        }
+
+        function displayNewData(chart, label, data, dateopt, multiple, xscale, id){
+            chart.data.labels = [];
+            chart.data.datasets.forEach( (dataset) => {
+                dataset.data = [];
+            });
+            chart.data.labels = label;
+            if(multiple > 1){
+                var i = 0;
+                chart.data.datasets.forEach((dataset) => {
+                    if( i < multiple) dataset.data = data[i++];
+                });
+            }
+            else if(multiple == 1){
+                /*chart.data.datasets.forEach((dataset) => {
+                    dataset.data = data;
+                });*/
+                chart.data.datasets[0].data = data;
+            }
+            if(xscale === 'day') chart.options.scales.xAxes[0].scaleLabel.labelString = moment(dateopt).format('DD MMMM').toString();
+            else if( xscale === 'month') chart.options.scales.xAxes[0].scaleLabel.labelString = moment(dateopt).format('MMMM').toString();
+            //console.log(chart.options.scales.xAxes[0].scaleLabel.labelString);
+            //preloaderChart(id, false);
+            chart.update();
+        }
+
+        //console.log(CourbedeCharge);
+
+        $("#datetimepicker10").on("dp.change", function (e) {
+            //$('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+            //console.log(e.date._d.toLocaleString().replace('à', ''));
+            //console.log(e.date._d);
+            //$date = new Date(e.date._d);
+            //console.log(e.date.format("YYYY-MM-DD H:i:s")._d);
+            //console.log(Date.parse($date).toString('yyyy-MM-dd H:i:s'));
+            $dat = new moment(e.date._d);
+            $date = $dat.format("YYYY-MM-DD").toString();
+            //console.log($date);
+            $date = '%' + $date + '%';
+            //console.log($date);
+
+            //for($i = 1; $i <= (CourbedeCharge.data.labels.length*2)+100; $i++) removeData(CourbedeCharge);
+           
+           $.getJSON("{{ path('update_mod_graphs', {'id': smartMod.id}) }}",{'selectedDate': $date}, function (result) {
+                if( Object.keys(result).length > 0 ){
+                    var dateLabel = Object.values(result['date']);
+                    //console.log(Object.values(result['CourbeCroisé']));
+                    //console.log(Object.values(result['IDD']));
+                        
+                    {% if smartMod.modType == 'GRID' %}
+                        //CourbedeCharge.destroy();
+                        //addData(CourbedeCharge, Object.values(result['date']), Object.values(result['S3ph']));
+                        
+                        /*Object.values(result['date']).forEach(function(item, index){
+                            //if( index < 10 ){
+                                dat[index] = item;
+                                //dat.push(item);
+                                strdat += dat[index] + "\"" + ";";
+                            //}
+                        });
+                        
+                        //console.log(  Object.values(result['date']) );
+                        CourbedeCharge_Linechart.data.labels = Object.values(result['date']);//dat;//.push("2020-04-01 10:00:00");
+                        CourbedeCharge_Linechart.data.datasets.forEach((dataset) => {
+                            dataset.data = Object.values(result['S3ph']);//Val;//.push(60);
+                        });
+                        CourbedeCharge_Linechart.options.scales.xAxes[0].scaleLabel.labelString = moment(e.date._d).format('MMM').toString();
+                        console.log(CourbedeCharge_Linechart.options.scales.xAxes[0].scaleLabel.labelString);
+                        CourbedeCharge_Linechart.update();*/
+                        
+                        //preloaderChart('#spinPowerConsumption', true)
+                        displayNewData(PowerConsumption_Barchart, Object.values(result['dateE']), Object.values(result['kWh']), e.date._d, 1, 'month', '#spinPowerConsumption');
+                        //preloaderChart(id, status);
+                        displayNewData(CourbedeCharge_Linechart, dateLabel, Object.values(result['S3ph']), e.date._d, 1, 'day');
+                        //displayNewData(PowerProfile_Linechart, dateLabel, Object.values(result['S']), e.date._d, 3);
+                        //displayNewData(VoltageProfile_Linechart, dateLabel, Object.values(result['V']), e.date._d, 3);
+                        //displayNewData(IDDProfile_Linechart, dateLabel, Object.values(result['V']), e.date._d, 2);
+                        //displayNewData(IDCProfile_Linechart, dateLabel, Object.values(result['V']), e.date._d, 2);
+                    {% elseif smartMod.modType == 'FUEL' %}
+                        displayNewData(PowerProduction_Barchart, Object.values(result['dateE']), Object.values(result['kWh']), e.date._d, 1, 'month');
+                        displayNewData(CourbeCroisé_BarLinechart, Object.values(result['dateE']), Object.values(result['CourbeCroisé']), e.date._d, 2, 'month');
+                        displayNewData(ActivityPlan_Linechart, dateLabel, Object.values(result['S3ph']), e.date._d, 1, 'day');
+                        
+                    {% endif %}
+                    displayNewData(PowerProfile_Linechart, dateLabel, Object.values(result['S']), e.date._d, 3, 'day');
+                    displayNewData(VoltageProfile_Linechart, dateLabel, Object.values(result['V']), e.date._d, 3, 'day');
+                    displayNewData(IDCProfile_Linechart, dateLabel, Object.values(result['IDC']), e.date._d, 2, 'day');
+                    displayNewData(IDDProfile_Linechart, dateLabel, Object.values(result['IDD']), e.date._d, 2, 'day');
+                    
+                }        
+            });
+            
+        
+        });
+        
+        /*var updateChart = function() {
+        
+            $.getJSON("data.php", function (result) {
+        
+                id.push(data[i].id);
+                valeur_ecg.push(data[i].valeur);
+                LineGraph.render();
+        
+            });
+        }*/
+
+        //setInterval(function(){ updateChart()},5000);
+
+    </script>
+    
+
+{% endblock %}

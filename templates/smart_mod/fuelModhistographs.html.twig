@@ -1,0 +1,518 @@
+{% extends 'home.html.twig' %}
+
+
+{% block x_title %}
+    <h5>{{smartMod.modName}} Historical <strong>graphs</strong></h5>
+{% endblock %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS 
+    <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+    <!-- Material Design Bootstrap -->
+    <link rel="stylesheet" href="/mdb/css/mdb.min.css">
+    <!--<link rel="stylesheet" href="/js/Chart.min.css">-->
+    <!--<link rel="stylesheet" href="/css/spin.css">-->
+    <style>
+        
+        .x_panel{
+            background-color: rgba(250,249,245,0.4);
+        }    
+
+        /* * {box-sizing: border-box;}*/
+
+        /* Button used to open the chat form - fixed at the bottom of the page */
+        .open-button {
+        background-color: #555;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        opacity: 0.8;
+        position: fixed;
+        bottom: 23px;
+        right: 28px;
+        width: 280px;
+        }
+
+        /* The popup chat - hidden by default */
+        .chat-popup {
+        display: none;
+        position: fixed;
+        bottom: 0;
+        right: 15px;
+        border: 3px solid #f1f1f1;
+        z-index: 9;
+        }
+
+        /* Add styles to the form container */
+        .form-container {
+        max-width: 300px;
+        padding: 10px;
+        background-color: white;
+        }
+
+        /* Full-width textarea */
+        .form-container textarea {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        border: none;
+        background: #f1f1f1;
+        resize: none;
+        min-height: 200px;
+        }
+
+        /* When the textarea gets focus, do something */
+        .form-container textarea:focus {
+        background-color: #ddd;
+        outline: none;
+        }
+
+        /* Set a style for the submit/send button */
+        .form-container .btn {
+        background-color: #4CAF50;
+        color: white;
+        padding: 16px 20px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        margin-bottom:10px;
+        opacity: 0.8;
+        }
+
+        /* Add a red background color to the cancel button */
+        .form-container .cancel {
+        background-color: red;
+        }
+
+        /* Add some hover effects to buttons */
+        .form-container .btn:hover, .open-button:hover {
+        opacity: 1;
+        }
+
+        .blink {
+            animation: blink 2s steps(5, start) infinite;
+            -webkit-animation: blink 1s steps(5, start) infinite;
+        }
+        @keyframes blink {
+            to {
+                visibility: hidden;
+            }
+        }
+        @-webkit-keyframes blink {
+            to {
+                visibility: hidden;
+            }
+        }
+
+    </style>
+{% endblock %}
+
+{% block userEmail %}{% endblock %}
+
+{% block x_calendar %}
+<div class="container">
+    <div >
+        <div class="form-group">
+            <div class='input-group date' id='datetimepicker10'>
+                <input type='text' class="form-control" />
+                <span class="input-group-addon">
+                    <span class="fa fa-calendar">
+                    </span>
+                </span>
+            </div>
+        </div>
+    </div>
+    <!--<div class="col-sm-6" style="height:130px;">
+    <div class="form-group">
+        <div class='input-group date' id='datetimepicker6'>
+        <input type='text' class="form-control" />
+        <span class="input-group-addon">
+            <span class="fa fa-calendar">
+            </span>
+        </span>
+        </div>
+    </div>
+    </div>-->
+</div>
+{% endblock %}
+
+
+{% block body %}
+    {% for label, messages in app.flashes %}
+        <div class="container mt-2"> 
+            <div class="alert-{{label}}"> 
+                {% for message in messages %}
+                    <p>{{ message | raw }}</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Approvisionnement <strong>Carburant</strong></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                        {#{{path('addApprofuel_form')}}
+                        {% set url = path('show_fuelMod_histographs', {'id': smartMod.id}) %}#}
+                        <!-- onclick="window.opener.location.href='{# {{ path('show_fuelMod_histographs', {'id': smartMod.id}) }} #}';self.close();" -->
+                            <a href="#" onclick="openForm()" class="btn btn-primary btn-sm mr-5" data-toggle="tooltip" data-placement="top" title="Ajouter un nouvel approvisionnement">
+                                <i class="fas fa-plus-circle"></i>
+                            </a>
+                            <div class="chat-popup" id="myForm">
+                                <div class="form-container">
+                                    <h5 class="text-center mb-3">Ajouter un nouvel Approvisionnement ?</h5>
+                                    
+                                    {{ form_start(form) }}
+                                    <div class="row mb-2 px-3">
+                                        {{form_widget(form.addAt)}}
+                                    
+                                    </div>
+                                    <div class="row mb-2 px-3">
+                                        {{ form_widget(form.quantity, { 'type':'number' }) }}
+                                    
+                                    </div>
+
+                                    <!--<button type = "submit" class="btn btn-primary">Créer le nouveau Site</button>-->
+                                    <button type="submit" class="btn btn-primary">Ajouter !</button>
+                                    <button type="button" class="btn cancel" onclick="closeForm()">Annuler</button>
+                                    {{ form_end(form) }}
+                                    
+                                </div>
+                            </div>
+
+                            <script>
+                                function openForm() {
+                                    document.getElementById("myForm").style.display = "block";
+                                }
+
+                                function closeForm() {
+                                    document.getElementById("myForm").style.display = "none";
+                                }
+                            </script>
+                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <!--<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                        </li>-->
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" id="Appro_cont">
+                    <canvas id="CourbeAppro"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> 
+
+    <div class="row">
+        <div class="col-md-12 col-sm-12  ">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2>Evolution des <strong>Stocks</strong> de Carburant</h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li id="alertAppro">
+                        </li>
+                        <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                        </li>
+                        <!--<li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item" href="#">Settings 1</a>
+                                <a class="dropdown-item" href="#">Settings 2</a>
+                            </div>
+                        </li>-->
+                        <li><a class="close-link"><i class="fa fa-close"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content" id="CourbdeStock_cont">
+                    <canvas id="CourbeStock"></canvas>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <script>
+        // Line chart
+        var CourbeAppro_Linechart;
+        var CourbeStock_Linechart;
+               
+
+        if ($('#CourbeAppro').length) {
+            var ctx = document.getElementById("CourbeAppro");
+            ctx.height = 100;
+            ctx.style.backgroundColor = "rgba(245,244,240,255)";
+            CourbeAppro_Linechart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "Historique des Approvisionnements",
+                        backgroundColor: "rgba(55, 159, 255, 0.3)",
+                        borderColor: "rgba(163, 199, 231, 255)",
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(163, 199, 231, 255)",
+                        pointBackgroundColor: "rgba(163, 199, 231, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(55, 159, 255,1)",//151,187,205,
+                        pointBorderWidth: 0,
+                        pointRadius: 1.5,
+                        pointStyle: 'circle',
+                        fill: false,
+                        data: [],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            type: 'time',
+                            distribution: 'linear',
+                            time: {
+                                unit: 'hour',//'day'
+                                displayFormats: {
+                                    //day: 'D MMM'
+                                    day: 'h:mm'
+                                },
+                                unitStepSize: 2
+                            },
+                            gridLines: {
+                                //display:false,
+                                drawOnChartArea: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: moment().format('DD MMMM').toString()//'Mars'
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display:false,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '(Litres)'
+                            }
+                        }]
+                    },
+                    /*animation: {
+                        duration: 2000,
+                        onProgress: function(animation) {
+                            progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                        }
+                        onAnimationProgress: function() {
+                            console.log('Animation Progress');
+                        }
+                    }*/
+                }
+
+            });
+
+        }
+        if ($('#CourbeStock').length) {
+            var ctx = document.getElementById("CourbeStock");
+            ctx.height = 80;
+            ctx.style.backgroundColor = "rgba(245,244,240,255)";
+            CourbeStock_Linechart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "Historique des Stocks",
+                        backgroundColor: "rgba(55, 159, 255, 0.3)",
+                        borderColor: "rgba(252, 184, 183, 255)",
+                        borderWidth: 1,
+                        pointBorderColor: "rgba(252, 184, 183, 255)",
+                        pointBackgroundColor: "rgba(252, 184, 183, 255)",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(55, 159, 255,1)",//151,187,205,
+                        pointBorderWidth: 0,
+                        pointRadius: 1.5,
+                        pointStyle: 'circle',
+                        fill: false,
+                        data: [],
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            type: 'time',
+                            distribution: 'linear',
+                            time: {
+                                unit: 'hour',//'day'
+                                displayFormats: {
+                                    //day: 'D MMM'
+                                    day: 'h:mm'
+                                },
+                                unitStepSize: 2
+                            },
+                            gridLines: {
+                                //display:false,
+                                drawOnChartArea: false
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: moment().format('DD MMMM').toString()//'Mars'
+                            }
+                        }],
+                        yAxes: [{
+                            display: true,
+                            gridLines: {
+                                display:false,
+                            },
+                            scaleLabel: {
+                                display: true,
+                                labelString: '(Litres)'
+                            }
+                        }]
+                    },
+                    /*animation: {
+                        duration: 2000,
+                        onProgress: function(animation) {
+                            progress.value = animation.animationObject.currentStep / animation.animationObject.numSteps;
+                        }
+                        onAnimationProgress: function() {
+                            console.log('Animation Progress');
+                        }
+                    }*/
+                }
+
+            });
+
+        }
+
+    </script>
+{% endblock %}
+
+{% block datetimeFormat %}format: 'DD/MM/YYYY',{% endblock %}
+
+{% block javascripts %}
+
+    <!-- jQuery -->
+    <!--<script type="text/javascript" src="/mdb/js/jquery.min.js"></script>-->
+    <!-- Bootstrap tooltips -->
+    <!--<script type="text/javascript" src="/mdb/js/popper.min.js"></script>-->
+    <!-- Bootstrap core JavaScript -->
+    <!--<script type="text/javascript" src="/mdb/js/bootstrap.min.js"></script>-->
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="/mdb/js/mdb.min.js"></script>
+
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js" integrity="sha256-nZaxPHA2uAaquixjSDX19TmIlbRNCOrf5HO1oHl5p70=" crossorigin="anonymous"></script>
+    -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/javascript.util/0.12.12/javascript.util.min.js" integrity="sha256-eiohPQlDytO6qQO+k+xX6LyVgfXcTzlPCy9t/VjceYo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js" integrity="sha256-PieqE0QdEDMppwXrTzSZQr6tWFX3W5KkyRVyF1zN3eg=" crossorigin="anonymous"></script>
+
+
+    <script>
+        function blinkAlert(blink) {
+            var a = $("#alertAppro");
+            if(blink){
+                var str = "<span class=\"badge badge-danger mr-3 mt-2 blink\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"Alerte ravitaillement\"><i class=\"far fa-bell\"></i></span>";
+                a.html(str);
+            }
+            else a.html('');
+
+        }
+        
+        var $urlUpdateFuelModHistographs = "{{ path('update_fuelMod_histographs', {'id': smartMod.id}) }}";
+        function displayNewData(chart, label, data, dateopt, multiple, xscale, id){
+            chart.data.labels = [];
+            chart.data.datasets.forEach( (dataset) => {
+                dataset.data = [];
+            });
+            chart.data.labels = label;
+            if(multiple > 1){
+                var i = 0;
+                chart.data.datasets.forEach((dataset) => {
+                    if( i < multiple) dataset.data = data[i++];
+                });
+            }
+            else if(multiple == 1){
+                /*chart.data.datasets.forEach((dataset) => {
+                    dataset.data = data;
+                });*/
+                chart.data.datasets[0].data = data;
+            }
+            if(xscale === 'day') chart.options.scales.xAxes[0].scaleLabel.labelString = moment(dateopt).format('DD MMMM').toString();
+            else if( xscale === 'month') chart.options.scales.xAxes[0].scaleLabel.labelString = moment(dateopt).format('MMMM').toString();
+            //console.log(chart.options.scales.xAxes[0].scaleLabel.labelString);
+            //preloaderChart(id, false);
+            chart.update();
+        }
+
+        //console.log(CourbedeCharge);
+
+        $("#datetimepicker10").on("dp.change", function (e) {
+            var $dat = new moment(e.date._d);
+            $dat = $dat.format("YYYY-MM-DD").toString();
+            console.log($dat);
+            $date = '%' + $dat + '%';
+            //console.log($date);
+            var currentDate = new moment(new Date());
+            currentDate = currentDate.format("YYYY-MM-DD");
+            console.log( currentDate);
+
+            $.ajax({
+                type: "POST",/*method type*/
+                contentType: "application/json; charset=utf-8",
+                url: $urlUpdateFuelModHistographs,/*Target function that will be return result*/
+                data: JSON.stringify({
+                        "selectedDate": $date
+                    }),/*parameter pass data is parameter name param is value */ 
+                dataType: "json",
+                success: function (data) {
+                    //alert("Success");
+                    //console.log(data);
+                    console.log( Object.values( data['CourbeStock']['stock'] ).pop() );
+                    var lastFuelStock = Object.values( data['CourbeStock']['stock'] ).pop();
+                    //console.log(Object.values(result['IDD']));
+                    {% if smartMod.modType == 'FUEL' %}
+                        displayNewData(CourbeAppro_Linechart, Object.values(data['CourbeAppro']['date']), Object.values(data['CourbeAppro']['appro']), e.date._d, 1, 'day');
+                        displayNewData(CourbeStock_Linechart, Object.values(data['CourbeStock']['date']), Object.values(data['CourbeStock']['stock']), e.date._d, 1, 'day');
+                        
+                    {% endif %}
+
+                    if( $dat == currentDate ) {
+                        var seuil = {{ critiqFuelStock }};
+                        console.log('seuil = ' + seuil);
+                        if( lastFuelStock < seuil){
+                            blinkAlert(true);
+                        }
+                        
+                    }
+                    else{
+                        blinkAlert(false);
+                        console.log('not blinkking');
+                    }
+
+                },
+                error: function (result) {
+                    //alert("Error");
+                    console.log(result);
+                }
+            });
+            
+        });
+
+    </script>
+
+{% endblock %}

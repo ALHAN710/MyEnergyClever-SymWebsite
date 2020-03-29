@@ -8,42 +8,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 	  <link rel="icon" href="/img/CeCo_favicon.jpg" type="image/ico" />
 
-    <title>{% block title %} CLEVER Power Control Solution {% endblock %}</title>
+    <title>{% block title %} My Energy CLEVER Solution {% endblock %}</title>
 
     <!-- Bootstrap -->
-    <link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!--<link href="/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">-->
     <!-- Font Awesome -->
     <link href="/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="/vendors/nprogress/nprogress.css" rel="stylesheet">
-    <!-- iCheck -->
-    <!-- <link href="/vendors/iCheck/skins/flat/green.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/fontawesome.min.css" integrity="sha256-mM6GZq066j2vkC2ojeFbLCcjVzpsrzyMVUnRnEQ5lGw=" crossorigin="anonymous" />-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/regular.min.css" integrity="sha256-Pd28JXamAUfl4NS9QzGAdbaqdPQGG9dKLj3caGj28fg=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/solid.min.css" integrity="sha256-APTxfVyJgjHUS35EeuRpYs2tAbIQO7UF0nAV6krdYJ0=" crossorigin="anonymous" />
+    
+    
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    
 	
     <!-- bootstrap-progressbar -->
-    <link href="/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    <!--<link href="/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">-->
     <!-- JQVMap -->
     <!--  <link href="/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet"/> -->
     <!-- bootstrap-daterangepicker -->
-    <link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+    <!--<link href="/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">-->
 
     <!-- bootstrap-datetimepicker -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css.map">
+    <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker-standalone.min.css.map">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
 
-    <link rel="stylesheet" href="/css/bootstrap-datetimepicker-standalone.min.css">
+    <!--<link rel="stylesheet" href="/css/bootstrap-datetimepicker-standalone.min.css">
     <link rel="stylesheet" href="/css/bootstrap-datetimepicker-standalone.min.css.map">
-    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-datetimepicker.min.css">-->
 
     <!-- Custom Theme Style -->
     <link href="/build/css/custom.min.css" rel="stylesheet">
+
+    <style>
+      body{
+        /*font-family: ;"Comic sans ms";"Arial rounded mt";*/
+        font-family: "Roboto", "Trebuchet ms", sans-serif;
+        font-weight: 300
+      }
+    </style>
+
+    <!-- jQuery -->
+    <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    -->
+    <script src="/vendors/moment/min/moment.min.js"></script>
+    <!-- Chart.js -->
+    <!--<script src="/vendors/Chart.js/dist/Chart.js"></script> -->
+    <!--<script type="text/javascript" src="/js/Chart.bundle.min.js"></script>-->
+    <!--<script type="text/javascript" src="/js/Chart.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js" integrity="sha256-TQq84xX6vkwR0Qs1qH5ADkP+MvH0W+9E7TdHJsoIQiM=" crossorigin="anonymous"></script>
+    -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    
+
+
+    {% block stylesheet %}{% endblock %}
   </head>
 
   <body class="nav-md">
     <div class="container body">
       <div class="main_container">
-        <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
+        <div class="col-md-3 left_col" style="background-color: rgba(70,69,65,255);">
+          <div class="left_col scroll-view" style="background-color: rgba(80,79,75,255);">
             <!--<div class="navbar nav_title" style="border: 0;">
               <a href="{#{{ path("homepage") }}#}" class="site_title"><i > <img src="/img/CeCo_favicon.jpg" alt="" class="img-circle"></i> <span>Gentelella Alela!</span></a>
             </div>
@@ -53,7 +88,7 @@
             <!-- menu profile quick info class="fa fa-paw" -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="/img/Logo_CeCo128x90.png" alt="..." class="img-circle profile_img">
+                <img src="/img/SATC_LOGO.png" alt="User Logo" class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
@@ -62,7 +97,7 @@
             </div>
             <!-- /menu profile quick info -->
 
-            <br />
+            <!--<br />-->
 
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
@@ -73,9 +108,9 @@
                   {% for site in user.sites %}
                     {#{{dump(site)}}#}
                     {% set url = path('sites_show',{'slug':site.slug}) %}
-                    <li {% if loop.index0 == 0 %} class="active" {% endif %} ><a><i class="fa fa-sitemap"></i> {{site.name}} <span class="fa fa-chevron-down"></span></a> 
+                    <li {#{% if loop.index0 == 0 %} class="active" {% endif %}#} ><a><i class="fa fa-sitemap"></i> {{site.name}} <span class="fa fa-chevron-down"></span></a> 
                       <ul class="nav child_menu">
-                        <li><a href="{{url}}">Site resume</a>
+                        <li class="active"><a href="{{url}}">Site resume</a>
                         {% set categorie = ['GRID', 'FUEL'] %}
                         {% for cat in categorie %}
                           <li><a>{{ cat }} POWER<span class="fa fa-chevron-down"></span></a>
@@ -83,7 +118,7 @@
                               {% for type in site.smartMods %}
                                 {#{{dump(type)}}#}
                                 {% if type.modType == cat %}
-                                  <li class="sub_menu"><a>{{type.modName}}</a>
+                                  <li class="sub_menu"><a href="{{ path('show_mod_graphs', {'id': type.id}) }}">{{type.modName}}</a>
                                   </li>
                                 {% endif %}
                               {% endfor %}
@@ -181,93 +216,95 @@
               </div>
               <nav class="nav navbar-nav">
               {# {{ dump(app.user.getRoles()[0]) }} #}
-              <ul class=" navbar-right">
-                <li class="nav-item dropdown open" style="padding-left: 15px;">
-                  <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                    <img src="/img/img.jpg" alt="">{{user.email}}
-                  </a>
-                  <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                    
-                    {% if user.getRoles()[0] == "ROLE_ADMIN" %}
-                      <a href="{{path('sites_create')}}" class="dropdown-item"><i class="fa fa-plus-square pull-right"></i>Add New Site</a>
-                    {% endif %}
-                    <a class="dropdown-item"  href="{{ path('account_profile') }}"><i class="fa fa-user pull-right"></i> Profile</a>
-                    <!--<a class="dropdown-item"  href="javascript:;">
-                      <span class="badge bg-red pull-right">50%</span>
-                      <span>Settings</span>
-                    </a> -->
-                    <a class="dropdown-item"  href="{{ path('account_password') }}"><i class="fa fa-edit pull-right"></i> Edit Password</a>
-                    <a class="dropdown-item"  href="{{ path('account_logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
-                    
-                  </div>
-                </li>
+              {% block userEmail %}
+                <ul class=" navbar-right">
+                  <li class="nav-item dropdown open" style="padding-left: 15px;">
+                    <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
+                      <img src="/img/Naomi.jpg" alt="">{{app.user.email}}
+                    </a>
+                    <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
+                      
+                      {#{% if user.getRoles()[0] == "ROLE_ADMIN" %}
+                        <a href="{{path('sites_create')}}" class="dropdown-item"><i class="fa fa-plus-square pull-right"></i>Add New Site</a>
+                      {% endif %}#}
+                      <a class="dropdown-item"  href="{{ path('account_profile') }}"><i class="fa fa-user pull-right"></i> Profile</a>
+                      <!--<a class="dropdown-item"  href="javascript:;">
+                        <span class="badge bg-red pull-right">50%</span>
+                        <span>Settings</span>
+                      </a> -->
+                      <a class="dropdown-item"  href="{{ path('account_password') }}"><i class="fa fa-edit pull-right"></i> Edit Password</a>
+                      <a class="dropdown-item"  href="{{ path('account_logout') }}"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
+                      
+                    </div>
+                  </li>
 
-                <!--<li role="presentation" class="nav-item dropdown open">
-                  <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
-                    <i class="fa fa-envelope-o"></i>
-                    <span class="badge bg-green">6</span>
-                  </a>
-                  <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-                    <li class="nav-item">
-                      <a class="dropdown-item">
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li> 
-                    <li class="nav-item">
-                      <a class="dropdown-item">
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="dropdown-item">
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="dropdown-item">
-                        <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
-                        <span>
-                          <span>John Smith</span>
-                          <span class="time">3 mins ago</span>
-                        </span>
-                        <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                      </a>
-                    </li>
-                    <li class="nav-item">
-                      <div class="text-center">
+                  <!--<li role="presentation" class="nav-item dropdown open">
+                    <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
+                      <i class="fa fa-envelope-o"></i>
+                      <span class="badge bg-green">6</span>
+                    </a>
+                    <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
+                      <li class="nav-item">
                         <a class="dropdown-item">
-                          <strong>See All Alerts</strong>
-                          <i class="fa fa-angle-right"></i>
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
                         </a>
-                      </div>
-                    </li>
-                  </ul>
-                </li> -->
+                      </li> 
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="dropdown-item">
+                          <span class="image"><img src="images/img.jpg" alt="Profile Image" /></span>
+                          <span>
+                            <span>John Smith</span>
+                            <span class="time">3 mins ago</span>
+                          </span>
+                          <span class="message">
+                            Film festivals used to be do-or-die moments for movie makers. They were where...
+                          </span>
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <div class="text-center">
+                          <a class="dropdown-item">
+                            <strong>See All Alerts</strong>
+                            <i class="fa fa-angle-right"></i>
+                          </a>
+                        </div>
+                      </li>
+                    </ul>
+                  </li> -->
 
-              </ul>
+                </ul>
+              {% endblock %}
             </nav> 
           </div> 
         </div> 
@@ -291,15 +328,26 @@
           <div class="row"> <!--  -->
             <div class="col-md-12 col-sm-12 ">
             <!--  <div class="dashboard_graph"> -->
+              {% for label, messages in app.flashes %}
+                <div class="container mt-3"> 
+                  <div class="alert-{{label}}"> 
+                    {% for message in messages %}
+                      <p>{{ message | raw }}</p>
+                    {% endfor %}
+                  </div>
+                </div>
+
+              {% endfor %}
+
               {% block row_x_title %}
-                <div class="row x_title">
-                  <div class="col-md-7">
+                <div class="row x_title align-items-center">
+                  <div class="col-9">
                     {% block x_title %}
                       <h3>General Report Activities <small>Graph title sub-title</small></h3>
                     {% endblock %}
                       
                   </div>
-                  <div class="col-md-5">
+                  <div class="col-3">
                     <!-- <div id="reportrange" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc">
                         <i class="fa fa-calendar"></i>
                         <span>December 30, 2014 - January 28, 2015</span> <b class="caret"></b>
@@ -320,21 +368,34 @@
                         
                     </div>
                     -->
-
+                    {% block x_calendar %}
                     <div class="container">
-                      <div class="col-sm-6" style="height:130px;">
-                          <div class="form-group">
-                              <div class='input-group date' id='datetimepicker10'>
-                                  <input type='text' class="form-control" />
-                                  <span class="input-group-addon">
-                                      <span class="fa fa-calendar">
-                                      </span>
-                                  </span>
-                              </div>
+                      <div >
+                        <div class="form-group">
+                          <div class='input-group date' id='datetimepicker10'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                              <span class="fa fa-calendar">
+                              </span>
+                            </span>
                           </div>
+                        </div>
                       </div>
-                      
-                  </div>
+
+                      <!--<div class="col-sm-6" style="height:130px;">
+                        <div class="form-group">
+                          <div class='input-group date' id='datetimepicker6'>
+                            <input type='text' class="form-control" />
+                            <span class="input-group-addon">
+                              <span class="fa fa-calendar">
+                              </span>
+                            </span>
+                          </div>
+                        </div>
+                      </div>-->
+
+                    </div>
+                    {% endblock %}
 
                   </div>
                 </div>
@@ -366,7 +427,7 @@
         <!-- footer content -->
         <footer>
           <div class="pull-right">
-            CLEVER Power Control Solution Interface Engineered By <a href="https://cleverelectric-company.com">CLEVER ELECTRIC Company Ltd</a>
+            My Energy CLEVER Solution Interface Engineered By <a href="https://cleverelectric-company.com">CLEVER ELECTRIC Technologies</a>
           </div>
           <div class="clearfix"></div>
         </footer>
@@ -375,21 +436,17 @@
     </div>
 
     
-
-    <!-- jQuery -->
-    <script src="/vendors/jquery/dist/jquery.min.js"></script>
+    
     <!-- Bootstrap -->
     <script src="/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <!-- FastClick -->
     <script src="/vendors/fastclick/lib/fastclick.js"></script>
     <!-- NProgress -->
-    <script src="/vendors/nprogress/nprogress.js"></script>
-    <!-- Chart.js -->
- <!--   <script src="/vendors/Chart.js/dist/Chart.min.js"></script> -->
+    <!--<script src="/vendors/nprogress/nprogress.js"></script>-->
     <!-- gauge.js -->
  <!--   <script src="/vendors/gauge.js/dist/gauge.min.js"></script> -->
     <!-- bootstrap-progressbar -->
-    <script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    <!--<script src="/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>-->
     <!-- iCheck -->
  <!--   <script src="/vendors/iCheck/icheck.min.js"></script> -->
     <!-- Skycons -->
@@ -411,23 +468,53 @@
     <script src="/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
     <script src="/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script> -->
     <!-- bootstrap-daterangepicker -->
-    <script src="/vendors/moment/min/moment.min.js"></script>
-    <script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
+    
+    <!--<script src="/vendors/bootstrap-daterangepicker/daterangepicker.js"></script> -->
+
+    
+    
 
     <!--  bootstrap-datetimepicker -->
     <script src="/js/bootstrap-datetimepicker.min.js"></script>
 
     <!-- Custom Theme Scripts -->
-    <script src="/build/js/custom.js"></script>
+    <script type="text/javascript" src="/build/js/custom.js"></script>
 
     <script type="text/javascript">
         $(function () {
-            $('#datetimepicker10').datetimepicker({
-                viewMode: 'years',
-                format: 'MM/YYYY'
-            });
+          $('#datetimepicker10').datetimepicker({
+              viewMode: 'years',
+              {% block datetimeFormat %} format: 'DD/MM/YYYY', {% endblock %}
+              defaultDate: moment(),
+              
+          });
+
+          /*$('#datetimepicker6').datetimepicker({
+              //viewMode: 'years',
+              format: 'MM/YYYY',
+              defaultDate: moment(),              
+              
+          });*/
+
+          /*$("#datetimepicker6").on("dp.change", function (e) {
+              //$('#datetimepicker10').data("DateTimePicker").minDate(e.date);
+              
+              console.log(e);
+          });
+          $("#datetimepicker10").on("dp.change", function (e) {
+              //$('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+              //console.log(e.date._d.toLocaleString().replace('à', ''));
+              //console.log(e.date._d);
+              //$date = new Date(e.date._d);
+              //console.log(e.date.format("YYYY-MM-DD H:i:s")._d);
+              //console.log(Date.parse($date).toString('yyyy-MM-dd H:i:s'));
+              $dat = new moment(e.date._d);
+              console.log($dat.format("YYYY-MM-DD HH:mm:ss").toString());
+              
+          });*/
         });
     </script>
+
     {% block javascripts %}{% endblock %}
 	
   </body>

@@ -2,9 +2,12 @@
 
 
 {% block x_title %}
-    <h3>{{site.name}} General Report Activities <small>dashboard</small></h3>
+    {#{% set Nowdate = 'now' | date('d/m/Y H:i', 'Africa/Douala') %} #}
+    <h3>{{site.name}} <small>Dashboard </small></h3>
 {% endblock %}
+{#{% block x_calendar %}{% endblock %} #}
 
+    
 {% block body %}
     <!--<div class="row">
         <div class="col-md-6 col-sm-6  ">
@@ -60,7 +63,7 @@
     <div class="clearfix"></div>
     <div class="col-md-12 col-sm-12  ">
 
-        <div class="x_panel">
+        <div class="x_panel" style="background-color: rgba(250,249,245,0.4);">
             <div class="x_content">
                 {% set modGrid = [] %}
                 {% set modFuel = [] %}
@@ -99,29 +102,33 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="card-box table-responsive">
-                                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                        <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap gridTab" cellspacing="0" width="100%">
                                             <thead>
-                                            <tr>
-                                                <th>Module</th>
+                                            <tr class="text-center">
+                                                <th class="text-left">Module</th>
                                                 <th>Active Energy(kWh)</th>
-                                                <th>Energie Active (XAF)</th>
+                                                <!--<th>Energie Active (XAF)</th>-->
                                                 <th>Energie Reactive(kVARh)</th>
                                                 <th>Cosϕ</th>
                                                 <th>Smax(kVA)</th>
                                                 <th>Smoy(kVA)</th> 
-                                                
+                                                {%  set nbcolgrid  = 6 %}
+                                                <script>var nbColGrid =  {{ nbcolgrid }} ;</script>
+                                                {#{% dump(nbcolfuel) %}#}
                                             </tr>
                                             </thead>
                                             <tbody>
                                             {% for mod in modGrid %}
-                                                <tr>
-                                                <td>{{mod.modName}}</td>
-                                                <td>Nixon</td>
-                                                <td>System Architect</td>
-                                                <td>Edinburgh</td>
-                                                <td>61</td>
-                                                <td>2011/04/25</td>
-                                                <td>$320,800</td>
+                                                <tr class="text-center">
+                                                    <td class="text-left">
+                                                        <a href="{{ path('show_mod_graphs', {'id': mod.id}) }}">{{mod.modName}}</a>
+                                                    </td>
+                                                    <td data-entry-idgrid="{{mod.id}}"></td>
+                                                    <!--<td>System Architect</td>-->
+                                                    <td class="ER"></td>
+                                                    <td class="Cos"></td>
+                                                    <td class="Smax"></td>
+                                                    <td class="Smoy"></td>
                                                 </tr>
                                             {% endfor %}
                                             </tbody>
@@ -140,23 +147,35 @@
                             <div class="row">
                                     <div class="col-sm-12">
                                         <div class="card-box table-responsive">
-                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                            <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap fuelTab" cellspacing="0" width="100%">
                                                 <thead>
-                                                <tr>
-                                                    <th>Module</th>
+                                                <tr class="text-center justify-content-center">
+                                                    <th class="text-left">Module</th>
                                                     <th>Energie Active(kWh) produite</th>
+                                                    <th>Energie Reactive(kVARh)</th>
+                                                    <th>Cosϕ</th>
                                                     <th>Litre consommée</th>
                                                     <th>Temps de fonctionnement</th>
+                                                    <th class="">Appro  et Stock carburant</th>
+                                                    {%  set nbcolfuel  = 7 %}
+                                                    <script>var nbColFuel =  {{ nbcolfuel }} ;</script>
                                                     
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 {% for mod in modFuel %}
-                                                    <tr>
-                                                    <td>{{mod.modName}}</td>
-                                                    <td>61</td>
-                                                    <td>2011/04/25</td>
-                                                    <td>$320,800</td>
+                                                    <tr class="text-center">
+                                                        <td class="text-left">
+                                                            <a href="{{ path('show_mod_graphs', {'id': mod.id}) }}">{{mod.modName}}</a>
+                                                        </td>
+                                                        <td data-entry-idfuel="{{mod.id}}"></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td></td>
+                                                        <td>
+                                                            <a href="{{ path('show_fuelMod_histographs', {'id': mod.id}) }}" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Voir l'historique"><i class="fas fa-history"></i></a>
+                                                        </td>
                                                     </tr>
                                                 {% endfor %}
                                                 </tbody>
@@ -175,3 +194,12 @@
     </div>
 {%  endblock %}
  
+{% block datetimeFormat %}format: 'MM/YYYY',{% endblock %}
+
+{% block javascripts %}
+<script>
+    var $urlupdateDashSite = "{{ path('update_sites_dashboard', {'id': site.id}) }}";
+    console.log(nbColGrid);
+</script>
+<script src="/js/updateDashSite.js"></script>
+{% endblock %}
