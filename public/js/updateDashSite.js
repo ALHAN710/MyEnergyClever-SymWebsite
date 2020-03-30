@@ -31,16 +31,17 @@ $("#datetimepicker10").on("dp.change", function (e) {
     //console.log($date);
     $date = '%' + $date + '%';
     //console.log($date);
-
+    var $data = JSON.stringify({
+        "gridIds": $gridEntryIds,
+        "fuelIds": $fuelEntryIds,
+        "selectedDate": $date
+    });
+    console.log($data);
     $.ajax({
-        type: "POST",/*method type*/
+        type: "POST",//method type
         contentType: "application/json; charset=utf-8",
-        url: $urlupdateDashSite,/*Target function that will be return result*/
-        data: JSON.stringify({
-            "gridIds": $gridEntryIds,
-            "fuelIds": $fuelEntryIds,
-            "selectedDate": $date
-        }),/*parameter pass data is parameter name param is value */
+        url: $urlupdateDashSite,///Target function that will be return result
+        data: $data,//parameter pass data is parameter name param is value 
         dataType: "json",
         success: function (data) {
             //alert("Success");
@@ -65,23 +66,28 @@ $("#datetimepicker10").on("dp.change", function (e) {
 
         },
         error: function (result) {
-            //alert("Error");
             console.log("Error");
+            console.log(result);
         }
     });
+
     /*var settings = {
-    "url": "{{ path('update_sites_dashboard', {'id': site.id}) }}",
+        "url": $urlupdateDashSite,
         "method": "POST",
         "timeout": 0,
         "headers": {
-    "Content-Type": "application/json"
+            "Content-Type": "application/json"
         },
-        "data": JSON.stringify({"gridIds": $gridEntryIds,"fuelIds": $fuelEntryIds,"selectedDate": $date}),
-        };
+        "data": $data,
+        "dataType": "json",
 
-        $.ajax(settings).done(function (response) {
-    console.log(response);
-        });*/
+    };
+
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+    }).error(function (error) {
+        console.log(error);
+    });*/
 
 });
 

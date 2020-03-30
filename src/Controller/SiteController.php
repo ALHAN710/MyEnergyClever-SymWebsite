@@ -8,6 +8,8 @@ use App\Form\SiteType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,18 +20,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  * @Security("user == site.getUser() or is_granted('ROLE_ADMIN')", message="Vous n'avez pas le droit d'accéder à cette ressource")
  * 
  */
-class SiteController extends AbstractController
+class SiteController extends ApplicationController
 {
-    /** 
-     * @Route("/site", name="site")
-     */
-    public function index()
-    {
-        return $this->render('site/index.html.twig', [
-            'controller_name' => 'SiteController',
-        ]);
-    }
-
     /**
      * Permet de créer un site
      *
@@ -143,11 +135,102 @@ class SiteController extends AbstractController
     }
 
 
-    public function delete(Site $site, EntityManagerInterface $manager)
+    /**
+     * Permet de mettre à jour le tableau de bord des sites
+     * 
+     * @Route("/update/sites/{id<\d+>}/dashboard/",name="update_sites_dashboard")
+     * 
+     *
+     * @param [integer] $id
+     * @param EntityManagerInterface $manager
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function updateSiteDashboard($id, Site $site, EntityManagerInterface $manager, Request $request): JsonResponse
     {
-        $manager->remove($site);
-        $manager->flush();
+        $EA       = [];
+        $ER       = [];
+        $Cosphi   = [];
+        $Smax     = [];
+        $Smoy     = [];
+        $Liters   = [];
+        $WorkTime = [];
 
-        return $this->redirectToRoute("homepage");
+        $paramJSON = $this->getJSONRequest($request->getContent());
+        //dump($paramJSON['selectedDate']);
+        //dump($request->getContent());
+        //die();
+        $dat = $paramJSON['selectedDate'];
+        $dataGrid = [];
+        $dataFuel = [];
+        if (!empty($paramJSON['gridIds'])) {
+            foreach ($paramJSON['gridIds'] as $gridId) {
+
+                $dataGrid['' . $gridId . ''] = $manager->createQuery("SELECT SUM(d.kWh) AS EA, SUM(d.kVarh) AS ER, 
+                                            MAX(d.s3ph) AS Smax, AVG(d.s3ph) AS Smoy, SUM(d.kWh) / SQRT( (SUM(d.kWh)*SUM(d.kWh)) + (SUM(d.kVarh)*SUM(d.kVarh)) ) AS Cosphi
+                                            FROM App\Entity\DataMod d
+                                            JOIN d.smartMod sm 
+                                            WHERE d.dateTime LIKE :selDate
+                                            AND sm.id = :modId
+                                                                                                                                
+                                            ")
+                    ->setParameters(array(
+                        'selDate' => $dat,
+                        'modId'   => $gridId
+                    ))
+                    ->getResult();
+                $EA['' . $gridId . '']     = number_format((float) $dataGrid['' . $gridId . ''][0]['EA'], 2, '.', ' ');
+                $ER['' . $gridId . '']     = number_format((float) $dataGrid['' . $gridId . ''][0]['ER'], 2, '.', ' ');
+                $Smax['' . $gridId . '']   = number_format((float) $dataGrid['' . $gridId . ''][0]['Smax'], 2, '.', ' ');
+                $Smoy['' . $gridId . '']   = number_format((float) $dataGrid['' . $gridId . ''][0]['Smoy'], 2, '.', ' ');
+                $Cosphi['' . $gridId . ''] = number_format((float) $dataGrid['' . $gridId . ''][0]['Cosphi'], 2, '.', ' ');
+            }
+
+            //dump($dataGrid['363'][0]['Cosphi']);
+            //die();
+        }
+
+        if (!empty($paramJSON['fuelIds'])) {
+            foreach ($paramJSON['fuelIds'] as $fuelId) {
+
+                $dataFuel['' . $fuelId . ''] = $manager->createQuery("SELECT SUM(d.kWh) AS EA, SUM(d.kVarh) AS ER, 
+                                            Sum(d.liters) AS Liters, SUM(d.workingtime) AS WorkingTime, SUM(d.kWh) / SQRT( (SUM(d.kWh)*SUM(d.kWh)) + (SUM(d.kVarh)*SUM(d.kVarh)) ) AS Cosphi
+                                            FROM App\Entity\DataMod d
+                                            JOIN d.smartMod sm 
+                                            WHERE d.dateTime LIKE :selDate
+                                            AND sm.id = :modId
+                                                                                                                                
+                                            ")
+                    ->setParameters(array(
+                        'selDate' => $dat,
+                        'modId'   => $fuelId
+                    ))
+                    ->getResult();
+                $EA['' . $fuelId . '']       = number_format((float) $dataFuel['' . $fuelId . ''][0]['EA'], 2, '.', ' ');
+                $ER['' . $fuelId . '']       = number_format((float) $dataFuel['' . $fuelId . ''][0]['ER'], 2, '.', ' ');
+                $Liters['' . $fuelId . '']   = number_format((float) $dataFuel['' . $fuelId . ''][0]['Liters'], 2, '.', ' ');
+                $WorkTime['' . $fuelId . ''] = date("H:i:s", $dataFuel['' . $fuelId . ''][0]['WorkingTime'] / 1000);
+                $Cosphi['' . $fuelId . '']   = number_format((float) $dataFuel['' . $fuelId . ''][0]['Cosphi'], 2, '.', ' ');
+            }
+
+            //dump($dataFuel);
+            //dump($EA);
+            //dump($dataFuel['365'][0]['WorkingTime']);
+            /*foreach ($WorkTime as $WT) {
+                $WorkTime[] = date("H:i:s", $WT); //DateTime::createFromFormat('H:i:s', $WT);
+            }*/
+            //die();
+        }
+
+        return $this->json([
+            //'code'        => 200,
+            'EA'          => $EA,
+            'ER'          => $ER,
+            'Cos'         => $Cosphi,
+            'Smax'        => $Smax,
+            'Smoy'        => $Smoy,
+            'Liters'       => $Liters,
+            'WorkingTime' => $WorkTime
+        ], 200);
     }
 }
