@@ -238,14 +238,14 @@ class SmartModController extends ApplicationController
                 ->getResult();*/
             //dump($data);
             foreach ($data as $d) {
-                $date[]        = $d['dat']->format('Y-m-d H:i:s');
-                $VA[]          = $d['va'];
-                $VB[]          = $d['vb'];
-                $VC[]          = $d['vc'];
-                $SA[]          = $d['sa'];
-                $SB[]          = $d['sb'];
-                $SC[]          = $d['sc'];
-                $S3ph[]        = $d['s3ph'];
+                $date[]  = $d['dat']->format('Y-m-d H:i:s');
+                $VA[]    = $d['va'];
+                $VB[]    = $d['vb'];
+                $VC[]    = $d['vc'];
+                $SA[]    = $d['sa'];
+                $SB[]    = $d['sb'];
+                $SC[]    = $d['sc'];
+                $S3ph[]  = $d['s3ph'];
                 $idc[]   = number_format((float) $d['IDC'], 2, '.', '');
                 $idd[]   = number_format((float) $d['IDD'], 2, '.', '');
             }
@@ -372,7 +372,7 @@ class SmartModController extends ApplicationController
         //$dateparam = $request->get('selectedDate'); // Ex : %2020-03-20%
         //$dat = "2020-02"; //'%' . $dat . '%'
         //$dat = substr($dateparam, 0, 8); // Ex : %2020-03
-        dump($dateparam);
+        //dump($dateparam);
         //die();
         //$dat = $dat . '%';
 
@@ -408,7 +408,7 @@ class SmartModController extends ApplicationController
                 'smartModId'   => $id
             ))
             ->getResult();
-        dump($approData);
+        //dump($approData);
         //die();
         foreach ($stockData as $d) {
             $stockDate[] = $d['dateTime']->format('Y-m-d H:i:s');

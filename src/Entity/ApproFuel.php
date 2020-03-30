@@ -26,6 +26,7 @@ class ApproFuel
 
     /**
      * @ORM\Column(type="float", nullable=false)
+     * @Assert\Type(type={"float"})
      */
     private $quantity;
 
