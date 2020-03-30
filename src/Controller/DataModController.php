@@ -16,15 +16,6 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class DataModController extends ApplicationController
 {
-    /**
-     * @Route("/data/mod", name="data_mod")
-     */
-    public function index()
-    {
-        return $this->render('dataMod/index.html.twig', [
-            'controller_name' => 'DataModController',
-        ]);
-    }
 
     /**
      * Permet de surcharger les données des modules dans la BDD
@@ -94,7 +85,7 @@ class DataModController extends ApplicationController
                         'modId' => $smartMod->getId()
                     ))
                     ->getResult();
-                dump($prevDate);
+                //dump($prevDate);
                 //die();
 
                 //Récupération du stock à la date prevDate
@@ -110,7 +101,7 @@ class DataModController extends ApplicationController
                         'modId'   => $smartMod->getId()
                     ))
                     ->getResult();
-                dump($prevStock);
+                //dump($prevStock);
 
                 //Récupération des appro compris prevDate et actualDate
                 $sumAppro = $manager->createQuery("SELECT SUM(d.quantity) AS sumAppro
@@ -126,16 +117,16 @@ class DataModController extends ApplicationController
                         'modId'    => $smartMod->getId()
                     ))
                     ->getResult();
-                dump($sumAppro);
+                //dump($sumAppro);
                 //die();
 
                 //Récupération de la conso
                 $conso = $paramJSON['liters'];
-                dump($conso);
+                //dump($conso);
 
                 //Calcul du stock actuel
                 $stock = $prevStock[0]['stock'] + $sumAppro[0]['sumAppro'] - $conso;
-                dump($stock);
+                //dump($stock);
                 //die();
 
                 $dataMod->setStock($stock);
