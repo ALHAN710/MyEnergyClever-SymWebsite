@@ -51,6 +51,7 @@ security:
     access_control:
          - { path: ^/admin/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
          - { path: ^/admin, roles: ROLE_ADMIN, requires_channel: https }
+         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }
         # - { path: ^/profile, roles: ROLE_USER } 
         # catch all other URLs
          - { path: ^/, roles: ROLE_USER, requires_channel: https }
