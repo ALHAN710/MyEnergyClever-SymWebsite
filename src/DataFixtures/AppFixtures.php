@@ -43,9 +43,11 @@ class AppFixtures extends Fixture
         $manager->persist($adminRole);
 
         $adminUser = new User1();
+        $date = new DateTime(date('Y-m-d H:i:s'));
         $adminUser->setEnterpriseName('Clever Electric Company Ltd')
             ->setEmail('alhadoumpascal@gmail.com')
             ->setHash($this->encoder->encodePassword($adminUser, 'password'))
+            ->setCreatedAt($date)
             ->addUserRole($adminRole);
         $manager->persist($adminUser);
 
@@ -67,6 +69,7 @@ class AppFixtures extends Fixture
             //$picture .= ($genre == 'male' ? 'men/' : 'women/') . $pictureId;
 
             $hash = $this->encoder->encodePassword($user, 'password');
+            $date = new DateTime(date('Y-m-d H:i:s'));
 
             /*$user->setFirstName($faker->firstname($genre))
                  ->setLastName($faker->lastname)
@@ -77,6 +80,7 @@ class AppFixtures extends Fixture
                  ->setPicture($picture);*/
             $user->setEnterpriseName($faker->unique()->company)
                 ->setEmail($faker->unique()->companyEmail)
+                ->setCreatedAt($date)
                 ->setHash($hash);
 
             $manager->persist($user);
@@ -131,7 +135,7 @@ class AppFixtures extends Fixture
             $site->setName($name)
                 ->setUser($user);
 
-            for ($j = 1; $j <= mt_rand(2, 5); $j++) {
+            for ($j = 1; $j <= mt_rand(2, 4); $j++) {
                 $smartMod = new SmartMod();
                 $modType = $faker->randomElement($modTypes);
                 $instaType = $faker->randomElement($instaTypes);
@@ -159,7 +163,7 @@ class AppFixtures extends Fixture
         //$date = new DateTime();
         // Génération de fausses données pour chaque module sur une année
         $Year = 2020;
-        $month = 3;
+        $month = 4;
         $day = 1;
         $nbDay = 10;
         $nbYear = 1;
