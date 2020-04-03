@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -16,7 +17,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *  fields={"email"},
  *  message="Un autre utilisateur c'est déjà inscrit avec cette adresse email, merci de la modifier"
  * )
- */  
+ */
 class User1 implements UserInterface
 {
     /**
@@ -73,6 +74,16 @@ class User1 implements UserInterface
      */
     private $userRoles;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $enterpriseLogo;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -120,29 +131,35 @@ class User1 implements UserInterface
         return $this;
     }
 
-    public function getRoles(){
-        
-        $roles = $this->userRoles->map(function($role){
+    public function getRoles()
+    {
+
+        $roles = $this->userRoles->map(function ($role) {
             return $role->getTitle();
         })->toArray();
 
         $roles[] = 'ROLE_USER';
 
         return $roles;
-
     }
 
-    public function getPassword(){
+    public function getPassword()
+    {
         return $this->hash;
     }
 
-    public function getSalt(){}
+    public function getSalt()
+    {
+    }
 
-    public function getUserName(){
+    public function getUserName()
+    {
         return $this->email;
     }
 
-    public function eraseCredentials(){}
+    public function eraseCredentials()
+    {
+    }
 
     /**
      * @return Collection|Site[]
@@ -150,6 +167,16 @@ class User1 implements UserInterface
     public function getSites(): Collection
     {
         return $this->sites;
+    }
+
+    /**
+     * Permet de calculer le nombre de Site de l'utilisateur
+     *
+     * @return Integer
+     */
+    public function getNbSites(): int
+    {
+        return count($this->getSites());
     }
 
     public function addSite(Site $site): self
@@ -235,6 +262,30 @@ class User1 implements UserInterface
             $this->userRoles->removeElement($userRole);
             $userRole->removeUser($this);
         }
+
+        return $this;
+    }
+
+    public function getEnterpriseLogo(): ?string
+    {
+        return $this->enterpriseLogo;
+    }
+
+    public function setEnterpriseLogo(?string $enterpriseLogo): self
+    {
+        $this->enterpriseLogo = $enterpriseLogo;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

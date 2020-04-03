@@ -5,16 +5,19 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Entity\User1;
 use App\Form\AccountType;
+use Cocur\Slugify\Slugify;
 use App\Entity\PasswordUpdate;
 use App\Form\RegistrationType;
 use App\Form\Registration1Type;
 use App\Form\PasswordUpdateType;
 use Symfony\Component\Form\FormError;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
@@ -30,7 +33,7 @@ class AccountController extends AbstractController
         $error = $utils->getLastAuthenticationError();
         $username = $utils->getLastUsername();
 
-        return $this->render('account/login.html.twig',[
+        return $this->render('account/login.html.twig', [
             'hasError' => $error !== null,
             'username' => $username
         ]);
@@ -46,7 +49,7 @@ class AccountController extends AbstractController
         $error = $utils->getLastAuthenticationError();
         $username = $utils->getLastUsername();
 
-        return $this->render('account/login2.html.twig',[
+        return $this->render('account/login2.html.twig', [
             'hasError' => $error !== null,
             'username' => $username
         ]);
@@ -59,7 +62,9 @@ class AccountController extends AbstractController
      * 
      * @return void
      */
-    public function logout(){}
+    public function logout()
+    {
+    }
 
 
     /**
@@ -69,31 +74,26 @@ class AccountController extends AbstractController
      *
      * @return Response
      */
-    public function register(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder){
-       //$user = new User(); 
-       $user = new User1(); 
+    public function register(Request $request, EntityManagerInterface $manager, UserPasswordEncoderInterface $encoder)
+    {
+        //$user = new User(); 
+        $user = new User1();
+        $slugify = new Slugify();
 
-       //$form = $this->createForm(RegistrationType::class, $user);
-       $form = $this->createForm(Registration1Type::class, $user);
+        //$form = $this->createForm(RegistrationType::class, $user);
+        $form = $this->createForm(Registration1Type::class, $user);
 
-       $form->handleRequest($request);
+        $form->handleRequest($request);
 
-       if( $form->isSubmitted() && $form->isValid() ){
-           $hash = $encoder->encodePassword($user, $user->getHash());
-           $user->setHash($hash);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $hash = $encoder->encodePassword($user, $user->getHash());
+            $user->setHash($hash);
 
-           $manager->persist($user);
-           $manager->flush();
 
-           $this->addFlash(
-               'success',"Compte utilisateur crée. Veuillez vous connecter !"
-           );
-
-           return $this->redirectToRoute('account_login2');
-       }
-       return $this->render('account/registration.html.twig', [
-           'form' => $form->createView()
-       ]); 
+            return $this->render('account/registration.html.twig', [
+                'form' => $form->createView()
+            ]);
+        }
     }
 
     /**
@@ -104,14 +104,76 @@ class AccountController extends AbstractController
      * 
      * @return Response
      */
-    public function profile(Request $request, EntityManagerInterface $manager){
+    public function profile(Request $request, EntityManagerInterface $manager)
+    {
         $user = $this->getUser();
-        dump($user);
+        $lastAvatar = $user->getAvatar();
+        $lastLogo = $user->getEnterpriseLogo();
+
+        $filesystem = new Filesystem();
+
+        $slugify = new Slugify();
+        dump($this->getParameter('avatar_directory'));
         $form = $this->createForm(AccountType::class, $user);
 
         $form->handleRequest($request);
 
-        if( $form->isSubmitted() && $form->isValid() ){
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            /** @var UploadedFile $avatarFile */
+            $avatarFile = $form->get('avatar')->getData();
+
+            // this condition is needed because the 'avatar' field is not required
+            // so the Image file must be processed only when a file is uploaded
+            if ($avatarFile) {
+                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugify->slugify($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
+
+                // Move the file to the directory where avatars are stored
+                try {
+                    $avatarFile->move(
+                        $this->getParameter('avatar_directory'),
+                        $newFilename
+                    );
+                    $path = $this->getParameter('avatar_directory') . '/' . $lastAvatar;
+                    if ($lastAvatar != NULL) $filesystem->remove($path);
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                $user->setAvatar($newFilename);
+            }
+
+            /** @var UploadedFile $enterpriseLogoFile */
+            $enterpriseLogoFile = $form->get('enterpriseLogo')->getData();
+
+            // this condition is needed because the 'enterpriseLogo' field is not required
+            // so the Image file must be processed only when a file is uploaded
+            if ($enterpriseLogoFile) {
+                $originalFilename = pathinfo($enterpriseLogoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugify->slugify($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $enterpriseLogoFile->guessExtension();
+
+                // Move the file to the directory where enterpriseLogos are stored
+                try {
+                    $enterpriseLogoFile->move(
+                        $this->getParameter('logo_directory'),
+                        $newFilename
+                    );
+                    $path = $this->getParameter('logo_directory') . '/' . $lastLogo;
+                    if ($lastLogo) $filesystem->remove($path);
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'enterpriseLogoFilename' property to store the PDF file name
+                // instead of its contents
+                $user->setEnterpriseLogo($newFilename);
+            }
+
+
             $manager->persist($user);
             $manager->flush();
 
@@ -119,10 +181,9 @@ class AccountController extends AbstractController
                 'success',
                 "Les Modifications du profil ont été enregistrées avec succès"
             );
-
         }
 
-        return $this->render('account/profile.html.twig',[
+        return $this->render('account/profile.html.twig', [
             'form' => $form->createView(),
             'user' => $user
         ]);
@@ -136,7 +197,8 @@ class AccountController extends AbstractController
      *
      * @return Response
      */
-    public function updatePassword(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $manager){
+    public function updatePassword(Request $request, UserPasswordEncoderInterface $encoder, EntityManagerInterface $manager)
+    {
         $passwordUpdate = new PasswordUpdate();
 
         $user = $this->getUser();
@@ -145,15 +207,15 @@ class AccountController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
             //1. Vérifier que le oldpassword soit le même que celui de l'user
-            if( !password_verify($passwordUpdate->getNewPassword(), $user->getHash()) ){
+            if (!password_verify($passwordUpdate->getNewPassword(), $user->getHash())) {
                 //Gérer l'erreur
                 $form->get('oldPassword')->addError(new FormError("Le mot de passe saisi n'est pas votre mot de passe actuel"));
-            }else{
+            } else {
                 $newPassword = $passwordUpdate->getNewPassword();
                 $hash = $encoder->encodePassword($user, $newPassword);
-                
+
                 $user->setHash($hash);
 
                 $manager->persist($user);
@@ -168,10 +230,9 @@ class AccountController extends AbstractController
             }
         }
 
-        return $this->render('account/password.html.twig',[
+        return $this->render('account/password.html.twig', [
             'form' => $form->createView(),
             'user' => $user
         ]);
-
     }
 }

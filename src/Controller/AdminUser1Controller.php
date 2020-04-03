@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use DateTime;
 use App\Entity\Role;
 use App\Entity\User1;
+use Cocur\Slugify\Slugify;
 use App\Service\Pagination;
 use App\Form\Registration1Type;
 use App\Repository\User1Repository;
@@ -12,6 +14,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AdminUser1Controller extends AbstractController
@@ -43,6 +46,7 @@ class AdminUser1Controller extends AbstractController
     public function create(EntityManagerInterface $manager, Request $request, UserPasswordEncoderInterface $encoder)
     {
         $user = new User1();
+        $slugify = new Slugify();
         $form = $this->createForm(AdminRegistration1Type::class, $user);
 
         $form->handleRequest($request);
@@ -52,10 +56,74 @@ class AdminUser1Controller extends AbstractController
 
             $userRole = new Role();
             $userRole->setTitle($user->getRole());
+            $date = new DateTime(date('Y-m-d H:i:s'));
+            $user->setCreatedAt($date);
+
+
             $manager->persist($userRole);
 
             $user->setHash($hash)
                 ->addUserRole($userRole);
+
+            /** @var UploadedFile $avatarFile */
+            $avatarFile = $form->get('avatar')->getData();
+
+            // this condition is needed because the 'avatar' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($avatarFile) {
+                $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugify->slugify($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $avatarFile->guessExtension();
+
+                // Move the file to the directory where avatars are stored
+                try {
+                    $avatarFile->move(
+                        $this->getParameter('avatar_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                $user->setAvatar($newFilename);
+            }
+
+            /** @var UploadedFile $enterpriseLogoFile */
+            $enterpriseLogoFile = $form->get('enterpriseLogo')->getData();
+
+            // this condition is needed because the 'enterpriseLogo' field is not required
+            // so the PDF file must be processed only when a file is uploaded
+            if ($enterpriseLogoFile) {
+                $originalFilename = pathinfo($enterpriseLogoFile->getClientOriginalName(), PATHINFO_FILENAME);
+                // this is needed to safely include the file name as part of the URL
+                $safeFilename = $slugify->slugify($originalFilename);
+                $newFilename = $safeFilename . '-' . uniqid() . '.' . $enterpriseLogoFile->guessExtension();
+
+                // Move the file to the directory where enterpriseLogos are stored
+                try {
+                    $enterpriseLogoFile->move(
+                        $this->getParameter('logo_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                // updates the 'enterpriseLogoFilename' property to store the PDF file name
+                // instead of its contents
+                $user->setEnterpriseLogo($newFilename);
+            }
+
+            $manager->persist($user);
+            $manager->flush();
+
+            /*$this->addFlash(
+                'success',
+                "Compte utilisateur crée. Veuillez vous connecter !"
+            );
+
+            return $this->redirectToRoute('account_login2');*/
+
             $manager->persist($user);
             $manager->flush();
 
@@ -66,6 +134,7 @@ class AdminUser1Controller extends AbstractController
 
             return $this->redirectToRoute('admin_user1_index');
         }
+
         return $this->render('admin/user1/new.html.twig', [
             'form' => $form->createView()
         ]);
