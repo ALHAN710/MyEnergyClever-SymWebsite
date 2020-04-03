@@ -88,7 +88,7 @@
             <!-- menu profile quick info class="fa fa-paw" -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                <img src="/img/SATC_LOGO.PNG" alt="Enterprise Logo" class="img-circle profile_img">
+                <img src="{{ user.enterpriseLogo != null  ? '/img/uploads/logo/' ~ user.enterpriseLogo : '/img/uploads/logo/logo.png' }}" alt="Enterprise Logo" class="img-circle profile_img">
               </div>
               <div class="profile_info">
                 <span>Welcome,</span>
@@ -215,12 +215,13 @@
                 <a id="menu_toggle"><i class="fa fa-bars"></i></a>
               </div>
               <nav class="nav navbar-nav">
-              {# {{ dump(app.user.getRoles()[0]) }} #}
+              {# {{ dump(app.user.getRoles()[0]) }}  asset('uploads/avatar/' ~ user.avatar) {{ 'uploads/avatar/' ~ user.avatar }}#}
+              
               {% block userEmail %}
                 <ul class=" navbar-right">
                   <li class="nav-item dropdown open" style="padding-left: 15px;">
                     <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                      <img src="/img/Naomi.jpg" alt="User picture">{{app.user.email}}
+                      <img src=" {{ user.avatar != null  ? '/img/uploads/avatar/' ~ user.avatar : '/img/uploads/avatar/user.png' }}" alt="User picture">{{app.user.email}}
                     </a>
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                       
@@ -329,11 +330,16 @@
             <div class="col-md-12 col-sm-12 ">
             <!--  <div class="dashboard_graph"> -->
               {% for label, messages in app.flashes %}
-                <div class="container mt-3"> 
-                  <div class="alert-{{label}}"> 
-                    {% for message in messages %}
-                      <p>{{ message | raw }}</p>
-                    {% endfor %}
+                <div class="container mt-3 text-center">
+                  <div class="alert-{{label}} h-25"> 
+                    <div class="col-2">
+                      <i class="fas fa-check fa-2x pull-left py-1"></i>
+                    </div>
+                    <div class="col-10">
+                      {% for message in messages %}
+                        <p style="font-size: 25px;">{{ message | raw }}</p>
+                      {% endfor %}
+                    </div>
                   </div>
                 </div>
 
