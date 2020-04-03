@@ -209,7 +209,7 @@ class AccountController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             //1. Vérifier que le oldpassword soit le même que celui de l'user
-            if (!password_verify($passwordUpdate->getNewPassword(), $user->getHash())) {
+            if (!password_verify($passwordUpdate->getOldPassword(), $user->getHash())) {
                 //Gérer l'erreur
                 $form->get('oldPassword')->addError(new FormError("Le mot de passe saisi n'est pas votre mot de passe actuel"));
             } else {
