@@ -113,7 +113,7 @@ class AccountController extends AbstractController
         $filesystem = new Filesystem();
 
         $slugify = new Slugify();
-        dump($this->getParameter('avatar_directory'));
+        //dump($this->getParameter('avatar_directory'));
         $form = $this->createForm(AccountType::class, $user);
 
         $form->handleRequest($request);
