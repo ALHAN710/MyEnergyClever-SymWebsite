@@ -1,0 +1,33 @@
+<div class="left-sidenav">
+                    
+    <ul class="metismenu left-sidenav-menu" id="side-nav">
+
+        <li class="menu-title">Main</li>
+        {% for site in user.sites %}
+            {% set url = path('sites_show',{'slug':site.slug}) %}
+            <li>
+                <a href="javascript: void(0);"><i class="mdi mdi-office-building"></i><span>{{site.name}}</span><span class="menu-arrow"><i class="mdi mdi-chevron-right"></i></span></a>
+                <ul class="nav-second-level" aria-expanded="false">
+                    <li class="active"><a href="{{url}}"><i class="mdi mdi-monitor"></i><span>Dashboard</span></a></li>
+                    {% set categorie = ['GRID', 'FUEL'] %}
+                    {% for cat in categorie %}
+                        <li>
+                            <a href="javascript: void(0);">{% if cat == 'GRID' %}<i class="mdi mdi-tower-beach"></i>{% else %}<i class="mdi mdi-engine"></i>{% endif %}{{ cat }} POWER <span class="menu-arrow left-has-menu"><i class="mdi mdi-chevron-right"></i></span></a>
+                            <ul class="nav-second-level" aria-expanded="false">
+                                {% for type in site.smartMods %}
+                                    {#{{dump(type)}}#}
+                                    {% if type.modType == cat %}
+                                        <li><a href="{{ path('show_mod_graphs', {'id': type.id}) }}">{{type.modName}}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                            </ul>
+                        </li>  
+                    {% endfor %}                              
+                    
+                </ul>
+            </li>
+        {% endfor %}
+
+    </ul>
+</div>

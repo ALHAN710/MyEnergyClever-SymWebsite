@@ -31,7 +31,7 @@ class Site
      * @Assert\NotBlank(message="Veuillez renseigner le nom du Site")
      */
     private $name;
- 
+
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\User1", inversedBy="sites")
      * @ORM\JoinColumn(nullable=false)
@@ -47,7 +47,18 @@ class Site
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $slug; 
+    private $slug;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $subscription;
+
+    /**
+     * @ORM\Column(type="float")
+     * @Assert\NotBlank(message="Veuillez renseigner la puissance souscrite du Site")
+     */
+    private $psous;
 
     /**
      * Permet d'initialiser le slug !
@@ -57,8 +68,9 @@ class Site
      * 
      * @return void
      */
-    public function initializeSlug(){
-        if(empty($this->slug)){
+    public function initializeSlug()
+    {
+        if (empty($this->slug)) {
             $slugify = new Slugify();
             $this->slug = $slugify->slugify($this->name);
         }
@@ -137,6 +149,30 @@ class Site
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getSubscription(): ?string
+    {
+        return $this->subscription;
+    }
+
+    public function setSubscription(string $subscription): self
+    {
+        $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    public function getPsous(): ?float
+    {
+        return $this->psous;
+    }
+
+    public function setPsous(float $psous): self
+    {
+        $this->psous = $psous;
 
         return $this;
     }

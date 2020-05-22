@@ -1019,13 +1019,18 @@ hr {
   width: 270px;
   z-index: 1;
 }
+/*.topbar .topbar-center {
+  float: center;
+  width: 270px;
+  z-index: 1;
+}*/
 
 .topbar .topbar-left .logo {
   line-height: 70px;
 }
 
 .topbar .topbar-left .logo .logo-sm {
-  height: 24px;
+  height: 80px;
 }
 
 .topbar .topbar-left .logo .logo-lg {
@@ -7883,14 +7888,13 @@ tr:first-child > td > .fc-day-grid-event {
 }
 
 .accountbg {
-  background: url("../img/bg-1.jpg");
+  background: url("../img/home1.jpg");
   background-size: cover;
   background-position: center center;
   height: 100%;
   width: 100%;
   top: 0;
-  -webkit-box-shadow: inset 0 0 0 2000px rgba(24, 27, 46, 0.8);
-          box-shadow: inset 0 0 0 2000px rgba(24, 27, 46, 0.8);
+  
 }
 
 .accountbg .account-title {

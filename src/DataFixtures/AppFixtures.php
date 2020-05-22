@@ -37,7 +37,7 @@ class AppFixtures extends Fixture
         $dateTimeGenerator = new DateTimeGenerator();
         //$slugify = new Slugify();
         $nb = 0;
-
+        $genders = ['male', 'female'];
         $adminRole = new Role();
         $adminRole->setTitle('ROLE_ADMIN');
         $manager->persist($adminRole);
@@ -46,18 +46,52 @@ class AppFixtures extends Fixture
         $date = new DateTime(date('Y-m-d H:i:s'));
         $adminUser->setEnterpriseName('Clever Electric Company Ltd')
             ->setEmail('alhadoumpascal@gmail.com')
+            ->setFirstName('Pascal')
+            ->setLastName('ALHADOUM')
             ->setHash($this->encoder->encodePassword($adminUser, 'password'))
             ->setCreatedAt($date)
-            ->addUserRole($adminRole);
+            ->addUserRole($adminRole)
+            ->setVerified(true)
+            ->setPhoneNumber($faker->phoneNumber)
+            ->setCountryCode('+237');
         $manager->persist($adminUser);
+
+        $date = new DateTime(date('Y-m-d H:i:s'));
+        $adminUser2 = new User1();
+        $adminUser2->setEnterpriseName('Clever Electric Company Ltd')
+            ->setFirstName('Cabrel')
+            ->setLastName('MBAKAM')
+            ->setEmail('cabrelmbakam@gmail.com')
+            ->setHash($this->encoder->encodePassword($adminUser2, 'password'))
+            ->setCountryCode('+237')
+            ->setPhoneNumber('690304593')
+            ->setCreatedAt($date)
+            ->setVerified(true)
+            ->addUserRole($adminRole);
+
+        $manager->persist($adminUser2);
 
         //Nous gérons les utilisateurs
         $users = [];
         //$genres = ['male', 'female'];
         $modTypes = ['FUEL', 'GRID'];
+        $subscriptionTypes = ['MT', 'Tertiary', 'Residential'];
         $instaTypes = ['MONOPHASE', 'TRiPHASE'];
 
-        for ($i = 1; $i <= 5; $i++) {
+        $userSATC = new User1();
+        $date = new DateTime(date('Y-m-d H:i:s'));
+        $userSATC->setEnterpriseName('SATC SARL')
+            ->setFirstName('Martin')
+            ->setLastName('BOYOMO')
+            ->setEmail('martinboyomo@satc.com')
+            ->setHash($this->encoder->encodePassword($userSATC, 'password'))
+            ->setCreatedAt($date)
+            ->setVerified(true)
+            ->setPhoneNumber($faker->phoneNumber)
+            ->setCountryCode('+237');
+        $manager->persist($userSATC);
+
+        for ($i = 1; $i <= 3; $i++) {
             //$user = new User();
             $user = new User1();
 
@@ -80,8 +114,13 @@ class AppFixtures extends Fixture
                  ->setPicture($picture);*/
             $user->setEnterpriseName($faker->unique()->company)
                 ->setEmail($faker->unique()->companyEmail)
+                ->setFirstName($faker->unique()->firstName($faker->randomElement($genders)))
+                ->setLastName($faker->unique()->lastName)
                 ->setCreatedAt($date)
-                ->setHash($hash);
+                ->setHash($hash)
+                ->setVerified(true)
+                ->setPhoneNumber($faker->phoneNumber)
+                ->setCountryCode('+237');
 
             $manager->persist($user);
             $users[] = $user;
@@ -123,6 +162,112 @@ class AppFixtures extends Fixture
 
         $smartMods = [];
         //Nous gérons les Sites
+
+        //Site de Douala du client SATC
+        $siteDouala = new Site();
+
+        $siteDouala->setName('Usine de Douala')
+            ->setSubscription('MT')
+            ->setPsous(245)
+            ->setUser($userSATC);
+        $tabgridMod = ['Livraison ENEO', 'Départ Atelier de pointerie', 'Départ Atelier de chaudronnerie', 'Départ Atelier de laminage', 'Départ Bloc administratif'];
+        $tabfuelMod = ['Livraison Groupe Electrogène'];
+        //Site Douala GRID MODULES
+        foreach ($tabgridMod as $gridModName) {
+
+            $smartMod = new SmartMod();
+            $modType = 'GRID';
+            $instaType = $faker->randomElement($instaTypes);
+            $nameMod = $gridModName;
+
+            $smartMod->setModuleId($faker->unique()->randomNumber($nbDigits = 8, $strict = false))
+                ->setInstallationType($instaType)
+                ->setSite($siteDouala)
+                ->setModType($modType)
+                ->setModName($nameMod);
+
+            $manager->persist($smartMod);
+            $smartMods[] = $smartMod;
+        }
+
+        //Site Douala FUEL MODULES
+        foreach ($tabfuelMod as $fuelModName) {
+
+            $smartMod = new SmartMod();
+            $modType = 'FUEL';
+            $instaType = $faker->randomElement($instaTypes);
+            $nameMod = $fuelModName;
+
+            $smartMod->setModuleId($faker->unique()->randomNumber($nbDigits = 8, $strict = false))
+                ->setInstallationType($instaType)
+                ->setSite($siteDouala)
+                ->setModType($modType)
+                ->setModName($nameMod);
+
+
+            $critiqFuelStock = $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 120);
+
+            $smartMod->setCritiqFuelStock($critiqFuelStock);
+
+
+            $manager->persist($smartMod);
+            $smartMods[] = $smartMod;
+        }
+        $manager->persist($siteDouala);
+
+        //Site de Garoua du client SATC
+        $siteGaroua = new Site();
+
+        $siteGaroua->setName('Agence commercial Garoua')
+            ->setSubscription('Tertiary')
+            ->setPsous(66)
+            ->setUser($userSATC);
+        $tabgridMod = ['Livraison ENEO'];
+        $tabfuelMod = ['Livraison Groupe Electrogène'];
+        //Site Garoua GRID MODULES
+        foreach ($tabgridMod as $gridModName) {
+
+            $smartMod = new SmartMod();
+            $modType = 'GRID';
+            $instaType = $faker->randomElement($instaTypes);
+            $nameMod = $gridModName;
+
+            $smartMod->setModuleId($faker->unique()->randomNumber($nbDigits = 8, $strict = false))
+                ->setInstallationType($instaType)
+                ->setSite($siteGaroua)
+                ->setModType($modType)
+                ->setModName($nameMod);
+
+            $manager->persist($smartMod);
+            $smartMods[] = $smartMod;
+        }
+
+        //Site Garoua FUEL MODULES
+        foreach ($tabfuelMod as $fuelModName) {
+
+            $smartMod = new SmartMod();
+            $modType = 'FUEL';
+            $instaType = $faker->randomElement($instaTypes);
+            $nameMod = $fuelModName;
+
+            $smartMod->setModuleId($faker->unique()->randomNumber($nbDigits = 8, $strict = false))
+                ->setInstallationType($instaType)
+                ->setSite($siteGaroua)
+                ->setModType($modType)
+                ->setModName($nameMod);
+
+
+            $critiqFuelStock = $faker->randomFloat($nbMaxDecimals = 2, $min = 20, $max = 120);
+
+            $smartMod->setCritiqFuelStock($critiqFuelStock);
+
+
+            $manager->persist($smartMod);
+            $smartMods[] = $smartMod;
+        }
+        $manager->persist($siteGaroua);
+
+
         for ($i = 1; $i <= 10; $i++) {
             $site = new Site();
 
@@ -130,9 +275,9 @@ class AppFixtures extends Fixture
             $user = $users[mt_rand(0, count($users) - 1)];
 
             //  $slug = $slugify->slugify($title);
-
-
             $site->setName($name)
+                ->setSubscription($faker->randomElement($subscriptionTypes))
+                ->setPsous($faker->randomFloat($nbMaxDecimals = 1, $min = 2.2, $max = 240))
                 ->setUser($user);
 
             for ($j = 1; $j <= mt_rand(2, 4); $j++) {
@@ -177,14 +322,16 @@ class AppFixtures extends Fixture
         */
 
         //$date_array = $dateTimeGenerator->getArrayDateTime();
+        for ($i = 0; $i < 2; $i++) {
+            $months = $month + $i;
+            for ($j = 1; $j <= $nbDay; $j++) {
+                for ($h = 0; $h < 24; $h++) {
+                    for ($m = 0; $m < 60; $m += 15) { //'P0DT0H15M0S'
+                        $date = new DateTime($Year . '-' . $months . '-' . $j . ' ' . $h . ':' . $m . ':00');
+                        $date->format('Y-m-d H:i:s');
 
-        for ($j = 1; $j <= $nbDay; $j++) {
-            for ($h = 0; $h < 24; $h++) {
-                for ($m = 0; $m < 60; $m += 15) { //'P0DT0H15M0S'
-                    $date = new DateTime($Year . '-' . $month . '-' . $j . ' ' . $h . ':' . $m . ':00');
-                    $date->format('Y-m-d H:i:s');
-
-                    $date_array[] = $date;
+                        $date_array[] = $date;
+                    }
                 }
             }
         }

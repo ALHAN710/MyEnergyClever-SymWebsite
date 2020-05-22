@@ -23,7 +23,17 @@ class AdminRegistration1Type extends ApplicationType
                 TextType::class,
                 $this->getConfiguration("Nom de l'entreprise", "Nom de l'entreprise")
             )
+            ->add(
+                'firstName',
+                TextType::class,
+                $this->getConfiguration("First Name :", "Your First Name please...")
+            )
 
+            ->add(
+                'lastName',
+                TextType::class,
+                $this->getConfiguration("Last Name :", "Your Last Name please...")
+            )
             ->add(
                 'email',
                 EmailType::class,
@@ -96,6 +106,19 @@ class AdminRegistration1Type extends ApplicationType
                 'passwordConfirm',
                 PasswordType::class,
                 $this->getConfiguration("Confirmation de mot de passe", "Veuillez confirmer votre mot de passe")
+            )
+            ->add(
+                'countryCode',
+                TextType::class,
+                $this->getConfiguration("Country code :", "Telephone code of your country")
+
+            )
+
+            ->add(
+                'phoneNumber',
+                TextType::class,
+                $this->getConfiguration("Phone Number :", "Your Phone Number please...")
+
             )
             ->add(
                 'role',

@@ -1,0 +1,364 @@
+{% extends 'home1.html.twig' %}
+
+{% block stylesheets %}
+    <!-- DataTables -->
+    <link href="/plugins/datatables/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="/plugins/datatables/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <!-- Responsive datatable examples -->
+    <link href="/plugins/datatables/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" /> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+
+{% endblock %}
+    
+{% block body %}
+    {% set modGrid = [] %}
+    {% set modFuel = [] %}
+    {#{% if modTab != NULL  %} {{dump(modTab[2].moduleId)}} {% endif %}#}
+    {% for mod in site.getSmartMods() %}
+        {#{{dump(mod.modType)}}#}
+        {% if mod.modType == 'GRID' %}
+            {% set modGrid =  modGrid|merge([mod]) %}
+        {% else %}
+            {% set modFuel =  modFuel|merge([mod]) %}
+        {% endif %} 
+        {#{{loop.index0}}#}
+    {% endfor %}
+    {#{% if modGrid|length > 0 %}
+        {{dump(modGrid|length)}}
+    {% endif %}#}
+
+    <div class="row">
+        <div class="col-md-12 col-lg-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <h4 class="mt-0 header-title"></h4>
+                    
+                    <!-- Nav tabs -->
+                    {% set is_grid = true %}
+                    <ul class="nav nav-tabs" role="tablist">
+                        {% if modGrid|length > 0 %}
+                        <li class="nav-item">
+                            <a class="nav-link active" id="grid-tab" data-toggle="tab" href="#gridSection" role="tab" aria-controls="gridSection" aria-selected="true">GRID</a>
+                        </li>
+                        {% else %}
+                            {% set is_grid = false %}
+                        {% endif %}
+                        {% if modFuel|length > 0 %}
+                        <li class="nav-item">
+                            <a {% if is_grid == true %}class="nav-link"{% else %} class="nav-link active" {% endif %} id="fuel-tab" data-toggle="tab" href="#fuelSection" role="tab" aria-controls="fuelSection" aria-selected="true">FUEL</a>
+                        </li>   
+                        {% endif %}                                             
+                    </ul>
+
+                    <!-- Tab panes -->
+                    <div class="tab-content">
+                        {% if modGrid|length > 0 %}
+                        <div class="tab-pane active fade show p-3" id="gridSection" role="tabpanel" aria-labelledby="grid-tab">
+                            <div class="row mt-5">
+                                <div class="col-sm-12">
+                                    <div class="card-box table-responsive">
+                                        <table id="datatable-responsive1" class="table dt-responsive nowrap gridTabReport" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th class="text-left">Module Name</th>
+                                                    <th>Active Energy(kWh)</th>
+                                                    <!--<th>Energie Active (XAF)</th>-->
+                                                    <th>Reactive Energy(kVARh)</th>
+                                                    <th>Cosϕ</th>
+                                                    {%  set nbcolgrid  = 6 %}
+                                                    <script>var nbColGrid =  {{ nbcolgrid }} ;</script>
+                                                    {#{% dump(nbcolfuel) %}#}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for mod in modGrid %}
+                                            <tr class="text-center">
+                                                <td class="text-left">
+                                                    <a href="{{ path('show_mod_graphs', {'id': mod.id}) }}">{{mod.modName}}</a>
+                                                </td>
+                                                <td ></td>{# data-entry-idgrid="{{mod.id}}" #}
+                                                <td class="ER"></td>
+                                                <td class="Cos"></td>
+                                                
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row justify-content-md-center mt-5">
+                                <!-- GRID Modules DataTable -->
+                                <div class="col-lg-9 col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body table-responsive">
+                                            <div class="row">
+                                                <div class="col-1">
+                                                    <i class="mdi mdi-information-outline mdi-48px"></i>
+                                                </div>
+                                                <div class="col-11">
+                                                    <h5 class="header-title text-center mb-3">Detailed GRID modules informations</h5>
+                                                    <div class="form-group row mr-4">
+                                                        <label class="col-sm-4 col-form-label text-right">Select module</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" id="selectGridMod">
+                                                                {% for type in site.smartMods %}
+                                                                    {#{{dump(type)}}#}
+                                                                    {% if type.modType == 'GRID' %}
+                                                                        <option data-entry-idgrid="{{type.id}}" id="grid_{{type.id}}">{{type.modName}}</option>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                
+                                                </div>
+                                            </div>
+
+                                            <div class="">
+                                                <table id="datatable2" class="table dt-responsive nowrap gridTab" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                    <thead>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Consumption (kWh)</td>
+                                                        <td></td>
+                                                        <td class="text-right">
+                                                            <span id="gridEAProgVal">0</span>%<span><i class="mdi mdi-menu-down mdi-24px text-danger" id="gridEAProg"></i></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Cost (FCFA)</td>
+                                                        <td></td>
+                                                        <td class="text-right">
+                                                            <span id="gridCostProgVal">0</span>%<span><i class="mdi mdi-menu-down mdi-24px text-danger" id="gridCostProg"></i></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Reactif (kVARh)</td>
+                                                        <td></td>
+                                                        <td class="text-right">
+                                                            <span id="gridERProgVal">0</span>%<span><i class="mdi mdi-menu-down mdi-24px text-success" id="gridERProg"></i></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Cosϕ</td>
+                                                        <td></td>
+                                                        <td class="text-right">
+                                                            <span id="gridCosProgVal">0</span>%<span><i class="mdi mdi-menu-down mdi-24px text-danger" id="gridCosProg"></i></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Smax (kVA)</td>
+                                                        <td></td>
+                                                        <td class="text-right">
+                                                            <span id="gridSmaxProgVal">0</span>%<span><i class="mdi mdi-menu-down mdi-24px text-danger" id="gridSmaxProg"></i></span>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Smoy (kVA)</td>
+                                                        <td ></td>
+                                                        <td class="text-right">
+                                                            <span id="gridSmoyProgVal">0</span>%<span><i class="mdi mdi-menu-down mdi-24px text-danger" id="gridSmoyProg"></i></span>
+                                                        </td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>           
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End GRID Modules DataTable -->
+                            </div>
+                        </div>
+                        {% else %}
+                            {% set is_grid = false %}
+                        {% endif %}
+
+                        {% if modFuel|length > 0 %}
+                        <div class="tab-pane fade p-3{% if is_grid %}{% else %} show active {% endif %}" id="fuelSection" role="tabpanel" aria-labelledby="fuel-tab">
+                            <div class="row mt-5">
+                                <div class="col-sm-12">
+                                    <div class="card-box table-responsive">
+                                        <table id="datatable-responsive" class="table dt-responsive nowrap fuelTabReport" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr class="text-center justify-content-center">
+                                                    <th class="text-left">Module Name</th>
+                                                    <th>Production (kWh)</th>
+                                                    <th>Liter consumed</th>
+                                                    <th>Working Time</th> 
+                                                    {%  set nbcolfuel  = 7 %}
+                                                    <script>var nbColFuel =  {{ nbcolfuel }} ;</script>
+                                                    
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for mod in modFuel %}
+                                                <tr class="text-center">
+                                                    <td class="text-left">
+                                                        <a href="{{ path('show_mod_graphs', {'id': mod.id}) }}">{{mod.modName}}</a>
+                                                    </td>
+                                                    <td ></td> {# data-entry-idfuel="{{mod.id}}" #}
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                            </div>
+
+                            <div class="row justify-content-md-center mt-5">
+                                <!-- FUEL Modules DataTable -->
+                                <div class="col-lg-9 col-sm-12">
+                                    <div class="card">
+                                        <div class="card-body table-responsive2">
+                                            <div class="row">
+                                                <div class="col-1 text-center">
+                                                    <i class="mdi mdi-information-outline mdi-48px"></i>
+                                                </div>
+                                                <div class="col-11">
+                                                    <h5 class="header-title text-center mb-3">Detailed FUEL modules informations </h5>
+                                                    <div class="form-group row mr-4">
+                                                        <label class="col-sm-4 col-form-label text-right">Select module</label>
+                                                        <div class="col-sm-8">
+                                                            <select class="form-control" id="selectFuelMod">
+                                                                {% for type in site.smartMods %}
+                                                                    {#{{dump(type)}}#}
+                                                                    {% if type.modType == 'FUEL' %}
+                                                                        <option data-entry-idfuel="{{type.id}}" data-entry-stocklink="{{ path('show_fuelMod_histographs', {'id': type.id}) }}" id="grid_{{type.id}}" >{{type.modName}}</option>
+                                                                    {% endif %}
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="">
+                                                <table id="datatable3" class="table dt-responsive nowrap fuelTab" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                                                    <thead>                                                  
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>Production (kWh)</td>
+                                                            <td class="text-center"></td>
+                                                            <td class="text-right">
+                                                                <span id="fuelEAProgVal">0</span>%<span><i class="mdi mdi-menu-down mdi-24px text-danger" id="fuelEAProg"></i></span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>Cost (FCFA)</td>
+                                                            <td class="text-center"></td>
+                                                            <td class="text-right">
+                                                                <span id="fuelCostProgVal">0</span>%<span><span><i class="mdi mdi-menu-down mdi-24px text-danger" id="fuelCostProg"></i></span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>Gasoil consumption (L)</td>
+                                                            <td class="text-center"></td>
+                                                            <td class="text-right">
+                                                                <span id="fuelLitersProgVal">0</span>%<span><span><i class="mdi mdi-menu-down mdi-24px text-danger" id="fuelLitersProg"></i></span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>Duration</td>
+                                                            <td class="text-center"></td>
+                                                            <td class="text-right">
+                                                                <span id="fuelWorkingTimeProgVal">0</span><span><span><i class="mdi mdi-menu-down mdi-24px text-danger" id="fuelWorkingTimeProg"></i></span>
+                                                            </td>
+                                                        </tr>
+
+                                                        <tr>
+                                                            <td>Cosϕ</td>
+                                                            <td class="text-center"></td>
+                                                            <td class="text-right">
+                                                                <span id="fuelCosProgVal">0</span>%<span><span><i class="mdi mdi-menu-down mdi-24px text-danger" id="fuelCosProg"></i></span>
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        <tr>
+                                                            <td></td>
+                                                            <td style="color:white;">Stock Management</td>
+                                                            <td class="text-right">
+                                                                <a id="fuelStockLink" href="#" class="btn btn-primary btn-xs" data-toggle="tooltip" data-placement="top" title="Voir l'historique"><i class="mdi mdi-history mdi-18px"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>           
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End FUEL Modules DataTable -->                           
+                            </div>
+                        </div>  
+                        {% endif %}                                              
+                    </div>        
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {#
+    <div class="row justify-content-md-center">
+        <div class="col-lg-12 col-xl-10">
+            <div class="card">
+                <div class="card-body text-center">            
+                    <h4 class="mt-0 header-title ">distribution of energy expenditure</h4> 
+                    <p class="text-muted mb-4 d-inline-block text-truncate w-100 ">
+                        Total Expenses of Selected Modules: <span id="TotalConsumption">700</span> XAF
+                    </p>          
+                    <canvas id="pie" height="300"></canvas>            
+                </div><!--end card-body-->
+            </div> <!-- end card -->  
+        </div> <!-- end col -->
+    </div>
+    #}
+                            
+        
+
+{% endblock %}
+
+{% block datetimeFormat %}format: 'MM/YYYY',{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var $urlupdateDashSite = "{{ path('update_sites_dashboard', {'id': site.id}) }}";
+        console.log($urlupdateDashSite);
+   
+        //console.log(nbColGrid);
+    </script>
+    
+
+    <!-- Required datatable js -->
+    <script src="/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/plugins/datatables/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="/plugins/datatables/dataTables.buttons.min.js"></script>
+    <script src="/plugins/datatables/buttons.bootstrap4.min.js"></script>
+    <script src="/plugins/datatables/jszip.min.js"></script>
+    <script src="/plugins/datatables/pdfmake.min.js"></script>
+    <script src="/plugins/datatables/vfs_fonts.js"></script>
+    <script src="/plugins/datatables/buttons.html5.min.js"></script>
+    <script src="/plugins/datatables/buttons.print.min.js"></script>
+    <script src="/plugins/datatables/buttons.colVis.min.js"></script>
+    <!-- Responsive examples -->
+    <script src="/plugins/datatables/dataTables.responsive.min.js"></script>
+    <script src="/plugins/datatables/responsive.bootstrap4.min.js"></script>
+    <script src="/pages/jquery.datatable.init.js"></script>
+
+    <!-- Chart JS -->
+    <script src="/plugins/chartjs/chart.min.js"></script>
+    <script src="/pages/jquery.chartjs.update.js"></script> 
+    <script src="/js/updateDashSite.js"></script>
+   <!-- <script scr="/js/pieChartDashSite.js"></script> -->
+    <!-- App js -->
+    <script src="/js/app.js"></script>
+
+{% endblock %}

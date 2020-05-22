@@ -1,0 +1,243 @@
+{% extends 'home1.html.twig' %}
+
+{% block stylesheets %}
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous" />
+
+{% endblock %}
+
+{% block pageTitle %}
+    <h4 class="page-title mb-2"><i class="mdi mdi-chart-areaspline mr-2"></i>{{smartMod.modName}} Graphs Report</h4> 
+{% endblock %}  
+{% set isGrid = 0 %}
+    
+{% block body %}  
+    {% if smartMod.modType == 'GRID' %}
+        {% set isGrid = 1 %}
+        <div class="row" >
+            <div class="col-12">
+            <div class="card">
+                <div class="card-body">            
+                    <h4 class="mt-0 header-title">Power consumption per <strong>Day</strong></h4>
+                    <canvas id="PowerConsumption" height="300"></canvas>            
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!-- end col -->
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">            
+                        <h4 class="mt-0 header-title">Load <strong>Profile</strong></h4>
+                        <canvas id="CourbedeCharge" height="300"></canvas>            
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div> <!-- end col -->
+        </div> 
+
+    {%  elseif smartMod.modType == 'FUEL' %}
+        {% set isGrid = 2 %}
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">            
+                        <h4 class="mt-0 header-title">Electricity Production per <strong>Day</strong></h4>
+                        <canvas id="PowerProduction" height="300"></canvas>            
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div> <!-- end col -->
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">            
+                        <h4 class="mt-0 header-title">Gas Consumption and Working Time per <strong>Day</strong></h4>
+                        <canvas id="CourbeCroisé" height="300"></canvas>            
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div> <!-- end col -->
+        </div> 
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">            
+                        <h4 class="mt-0 header-title">Activity Plan per <strong>Day</strong></h4>
+                        <canvas id="ActivityPlan" height="300"></canvas>            
+                    </div><!--end card-body-->
+                </div><!--end card-->
+            </div> <!-- end col -->
+        </div> 
+
+    {% endif %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">            
+                    <h4 class="mt-0 header-title">Load Profile per <strong>Phase</strong></h4>
+                    <canvas id="PowerProfile" height="300"></canvas>            
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!-- end col -->
+    </div> 
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">            
+                    <h4 class="mt-0 header-title">Voltage Profile per <strong>Phase</strong></h4>
+                    <canvas id="VoltageProfile" height="300"></canvas>            
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!-- end col -->
+    </div> 
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">            
+                    <h4 class="mt-0 header-title">Load imbalance <strong>Indicator</strong></h4>
+                    <canvas id="IDCProfile" height="300"></canvas>            
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!-- end col -->
+    </div> 
+
+    <div class="row" >
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">            
+                    <h4 class="mt-0 header-title">Voltage asymmetry <strong>Indicator</strong></h4>
+                    <canvas id="IDDProfile" height="300"></canvas>            
+                </div><!--end card-body-->
+            </div><!--end card-->
+        </div> <!-- end col -->
+    </div> 
+
+    <script>
+        var isGrid = {{ isGrid }};
+        console.log(isGrid);         
+    </script>
+                    
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Chart JS -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js" integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <!-- <script src="/plugins/chartjs/chart.min.js"></script> -->
+    <!-- <script src="/pages/jquery.chartjs.init.js"></script>
+    -->
+    <script>
+        var CourbedeCharge_Linechart;
+        var PowerConsumption_Barchart; 
+        var PowerProduction_Barchart;
+        var CourbeCroisé_BarLinechart;
+        var ActivityPlan_Linechart;
+        var VoltageProfile_Linechart;
+        var PowerProfile_Linechart;
+        var IDCProfile_Linechart;
+        var IDDProfile_Linechart;
+        
+    </script>
+
+    <script src="/js/jquery.chartjs.update.js"></script>
+
+    <script>
+        
+        function removeData(chart) {
+            chart.data.labels.pop();
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.pop();
+            });
+            chart.update();
+        }
+
+        
+        function addData(chart, label, data) {
+            chart.data.labels.push(label);
+            chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(data);
+            });
+            chart.update();
+        }
+
+        function displayNewData(chart, label, data, dateopt, multiple, xscale, id){
+            chart.data.labels = [];
+            chart.data.datasets.forEach( (dataset) => {
+                dataset.data = [];
+            });
+            chart.data.labels = label;
+            if(multiple > 1){
+                var i = 0;
+                chart.data.datasets.forEach((dataset) => {
+                    if( i < multiple) dataset.data = data[i++];
+                });
+            }
+            else if(multiple == 1){
+                /*chart.data.datasets.forEach((dataset) => {
+                    dataset.data = data;
+                });*/
+                chart.data.datasets[0].data = data;
+            }
+            if(xscale === 'day') chart.options.scales.xAxes[0].scaleLabel.labelString = moment(dateopt).format('DD MMMM').toString();
+            else if( xscale === 'month') chart.options.scales.xAxes[0].scaleLabel.labelString = moment(dateopt).format('MMMM').toString();
+            //console.log(chart.options.scales.xAxes[0].scaleLabel.labelString);
+            //preloaderChart(id, false);
+            chart.update();
+        }
+
+        //console.log(CourbedeCharge);
+
+        $("#datetimepicker10").on("dp.change", function (e) {
+            //$('#datetimepicker6').data("DateTimePicker").maxDate(e.date);
+            //console.log(e.date._d.toLocaleString().replace('à', ''));
+            //console.log(e.date._d);
+            //$date = new Date(e.date._d);
+            //console.log(e.date.format("YYYY-MM-DD H:i:s")._d);
+            //console.log(Date.parse($date).toString('yyyy-MM-dd H:i:s'));
+            $dat = new moment(e.date._d);
+            $date = $dat.format("YYYY-MM-DD").toString();
+            //console.log($date);
+            $date = '%' + $date + '%';
+            //console.log($date);
+
+            //for($i = 1; $i <= (CourbedeCharge.data.labels.length*2)+100; $i++) removeData(CourbedeCharge);
+           
+           $.getJSON("{{ path('update_mod_graphs', {'id': smartMod.id}) }}",{'selectedDate': $date}, function (result) {
+                if( Object.keys(result).length > 0 ){
+                    var dateLabel = Object.values(result['date']);
+                    //console.log(Object.values(result['CourbeCroisé']));
+                    //console.log(Object.values(result['IDD']));
+                        
+                    {% if smartMod.modType == 'GRID' %}
+                        displayNewData(PowerConsumption_Barchart, Object.values(result['dateE']), Object.values(result['kWh']), e.date._d, 1, 'month', '#spinPowerConsumption');
+                        //preloaderChart(id, status);
+                        displayNewData(CourbedeCharge_Linechart, dateLabel, Object.values(result['S3ph']), e.date._d, 1, 'day');
+                        //displayNewData(PowerProfile_Linechart, dateLabel, Object.values(result['S']), e.date._d, 3);
+                        //displayNewData(VoltageProfile_Linechart, dateLabel, Object.values(result['V']), e.date._d, 3);
+                        //displayNewData(IDDProfile_Linechart, dateLabel, Object.values(result['V']), e.date._d, 2);
+                        //displayNewData(IDCProfile_Linechart, dateLabel, Object.values(result['V']), e.date._d, 2);
+                    {% elseif smartMod.modType == 'FUEL' %}
+                        displayNewData(PowerProduction_Barchart, Object.values(result['dateE']), Object.values(result['kWh']), e.date._d, 1, 'month');
+                        displayNewData(CourbeCroisé_BarLinechart, Object.values(result['dateE']), Object.values(result['CourbeCroisé']), e.date._d, 2, 'month');
+                        displayNewData(ActivityPlan_Linechart, dateLabel, Object.values(result['S3ph']), e.date._d, 1, 'day');
+                        
+                    {% endif %}
+                    displayNewData(PowerProfile_Linechart, dateLabel, Object.values(result['S']), e.date._d, 3, 'day');
+                    displayNewData(VoltageProfile_Linechart, dateLabel, Object.values(result['V']), e.date._d, 3, 'day');
+                    displayNewData(IDCProfile_Linechart, dateLabel, Object.values(result['IDC']), e.date._d, 2, 'day');
+                    displayNewData(IDDProfile_Linechart, dateLabel, Object.values(result['IDD']), e.date._d, 2, 'day');
+                    
+                }        
+            });
+            
+        
+        });
+        
+        //setInterval(function(){ updateChart()},5000);
+
+    </script>
+{% endblock %}

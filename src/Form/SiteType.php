@@ -9,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class SiteType extends ApplicationType
@@ -19,13 +20,24 @@ class SiteType extends ApplicationType
             ->add(
                 'name',
                 TextType::class,
-                $this->getConfiguration("Nom du Site","Entrer un nom pour votre Site")
+                $this->getConfiguration("Site Name", "Enter a name for your Site")
             )
             ->add(
                 'slug',
                 TextType::class,
-                $this->getConfiguration("Adresse web", "Taper l'adresse web (automatique)",[
+                $this->getConfiguration("Web Address", "Type the web address (automatic)", [
                     'required' => false
+                ])
+            )
+            ->add(
+                'subscription',
+                ChoiceType::class,
+                $this->getConfiguration("Subscription", "Specify the type of subscription", [
+                    'choices' => [
+                        'MT'          => 'MT',
+                        'Tertiary'    => 'Tertiary',
+                        'Residential' => 'Residential'
+                    ]
                 ])
             )
             ->add(

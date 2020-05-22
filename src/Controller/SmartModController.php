@@ -36,7 +36,11 @@ class SmartModController extends ApplicationController
      */
     public function showGraph(SmartMod $smartMod)
     {
-        return $this->render('smart_mod/showGraph.html.twig', [
+        /*return $this->render('smart_mod/showGraph.html.twig', [
+            'smartMod' => $smartMod,
+            'user' => $smartMod->getSite()->getUser()
+        ]);*/
+        return $this->render('smart_mod/energyGraphViewer.html.twig', [
             'smartMod' => $smartMod,
             'user' => $smartMod->getSite()->getUser()
         ]);
@@ -338,7 +342,13 @@ class SmartModController extends ApplicationController
             ]);
         }
 
-        return $this->render('smart_mod/fuelModhistographs.html.twig', [
+        /*return $this->render('smart_mod/fuelModhistographs.html.twig', [
+            'smartMod'           => $smartMod,
+            'user'               => $smartMod->getSite()->getUser(),
+            'form'               => $form->createView(),
+            'critiqFuelStock'    => $smartMod->getCritiqFuelStock()
+        ]);*/
+        return $this->render('smart_mod/fuelStockViewer.html.twig', [
             'smartMod'           => $smartMod,
             'user'               => $smartMod->getSite()->getUser(),
             'form'               => $form->createView(),

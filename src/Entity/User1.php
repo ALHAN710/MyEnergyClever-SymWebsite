@@ -84,6 +84,40 @@ class User1 implements UserInterface
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner votre prénom")
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner votre nom")
+     */
+    private $lastname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner votre numéro de téléphone principale ")
+     */
+    private $phonenumber;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Veuillez renseigner le code téléphonique de votre pays")
+     */
+    private $countrycode;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $verificationcode;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $verified;
+
     public function __construct()
     {
         $this->sites = new ArrayCollection();
@@ -286,6 +320,78 @@ class User1 implements UserInterface
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getPhonenumber(): ?string
+    {
+        return $this->phonenumber;
+    }
+
+    public function setPhonenumber(string $phonenumber): self
+    {
+        $this->phonenumber = $phonenumber;
+
+        return $this;
+    }
+
+    public function getCountrycode(): ?string
+    {
+        return $this->countrycode;
+    }
+
+    public function setCountrycode(string $countrycode): self
+    {
+        $this->countrycode = $countrycode;
+
+        return $this;
+    }
+
+    public function getVerificationcode(): ?string
+    {
+        return $this->verificationcode;
+    }
+
+    public function setVerificationcode(?string $verificationcode): self
+    {
+        $this->verificationcode = $verificationcode;
+
+        return $this;
+    }
+
+    public function getVerified(): ?bool
+    {
+        return $this->verified;
+    }
+
+    public function setVerified(bool $verified): self
+    {
+        $this->verified = $verified;
 
         return $this;
     }
