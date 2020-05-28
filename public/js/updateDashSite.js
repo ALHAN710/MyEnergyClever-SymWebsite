@@ -8,7 +8,7 @@ const $gridEntryElements = $('[data-entry-idgrid]');
 const $gridEntryIds = $.map($gridEntryElements, item => $(item).data('entryIdgrid'));
 //$('.gridTab td').eq(7).html('1.5');
 // You'll now have array containing string values
-console.log($gridEntryIds[0]); // eg: ["1", "2", "3"]
+//console.log($gridEntryIds[0]); // eg: ["1", "2", "3"]
 
 // Select elements by their data attribute
 const $fuelEntryElements = $('[data-entry-idfuel]');
@@ -17,7 +17,7 @@ const $fuelEntryElements = $('[data-entry-idfuel]');
 const $fuelEntryIds = $.map($fuelEntryElements, item => $(item).data('entryIdfuel'));
 //$('.fuelTab td').eq(7).html('0.7');
 // You'll now have array containing string values
-console.log(Object.values($fuelEntryIds)); // eg: ["1", "2", "3"]
+//console.log(Object.values($fuelEntryIds)); // eg: ["1", "2", "3"]
 
 
 // Select elements by their data attribute
@@ -33,14 +33,21 @@ $fuelEntryIds.forEach(function (item, index) {
     //$('.fuelTab td').eq(index * 7 + 1).html(data.EA[item] === null ? 0 : data.EA[item]); //EA
     tabFuelStockLink[item] = $stocklinkEntry[index];
 });
-console.log(tabFuelStockLink["11"]);
-console.log($('#fuelStockLink').attr("href"));
+//console.log(tabFuelStockLink["11"]);
+//console.log($('#fuelStockLink').attr("href"));
 
 
 var tabGridId = [];
 var tabFuelId = [];
 var strGridModId = '';
 var strFuelModId = '';
+
+var d = new Date();
+var timeZoneOffset = d.getTimezoneOffset();
+timeZoneOffset = timeZoneOffset / (-60);
+//console.log('Date : ' + d);
+//console.log(moment().format('zz'));
+//console.log('TimeZone offset : ' + timeZoneOffset);
 
 
 $("#datetimepicker10").on("dp.change", function (e) {
@@ -57,14 +64,14 @@ $("#datetimepicker10").on("dp.change", function (e) {
     // +++++++++ Récupération de l'id du module Fuel sélectionné' +++++++++
     strFuelModId = String($("#selectFuelMod").children(":selected").attr("id"));
     strFuelModId = strFuelModId.substring(strFuelModId.indexOf('_') + 1);
-    console.log('Fuel selected option id : ' + strFuelModId);
-    console.log('Grid selected option id : ' + strGridModId);
+    //console.log('Fuel selected option id : ' + strFuelModId);
+    //console.log('Grid selected option id : ' + strGridModId);
     tabGridId = [];
     tabFuelId = [];
     tabGridId = [parseInt(strGridModId)];
     tabFuelId = [parseInt(strFuelModId)];
-    console.log(tabGridId);
-    console.log(tabFuelId);
+    //console.log(tabGridId);
+    //console.log(tabFuelId);
 
     // +++++++++ Récupération de la date sélectionnée +++++++++
     //console.log($("#datetimepicker10").data("DateTimePicker"));
@@ -81,8 +88,16 @@ $("#datetimepicker10").on("dp.change", function (e) {
         "selectedfuelId": parseInt(strFuelModId),
         "selectedDate": $date
     });
-    console.log($data);
-    updateDataTable($data, $urlupdateDashSite);
+    //console.log($data);
+    $('.spinGridTab').removeClass('d-none');
+    $('.spinGridDetailed').removeClass('d-none');
+    $('.spinFuelTab').removeClass('d-none');
+    $('.spinFuelDetailed').removeClass('d-none');
+    $("#datatable-responsive1").css({ opacity: 0.2 });
+    $("#datatable2").css({ opacity: 0.2 });
+    $("#datatable-responsive").css({ opacity: 0.2 });
+    $("#datatable3").css({ opacity: 0.2 });
+    updateDataTable($data, $urlupdateDashSite, true);
 
     /*$dat = new moment(e.date._d);
     $date = $dat.format("YYYY-MM").toString();
@@ -132,7 +147,7 @@ $("#datetimepicker10").on("dp.change", function (e) {
 });
 
 $("#selectGridMod").change(function () {
-    console.log('selected GRID option : ' + $(this).val());
+    //console.log('selected GRID option : ' + $(this).val());
     // +++++++++ Récupération de l'id du module Grid sélectionné' +++++++++
     strGridModId = String($(this).children(":selected").attr("id"));
     strGridModId = strGridModId.substring(strGridModId.indexOf('_') + 1);
@@ -140,14 +155,14 @@ $("#selectGridMod").change(function () {
     // +++++++++ Récupération de l'id du module Fuel sélectionné' +++++++++
     strFuelModId = String($("#selectFuelMod").children(":selected").attr("id"));
     strFuelModId = strFuelModId.substring(strFuelModId.indexOf('_') + 1);
-    console.log('Fuel selected option id : ' + strFuelModId);
-    console.log('Grid selected option id : ' + strGridModId);
+    //console.log('Fuel selected option id : ' + strFuelModId);
+    //console.log('Grid selected option id : ' + strGridModId);
     tabGridId = [];
     tabFuelId = [];
     tabGridId = [parseInt(strGridModId)];
     tabFuelId = [parseInt(strFuelModId)];
-    console.log(tabGridId);
-    console.log(tabFuelId);
+    //console.log(tabGridId);
+    //console.log(tabFuelId);
 
     // +++++++++ Récupération de la date sélectionnée +++++++++
     //console.log($("#datetimepicker10").data("DateTimePicker"));
@@ -156,7 +171,7 @@ $("#selectGridMod").change(function () {
     $date = $dat.format("YYYY-MM").toString();
     //console.log($date);
     $date = '%' + $date + '%';
-    console.log($date);
+    //console.log($date);
     var $data = JSON.stringify({
         "gridIds": tabGridId,
         "fuelIds": tabFuelId,
@@ -164,8 +179,13 @@ $("#selectGridMod").change(function () {
         "selectedfuelId": parseInt(strFuelModId),
         "selectedDate": $date
     });
-    console.log($data);
-    updateDataTable($data, $urlupdateDashSite);
+    //console.log($data);
+    $('.spinGridDetailed').removeClass('d-none');
+    $('.spinGridTab').addClass('d-none');
+    $('.spinFuelTab').addClass('d-none');
+    $('.spinFuelDetailed').addClass('d-none');
+    $("#datatable2").css({ opacity: 0.2 });
+    updateDataTable($data, $urlupdateDashSite, false);
 });
 
 strFuelModId = String($("#selectFuelMod").children(":selected").attr("id"));
@@ -173,7 +193,7 @@ strFuelModId = strFuelModId.substring(strFuelModId.indexOf('_') + 1);
 $('#fuelStockLink').attr("href", tabFuelStockLink[strFuelModId]); // Set herf value
 
 $("#selectFuelMod").change(function () {
-    console.log('selected Fuel option : ' + $(this).val());
+    //console.log('selected Fuel option : ' + $(this).val());
     // +++++++++ Récupération de l'id du module Fuel sélectionné' +++++++++
     strFuelModId = String($(this).children(":selected").attr("id"));
     strFuelModId = strFuelModId.substring(strFuelModId.indexOf('_') + 1);
@@ -181,14 +201,14 @@ $("#selectFuelMod").change(function () {
     // +++++++++ Récupération de l'id du module Grid sélectionné' +++++++++
     strGridModId = String($("#selectGridMod").children(":selected").attr("id"));
     strGridModId = strGridModId.substring(strGridModId.indexOf('_') + 1);
-    console.log('Fuel selected option id : ' + strFuelModId);
-    console.log('Grid selected option id : ' + strGridModId);
+    //console.log('Fuel selected option id : ' + strFuelModId);
+    //console.log('Grid selected option id : ' + strGridModId);
     tabGridId = [];
     tabFuelId = [];
     tabGridId = [parseInt(strGridModId)];
     tabFuelId = [parseInt(strFuelModId)];
-    console.log(tabGridId);
-    console.log(tabFuelId);
+    //console.log(tabGridId);
+    //console.log(tabFuelId);
 
     $('#fuelStockLink').attr("href", tabFuelStockLink[strFuelModId]); // Set herf value
 
@@ -199,7 +219,7 @@ $("#selectFuelMod").change(function () {
     $date = $dat.format("YYYY-MM").toString();
     //console.log($date);
     $date = '%' + $date + '%';
-    console.log($date);
+    //console.log($date);
     var $data = JSON.stringify({
         "gridIds": tabGridId,
         "fuelIds": tabFuelId,
@@ -207,8 +227,13 @@ $("#selectFuelMod").change(function () {
         "selectedfuelId": parseInt(strFuelModId),
         "selectedDate": $date
     });
-    console.log($data);
-    updateDataTable($data, $urlupdateDashSite);
+    //console.log($data);
+    $('.spinFuelDetailed').removeClass('d-none');
+    $('.spinGridTab').addClass('d-none');
+    $('.spinGridDetailed').addClass('d-none');
+    $('.spinFuelTab').addClass('d-none');
+    $("#datatable3").css({ opacity: 0.2 });
+    updateDataTable($data, $urlupdateDashSite, false);
 });
 
 
@@ -227,7 +252,7 @@ function progressVal(selectorVal, selectorIcon, prog, posLogique, isTime) {
     }
     else {
         var diff = new Date(Math.abs(prog));
-        var $dat = new moment(diff).subtract(1, 'hours');
+        var $dat = new moment(diff).subtract(timeZoneOffset, 'hours');
         var str = $dat.format('HH:mm:ss').toString()
         selectorVal.html(prog === null ? 0 : prog > 0 ? '+' + str : '-' + str);
     }
@@ -263,7 +288,7 @@ function progressVal(selectorVal, selectorIcon, prog, posLogique, isTime) {
     }
 }
 
-function updateDataTable(_data, _url) {
+function updateDataTable(_data, _url, all) {
     $.ajax({
         type: "POST",//method type
         contentType: "application/json; charset=utf-8",
@@ -278,97 +303,202 @@ function updateDataTable(_data, _url) {
             //console.log(typeof data.Liters[$fuelEntryIds[0]]);
             //$("#gridEA").text(data.EA[9] === null ? 0 : data.EA[9]);
 
-            var $gridModCost = costComputing(data.tabEA_grid, data.Psous, data.subscription, data.EA[parseInt(strGridModId)]);
+            var $gridModCost = costComputing(data.tabEA_grid, data.Psous, data.subscription, parseFloat(data.EA[parseInt(strGridModId)]));
             console.log($gridModCost);
-            var $precgridModCost = costComputing(data.prectabEA_grid, data.Psous, data.subscription, data.EA[parseInt(strGridModId)]);
+            var $precgridModCost = costComputing(data.prectabEA_grid, data.Psous, data.subscription, parseFloat(data.EA[parseInt(strGridModId)]));
             console.log($precgridModCost);
 
-            var $fuelModCost = costComputing(data.tabEA_fuel, data.Psous, data.subscription, data.EA[parseInt(strFuelModId)]);
+            var $fuelPrice = 575;
+            var $fuelModCost = parseFloat(data.Liters[parseInt(strFuelModId)]) * $fuelPrice;
+            //console.log($fuelModCost);
+            var $precfuelModCost = parseFloat(data.precLiters[parseInt(strFuelModId)]) * $fuelPrice;
+            //console.log($precfuelModCost);
+            /*var $fuelModCost = costComputing(data.tabEA_fuel, data.Psous, data.subscription, data.EA[parseInt(strFuelModId)]);
             console.log($fuelModCost);
             var $precfuelModCost = costComputing(data.prectabEA_fuel, data.Psous, data.subscription, data.EA[parseInt(strFuelModId)]);
-            console.log($precfuelModCost);
+            console.log($precfuelModCost);*/
             var prog = 0;
 
-            //tabGridId.forEach(function (item, index) {
-            $gridEntryIds.forEach(function (item, index) {
-                //MAJ du tableau récaputilatif des modules GRID
-                //console.log(item);
-                //console.log(typeof item);
-                $('.gridTabReport td').eq(index * 4 + 1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
-                $('.gridTabReport td').eq(index * 4 + 2).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
-                $('.gridTabReport td').eq(index * 4 + 3).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
+            if (all) {
+                //tabGridId.forEach(function (item, index) {
+                $('.spinGridTab').addClass('d-none');
+                $('.spinGridDetailed').addClass('d-none');
+                $('.spinFuelTab').addClass('d-none');
+                $('.spinFuelDetailed').addClass('d-none');
+                $("#datatable-responsive1").css({ opacity: 1 });
+                $("#datatable2").css({ opacity: 1 });
+                $("#datatable-responsive").css({ opacity: 1 });
+                $("#datatable3").css({ opacity: 1 });
 
-                if (item === parseInt(strGridModId)) {
-                    //MAJ du tableau détailé des modules GRID
-                    $('.gridTab td').eq(1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
-                    $('.gridTab td').eq(4).html($gridModCost === null ? 0 : $gridModCost.toFixed(1)); //Cost
-                    $('.gridTab td').eq(7).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
-                    $('.gridTab td').eq(10).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
-                    $('.gridTab td').eq(13).html(data.Smax[item] === null ? 0 : parseFloat(data.Smax[item]).toFixed(1)); //Smax
-                    $('.gridTab td').eq(16).html(data.Smoy[item] === null ? 0 : parseFloat(data.Smoy[item]).toFixed(1)); //Smoy
+                $gridEntryIds.forEach(function (item, index) {
+                    //MAJ du tableau récaputilatif des modules GRID
+                    //console.log(item);
+                    //console.log(typeof item);
+                    $('.gridTabReport td').eq(index * 4 + 1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
+                    $('.gridTabReport td').eq(index * 4 + 2).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
+                    $('.gridTabReport td').eq(index * 4 + 3).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
 
-                    prog = (parseFloat(data.EA[item]) - parseFloat(data.precEA[item])) * 100 / parseFloat(data.precEA[item]);
-                    //$('.gridTab td').eq(2).html(prog === null ? 0 : prog.toFixed(1)); //EA gridEAProgVal
-                    progressVal($('#gridEAProgVal'), $('#gridEAProg'), prog, true, false);
+                    if (item === parseInt(strGridModId)) {
+                        //MAJ du tableau détailé des modules GRID
+                        $('.gridTab td').eq(1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
+                        $('.gridTab td').eq(4).html($gridModCost === null ? 0 : $gridModCost.toFixed(1)); //Cost
+                        $('.gridTab td').eq(7).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
+                        $('.gridTab td').eq(10).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
+                        $('.gridTab td').eq(13).html(data.Smax[item] === null ? 0 : parseFloat(data.Smax[item]).toFixed(1)); //Smax
+                        $('.gridTab td').eq(16).html(data.Smoy[item] === null ? 0 : parseFloat(data.Smoy[item]).toFixed(1)); //Smoy
 
-                    prog = ($gridModCost - $precgridModCost) * 100 / $precgridModCost;
-                    progressVal($('#gridCostProgVal'), $('#gridCostProg'), prog, true, false);
+                        prog = (parseFloat(data.EA[item]) - parseFloat(data.precEA[item])) * 100 / parseFloat(data.precEA[item]);
+                        //$('.gridTab td').eq(2).html(prog === null ? 0 : prog.toFixed(1)); //EA gridEAProgVal
+                        progressVal($('#gridEAProgVal'), $('#gridEAProg'), prog, true, false);
 
-                    prog = (parseFloat(data.ER[item]) - parseFloat(data.precER[item])) * 100 / parseFloat(data.precER[item]);
-                    progressVal($('#gridERProgVal'), $('#gridERProg'), prog, true, false); //ER
+                        prog = ($gridModCost - $precgridModCost) * 100 / $precgridModCost;
+                        progressVal($('#gridCostProgVal'), $('#gridCostProg'), prog, true, false);//Cost
 
-                    prog = (parseFloat(data.Cos[item]) - parseFloat(data.precCos[item])) * 100 / parseFloat(data.precCos[item]);
-                    progressVal($('#gridCosProgVal'), $('#gridCosProg'), prog, false, false); //Cosphi
+                        prog = (parseFloat(data.ER[item]) - parseFloat(data.precER[item])) * 100 / parseFloat(data.precER[item]);
+                        progressVal($('#gridERProgVal'), $('#gridERProg'), prog, true, false); //ER
 
-                    prog = (parseFloat(data.Smax[item]) - parseFloat(data.precSmax[item])) * 100 / parseFloat(data.precSmax[item]);
-                    progressVal($('#gridSmaxProgVal'), $('#gridSmaxProg'), prog, true, false); //Smax
+                        prog = (parseFloat(data.Cos[item]) - parseFloat(data.precCos[item])) * 100 / parseFloat(data.precCos[item]);
+                        progressVal($('#gridCosProgVal'), $('#gridCosProg'), prog, false, false); //Cosphi
 
-                    prog = (parseFloat(data.Smoy[item]) - parseFloat(data.precSmoy[item])) * 100 / parseFloat(data.precSmoy[item]);
-                    progressVal($('#gridSmoyProgVal'), $('#gridSmoyProg'), prog, true, false); //Smoy
-                }
+                        prog = (parseFloat(data.Smax[item]) - parseFloat(data.precSmax[item])) * 100 / parseFloat(data.precSmax[item]);
+                        progressVal($('#gridSmaxProgVal'), $('#gridSmaxProg'), prog, true, false); //Smax
 
-            });
+                        prog = (parseFloat(data.Smoy[item]) - parseFloat(data.precSmoy[item])) * 100 / parseFloat(data.precSmoy[item]);
+                        progressVal($('#gridSmoyProgVal'), $('#gridSmoyProg'), prog, true, false); //Smoy
+                    }
 
-            //tabFuelId.forEach(function (item, index) {
-            $fuelEntryIds.forEach(function (item, index) {
-                //MAJ du tableau récaputilatif des modules FUEL
-                $('.fuelTabReport td').eq(index * 4 + 1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
-                $('.fuelTabReport td').eq(index * 4 + 2).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
-                $('.fuelTabReport td').eq(index * 4 + 3).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
+                });
 
-                //MAJ du tableau détaillé des modules FUEL
-                if (item === parseInt(strFuelModId)) {
-                    $('.fuelTab td').eq(1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
-                    $('.fuelTab td').eq(4).html($fuelModCost === null ? 0 : $fuelModCost.toFixed(1)); //ER
-                    $('.fuelTab td').eq(7).html(data.Liters[item] === null ? 0 : parseFloat(data.Liters[item]).toFixed(1)); //Cosphi
-                    $('.fuelTab td').eq(10).html(data.WorkingTime[item] === null ? 0 : data.WorkingTime[item]); //Temps de fonctionnement
-                    $('.fuelTab td').eq(13).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
-                    //$('.fuelTab td').eq(16).html(data.Stock[item] === null ? 0 : data.Stock[item]); //Stock
-                    console.log(data.workTime);
-                    console.log(data.precworkTime);
-                    prog = (parseFloat(data.EA[item]) - parseFloat(data.precEA[item])) * 100 / parseFloat(data.precEA[item]);
-                    progressVal($('#fuelEAProgVal'), $('#fuelEAProg'), prog, true, false);
+                //tabFuelId.forEach(function (item, index) {
+                $fuelEntryIds.forEach(function (item, index) {
+                    //MAJ du tableau récaputilatif des modules FUEL
+                    $('.fuelTabReport td').eq(index * 4 + 1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
+                    $('.fuelTabReport td').eq(index * 4 + 2).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
+                    $('.fuelTabReport td').eq(index * 4 + 3).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
 
-                    //$('.fuelTab td').eq(5).html($fuelModCost === null ? 0 : $fuelModCost); //Cost Progression
-                    prog = ($fuelModCost - $precfuelModCost) * 100 / $precfuelModCost;
-                    progressVal($('#fuelCostProgVal'), $('#fuelCostProg'), prog, true, false);
+                    //MAJ du tableau détaillé des modules FUEL
+                    if (item === parseInt(strFuelModId)) {
+                        $('.fuelTab td').eq(1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
+                        $('.fuelTab td').eq(4).html($fuelModCost === null ? 0 : $fuelModCost.toFixed(1)); //Cost
+                        $('.fuelTab td').eq(7).html(data.Liters[item] === null ? 0 : parseFloat(data.Liters[item]).toFixed(1)); //Liters
+                        $('.fuelTab td').eq(10).html(data.WorkingTime[item] === null ? 0 : data.WorkingTime[item]); //Temps de fonctionnement
+                        $('.fuelTab td').eq(13).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
+                        //$('.fuelTab td').eq(16).html(data.Stock[item] === null ? 0 : data.Stock[item]); //Stock
+                        //console.log(data.workTime);
+                        //console.log(data.precworkTime);
+                        prog = (parseFloat(data.EA[item]) - parseFloat(data.precEA[item])) * 100 / parseFloat(data.precEA[item]);
+                        progressVal($('#fuelEAProgVal'), $('#fuelEAProg'), prog, true, false);
 
-                    //console.log(typeof data.Liters[item]);
-                    //console.log(data.precLiters[item]);
-                    prog = (parseFloat(data.Liters[item]) - parseFloat(data.precLiters[item])) * 100 / parseFloat(data.precLiters[item]);
-                    progressVal($('#fuelLitersProgVal'), $('#fuelLitersProg'), prog, true, false); //Liters
+                        //$('.fuelTab td').eq(5).html($fuelModCost === null ? 0 : $fuelModCost); //Cost Progression
+                        prog = ($fuelModCost - $precfuelModCost) * 100 / $precfuelModCost;
+                        progressVal($('#fuelCostProgVal'), $('#fuelCostProg'), prog, true, false);
 
-                    prog = (parseFloat(data.Cos[item]) - parseFloat(data.precCos[item])) * 100 / parseFloat(data.precCos[item]);
-                    progressVal($('#fuelCosProgVal'), $('#fuelCosProg'), prog, false, false); //Cosphi
+                        //console.log(typeof data.Liters[item]);
+                        //console.log(data.precLiters[item]);
+                        prog = (parseFloat(data.Liters[item]) - parseFloat(data.precLiters[item])) * 100 / parseFloat(data.precLiters[item]);
+                        progressVal($('#fuelLitersProgVal'), $('#fuelLitersProg'), prog, true, false); //Liters
 
-                    var date = new Date('2020-05-22 ' + data.workTime);
-                    var precdate = new Date('2020-05-22 ' + data.precworkTime);
-                    var prog = new Date(precdate - date);
-                    //prog = (data.WorkingTime[item] - data.precWorkingTime[item]) * 100 / data.precWorkingTime[item];
-                    progressVal($('#fuelWorkingTimeProgVal'), $('#fuelWorkingTimeProg'), prog, true, true); //WorkingTime 
-                }
+                        prog = (parseFloat(data.Cos[item]) - parseFloat(data.precCos[item])) * 100 / parseFloat(data.precCos[item]);
+                        progressVal($('#fuelCosProgVal'), $('#fuelCosProg'), prog, false, false); //Cosphi
 
-            });
+                        var date = new Date('2020-05-22 ' + data.workTime);
+                        var precdate = new Date('2020-05-22 ' + data.precworkTime);
+                        var prog = new Date(date - precdate);
+                        //prog = (data.WorkingTime[item] - data.precWorkingTime[item]) * 100 / data.precWorkingTime[item];
+                        progressVal($('#fuelWorkingTimeProgVal'), $('#fuelWorkingTimeProg'), prog, true, true); //WorkingTime 
+                    }
+
+                });
+            }
+            else {
+
+                tabGridId.forEach(function (item, index) {
+                    //MAJ du tableau récaputilatif des modules GRID
+                    //console.log(item);
+                    //console.log(typeof item);
+                    $('.spinGridDetailed').addClass('d-none');
+                    $("#datatable2").css({ opacity: 1 });
+
+                    $('.gridTabReport td').eq(index * 4 + 1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
+                    $('.gridTabReport td').eq(index * 4 + 2).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
+                    $('.gridTabReport td').eq(index * 4 + 3).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
+
+                    if (item === parseInt(strGridModId)) {
+                        //MAJ du tableau détailé des modules GRID
+                        $('.gridTab td').eq(1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
+                        $('.gridTab td').eq(4).html($gridModCost === null ? 0 : $gridModCost.toFixed(1)); //Cost
+                        $('.gridTab td').eq(7).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
+                        $('.gridTab td').eq(10).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
+                        $('.gridTab td').eq(13).html(data.Smax[item] === null ? 0 : parseFloat(data.Smax[item]).toFixed(1)); //Smax
+                        $('.gridTab td').eq(16).html(data.Smoy[item] === null ? 0 : parseFloat(data.Smoy[item]).toFixed(1)); //Smoy
+
+                        prog = (parseFloat(data.EA[item]) - parseFloat(data.precEA[item])) * 100 / parseFloat(data.precEA[item]);
+                        //$('.gridTab td').eq(2).html(prog === null ? 0 : prog.toFixed(1)); //EA gridEAProgVal
+                        progressVal($('#gridEAProgVal'), $('#gridEAProg'), prog, true, false);
+
+                        prog = ($gridModCost - $precgridModCost) * 100 / $precgridModCost;
+                        progressVal($('#gridCostProgVal'), $('#gridCostProg'), prog, true, false);
+
+                        prog = (parseFloat(data.ER[item]) - parseFloat(data.precER[item])) * 100 / parseFloat(data.precER[item]);
+                        progressVal($('#gridERProgVal'), $('#gridERProg'), prog, true, false); //ER
+
+                        prog = (parseFloat(data.Cos[item]) - parseFloat(data.precCos[item])) * 100 / parseFloat(data.precCos[item]);
+                        progressVal($('#gridCosProgVal'), $('#gridCosProg'), prog, false, false); //Cosphi
+
+                        prog = (parseFloat(data.Smax[item]) - parseFloat(data.precSmax[item])) * 100 / parseFloat(data.precSmax[item]);
+                        progressVal($('#gridSmaxProgVal'), $('#gridSmaxProg'), prog, true, false); //Smax
+
+                        prog = (parseFloat(data.Smoy[item]) - parseFloat(data.precSmoy[item])) * 100 / parseFloat(data.precSmoy[item]);
+                        progressVal($('#gridSmoyProgVal'), $('#gridSmoyProg'), prog, true, false); //Smoy
+                    }
+
+                });
+
+                tabFuelId.forEach(function (item, index) {
+
+                    $('.spinFuelDetailed').addClass('d-none');
+                    $("#datatable3").css({ opacity: 1 });
+
+                    //MAJ du tableau récaputilatif des modules FUEL
+                    $('.fuelTabReport td').eq(index * 4 + 1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
+                    $('.fuelTabReport td').eq(index * 4 + 2).html(data.ER[item] === null ? 0 : parseFloat(data.ER[item]).toFixed(1)); //ER
+                    $('.fuelTabReport td').eq(index * 4 + 3).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
+
+                    //MAJ du tableau détaillé des modules FUEL
+                    if (item === parseInt(strFuelModId)) {
+                        $('.fuelTab td').eq(1).html(data.EA[item] === null ? 0 : parseFloat(data.EA[item]).toFixed(1)); //EA
+                        $('.fuelTab td').eq(4).html($fuelModCost === null ? 0 : $fuelModCost.toFixed(1)); //ER
+                        $('.fuelTab td').eq(7).html(data.Liters[item] === null ? 0 : parseFloat(data.Liters[item]).toFixed(1)); //Cosphi
+                        $('.fuelTab td').eq(10).html(data.WorkingTime[item] === null ? 0 : data.WorkingTime[item]); //Temps de fonctionnement
+                        $('.fuelTab td').eq(13).html(data.Cos[item] === null ? 0 : parseFloat(data.Cos[item]).toFixed(3)); //Cosphi
+                        //$('.fuelTab td').eq(16).html(data.Stock[item] === null ? 0 : data.Stock[item]); //Stock
+                        //console.log(data.workTime);
+                        //console.log(data.precworkTime);
+                        prog = (parseFloat(data.EA[item]) - parseFloat(data.precEA[item])) * 100 / parseFloat(data.precEA[item]);
+                        progressVal($('#fuelEAProgVal'), $('#fuelEAProg'), prog, true, false);
+
+                        //$('.fuelTab td').eq(5).html($fuelModCost === null ? 0 : $fuelModCost); //Cost Progression
+                        prog = ($fuelModCost - $precfuelModCost) * 100 / $precfuelModCost;
+                        progressVal($('#fuelCostProgVal'), $('#fuelCostProg'), prog, true, false);
+
+                        //console.log(typeof data.Liters[item]);
+                        //console.log(data.precLiters[item]);
+                        prog = (parseFloat(data.Liters[item]) - parseFloat(data.precLiters[item])) * 100 / parseFloat(data.precLiters[item]);
+                        progressVal($('#fuelLitersProgVal'), $('#fuelLitersProg'), prog, true, false); //Liters
+
+                        prog = (parseFloat(data.Cos[item]) - parseFloat(data.precCos[item])) * 100 / parseFloat(data.precCos[item]);
+                        progressVal($('#fuelCosProgVal'), $('#fuelCosProg'), prog, false, false); //Cosphi
+
+                        var date = new Date('2020-05-22 ' + data.workTime);
+                        var precdate = new Date('2020-05-22 ' + data.precworkTime);
+                        var prog = new Date(precdate - date);
+                        //prog = (data.WorkingTime[item] - data.precWorkingTime[item]) * 100 / data.precWorkingTime[item];
+                        progressVal($('#fuelWorkingTimeProgVal'), $('#fuelWorkingTimeProg'), prog, true, true); //WorkingTime 
+                    }
+
+                });
+
+            }
 
 
         },
@@ -412,12 +542,12 @@ function costComputing(tabEA_grid, Psous, subscription, EA) {
             $datHp3 = new Date($strHp3);
             $datHp4 = new Date($strHp4);
             if ((item.DAT >= $datHp1 && item.DAT <= $datHp2) || (item.DAT >= $datHp3 && item.DAT <= $datHp4)) {
-                $EAHp += item.EA;
+                $EAHp += parseFloat(item.EA);
             } else {
-                $EAP += item.EA;
+                $EAP += parseFloat(item.EA);
             }
         });
-        $modCost = $EAHp * 60 + $EAP * 85 + $Psous * 3700;
+        $modCost = ($EAHp * 60) + ($EAP * 85) + ($Psous * 3700);
         //});
 
     }

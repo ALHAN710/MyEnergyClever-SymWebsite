@@ -223,9 +223,17 @@ class SiteController extends ApplicationController
                 $Cosphi['' . $gridId . ''] = number_format((float) $dataGrid['' . $gridId . ''][0]['Cosphi'], 2, '.', ' ');
 
                 $maxDate = $dataGrid['' . $gridId . ''][0]['DateTimeMax'];
+                //dump($maxDate);
+                if ($maxDate == null) {
+                    $dateStr = str_replace("%", "", $dat);
+                    $maxDate = $dateStr;
+                }
+
                 $date = new DateTime($maxDate);
+                //dump($date);
                 $interval = new DateInterval('P1M'); //P10D P1M
                 $date->sub($interval);
+                //dump($date);
 
                 //Récupération des données du mois passé
                 $precDataGrid['' . $gridId . ''] = $manager->createQuery("SELECT SUM(d.kWh) AS EA, SUM(d.kVarh) AS ER,
@@ -241,6 +249,7 @@ class SiteController extends ApplicationController
                         'modId'   => $gridId
                     ))
                     ->getResult();
+                //dump($precDataGrid['' . $gridId . '']);
                 $precEA['' . $gridId . '']     = number_format((float) $precDataGrid['' . $gridId . ''][0]['EA'], 2, '.', ' ');
                 $precER['' . $gridId . '']     = number_format((float) $precDataGrid['' . $gridId . ''][0]['ER'], 2, '.', ' ');
                 $precSmax['' . $gridId . '']   = number_format((float) $precDataGrid['' . $gridId . ''][0]['Smax'], 2, '.', ' ');
@@ -252,36 +261,36 @@ class SiteController extends ApplicationController
                     //$smartMod = $smartModRepo->findOneBy(['id' => $gridId]);
                     //$const = 1.192;
                     //$subscription = $smartMod->getSite()->getSubscription();
-                    if ($subscription == 'MT') {
-                        //$Psous = $smartMod->getSite()->getPsous();
-                        $tabEA_grid['' . $gridId . ''] = $manager->createQuery("SELECT d.kWh AS EA, d.dateTime AS DAT
+                    //if ($subscription == 'MT') {
+                    //$Psous = $smartMod->getSite()->getPsous();
+                    $tabEA_grid['' . $gridId . ''] = $manager->createQuery("SELECT d.kWh AS EA, d.dateTime AS DAT
                                             FROM App\Entity\DataMod d
                                             JOIN d.smartMod sm 
                                             WHERE d.dateTime LIKE :selDate
                                             AND sm.id = :modId                                                                              
                                             ")
-                            ->setParameters(array(
-                                'selDate' => $dat,
-                                'modId'   => $gridId
-                            ))
-                            ->getResult();
-                        dump($tabEA_grid['' . $gridId . '']);
+                        ->setParameters(array(
+                            'selDate' => $dat,
+                            'modId'   => $gridId
+                        ))
+                        ->getResult();
+                    //dump($tabEA_grid['' . $gridId . '']);
 
-                        //Récupération des données du mois passé
-                        $prectabEA_grid['' . $gridId . ''] = $manager->createQuery("SELECT d.kWh AS EA, d.dateTime AS DAT
+                    //Récupération des données du mois passé
+                    $prectabEA_grid['' . $gridId . ''] = $manager->createQuery("SELECT d.kWh AS EA, d.dateTime AS DAT
                                             FROM App\Entity\DataMod d
                                             JOIN d.smartMod sm 
                                             WHERE d.dateTime LIKE :selDate
                                             AND sm.id = :modId                                                                              
                                             ")
-                            ->setParameters(array(
-                                'selDate' => $date->format('Y-m-d H:i:s'),
-                                'modId'   => $gridId
-                            ))
-                            ->getResult();
-                        //$EAHp = [];
-                        //$EAP = [];
-                        /*foreach ($tabHpEA['' . $gridId . ''] as $key => $value) {
+                        ->setParameters(array(
+                            'selDate' => $date->format('Y-m-d H:i:s'),
+                            'modId'   => $gridId
+                        ))
+                        ->getResult();
+                    //$EAHp = [];
+                    //$EAP = [];
+                    /*foreach ($tabHpEA['' . $gridId . ''] as $key => $value) {
                             $strhp1_ = '00:00:00';
                             $strhp2_ = '17:45:00';
                             $strhp3_ = '23:15:00';
@@ -306,7 +315,8 @@ class SiteController extends ApplicationController
                             }
                             $Cost['' . $gridId . ''] = array_sum($EAHp) * 60 + array_sum($EAP) * 85 + $Psous * 3700;
                         }*/
-                    } /*else if ($smartMod->getSite()->getSubscription() == 'Tertiary') {
+                    //} 
+                    /*else if ($smartMod->getSite()->getSubscription() == 'Tertiary') {
                         //fdfr
                         if ($EA['' . $gridId . ''] <= 110) {
                             $Cost['' . $gridId . ''] = $EA['' . $gridId . ''] * 84 * $const;
@@ -330,16 +340,16 @@ class SiteController extends ApplicationController
             }
             //strpos(string, find, start)
             //strrpos() - Finds the position of the last occurrence of a string inside another string (case-sensitive)
-            $date_ = str_replace("%", "", $dat);
+            //$date_ = str_replace("%", "", $dat);
             //dump($date_);
             //dump($paramJSON['selectedgridId']);
             //dump($precDataGrid['101']);
             //(string)$diff->format('%R%a');
 
-            $strhp1 = '17:45:00';
+            /*$strhp1 = '17:45:00';
             $strhp2 = '00:00:00';
             $strhp3 = '23:15:00';
-            $strhp4 = '23:45:00';
+            $strhp4 = '23:45:00';*/
 
             //$str = (string) $tabHpEA['101'][1]['DAT']->format('Y-m-d');
             //$str = $str . ' ' . $strhp1;
@@ -347,7 +357,7 @@ class SiteController extends ApplicationController
             //dump($tabHpEA['101']);
             //$dat1 = new DateTime($str);
             //dump($dat1 > $tabHpEA['101'][0]['DAT']);
-            $date = new DateTime($maxDate);
+            //$date = new DateTime($maxDate);
             //$interval = new DateInterval('P1M');
 
             //$date->sub($interval);
@@ -380,6 +390,10 @@ class SiteController extends ApplicationController
                 $Cosphi['' . $fuelId . '']   = number_format((float) $dataFuel['' . $fuelId . ''][0]['Cosphi'], 2, '.', ' ');
 
                 $maxDate = $dataFuel['' . $fuelId . ''][0]['DateTimeMax'];
+                if ($maxDate == null) {
+                    $dateStr = str_replace("%", "", $dat);
+                    $maxDate = $dateStr;
+                }
                 $date = new DateTime($maxDate);
                 $interval = new DateInterval('P1M'); //P10D P1M
                 $date->sub($interval);
@@ -411,34 +425,34 @@ class SiteController extends ApplicationController
                     $workTime = date("H:i:s", $dataFuel['' . $fuelId . ''][0]['WorkingTime'] / 1000);
                     $precworkTime = date("H:i:s", $precDataFuel['' . $fuelId . ''][0]['WorkingTime'] / 1000);
                     //$subscription = $smartMod->getSite()->getSubscription(); 
-                    if ($subscription == 'MT') {
-                        //$Psous = $smartMod->getSite()->getPsous();
-                        $tabEA_fuel['' . $fuelId . ''] = $manager->createQuery("SELECT d.kWh AS EA, d.dateTime AS DAT
+                    //if ($subscription == 'MT') {
+                    //$Psous = $smartMod->getSite()->getPsous();
+                    $tabEA_fuel['' . $fuelId . ''] = $manager->createQuery("SELECT d.kWh AS EA, d.dateTime AS DAT
                                             FROM App\Entity\DataMod d
                                             JOIN d.smartMod sm 
                                             WHERE d.dateTime LIKE :selDate
                                             AND sm.id = :modId                                                                              
                                             ")
-                            ->setParameters(array(
-                                'selDate' => $dat,
-                                'modId'   => $fuelId
-                            ))
-                            ->getResult();
-                        dump($tabEA_fuel['' . $fuelId . '']);
+                        ->setParameters(array(
+                            'selDate' => $dat,
+                            'modId'   => $fuelId
+                        ))
+                        ->getResult();
+                    //dump($tabEA_fuel['' . $fuelId . '']);
 
-                        //Récupération des données du mois passé
-                        $prectabEA_fuel['' . $fuelId . ''] = $manager->createQuery("SELECT d.kWh AS EA, d.dateTime AS DAT
+                    //Récupération des données du mois passé
+                    $prectabEA_fuel['' . $fuelId . ''] = $manager->createQuery("SELECT d.kWh AS EA, d.dateTime AS DAT
                                             FROM App\Entity\DataMod d
                                             JOIN d.smartMod sm 
                                             WHERE d.dateTime LIKE :selDate
                                             AND sm.id = :modId                                                                              
                                             ")
-                            ->setParameters(array(
-                                'selDate' => $date->format('Y-m-d H:i:s'),
-                                'modId'   => $fuelId
-                            ))
-                            ->getResult();
-                    }
+                        ->setParameters(array(
+                            'selDate' => $date->format('Y-m-d H:i:s'),
+                            'modId'   => $fuelId
+                        ))
+                        ->getResult();
+                    //}
                 }
             }
 
@@ -447,7 +461,7 @@ class SiteController extends ApplicationController
             $interval = new DateInterval('P5D'); //P10D P1M
             $date->sub($interval);*/
             //dump($date->format('Y-m-d'));
-            dump($date);
+            //dump($date);
             //dump($maxDate);
 
             //dump($dataFuel);
@@ -459,6 +473,7 @@ class SiteController extends ApplicationController
             //die();
         }
 
+        //dump($precDataGrid['' . $gridId . '']);
         return $this->json([
             //'code'        => 200,
             'EA'              => $EA,

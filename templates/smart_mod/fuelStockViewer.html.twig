@@ -9,7 +9,15 @@
         .x_panel{
             background-color: rgba(250,249,245,0.4);
         }    
-
+        
+        .spin {
+            position: absolute;
+            z-index: 1031;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    
         /* * {box-sizing: border-box;}*/
 
         /* Button used to open the chat form - fixed at the bottom of the page */
@@ -123,9 +131,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">     
-                    <div class="row mt-0 header-title">
+                    <div class="row ">
                         <div class="col-10">
-                            <h4><strong>Fuel </strong>Supply</h4>
+                            <h4 class="mt-0 header-title"><strong>Fuel </strong>Supply</h4>
                         </div>
                         <div class="col-2">
                             <a href="#" onclick="openForm()" class="btn btn-primary btn-sm ml-5" data-toggle="tooltip" data-placement="top" title="Add a new Supply">
@@ -154,7 +162,10 @@
                             
                         </div>
                     </div>
-                    <canvas id="CourbeAppro" height="300"></canvas>            
+                    <canvas id="CourbeAppro" height="300"></canvas>   
+                    <div class="spin d-none">
+                        <div class="spinner-border text-pink" role="status"></div>
+                    </div>         
                 </div><!--end card-body-->
             </div><!--end card-->
 
@@ -166,7 +177,10 @@
             <div class="card">
                 <div class="card-body">            
                     <h4 class="mt-0 header-title">Evolution of Fuel <strong>Stocks</strong></h4>
-                    <canvas id="CourbeStock" height="300"></canvas>            
+                    <canvas id="CourbeStock" height="300"></canvas>  
+                    <div class="spin d-none">
+                        <div class="spinner-border text-pink" role="status"></div>
+                    </div>          
                 </div><!--end card-body-->
             </div><!--end card-->
         </div> <!-- end col -->
@@ -198,7 +212,7 @@
         
     </script>
 
-    <script src="/js/jquery.chartjs.update.js"></script>
+    <script src="/js/jquery.chartjs.init.js"></script>
 
     <script>
         function openForm() {
@@ -272,6 +286,9 @@
             var currentDate = new moment(new Date());
             currentDate = currentDate.format("YYYY-MM-DD");
             console.log( currentDate);
+            $('.spin').removeClass('d-none');
+            $("#CourbeAppro").css({ opacity: 0.2 });
+            $("#CourbeStock").css({ opacity: 0.2 });
 
             $.ajax({
                 type: "POST",/*method type*/
@@ -287,6 +304,9 @@
                     console.log( Object.values( data['CourbeStock']['stock'] ).pop() );
                     var lastFuelStock = Object.values( data['CourbeStock']['stock'] ).pop();
                     //console.log(Object.values(result['IDD']));
+                    $('.spin').addClass('d-none');
+                    $("#CourbeAppro").css({ opacity: 1 });
+                    $("#CourbeStock").css({ opacity: 1 });
                     {% if smartMod.modType == 'FUEL' %}
                         displayNewData(CourbeAppro_Linechart, Object.values(data['CourbeAppro']['date']), Object.values(data['CourbeAppro']['appro']), e.date._d, 1, 'day');
                         displayNewData(CourbeStock_Linechart, Object.values(data['CourbeStock']['date']), Object.values(data['CourbeStock']['stock']), e.date._d, 1, 'day');
