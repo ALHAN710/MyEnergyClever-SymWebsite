@@ -20,6 +20,35 @@
         <link href="/css/metismenu.min.css" rel="stylesheet" type="text/css" />
         <link href="/css/style.css" rel="stylesheet" type="text/css" />
 
+        {#<style>
+            .field-icon {
+                float: right;
+                position: relative;
+                /*z-index: 2;*/
+            }
+            .input-icons i { 
+                position: relative;/* absolute; */ 
+            } 
+            
+            .input-icons { 
+                width: 100%; 
+                margin-bottom: 10px; 
+            } 
+            
+            .icon { 
+                float: right;
+                padding: 10px; 
+                min-width: 40px; 
+                
+            } 
+            
+            .input-field { 
+                width: 100%; 
+                padding: 10px; 
+                text-align: center; 
+            } 
+        </style>#}
+
     </head>
 
     <body class="account-body">
@@ -61,34 +90,53 @@
     
                                 <div class="form-group">
                                     <label for="userpassword">Password</label>
-                                    <div class="input-group mb-3">
+                                    <div class="input-group mb-3 ">
                                         <div class="input-group-prepend">
-                                            <span class="input-group-text" id="basic-addon2"><i class="mdi mdi-key font-16"></i></span>
+                                            <span class="input-group-text" id="basic-addon2">
+                                                <i class="mdi mdi-key font-16"></i>                    
+                                            </span>
                                         </div>
-                                        <input type="password" class="form-control" name="_password" id="userpassword" placeholder="Enter password">
+                            
+                                        {#<i toggle="#password-field" class="fa fa-fw fa-eye-slash field-icon toggle-password icon"></i> #}
+                                        <input type="password" class="form-control input-field" name="_password" id="password-field"  placeholder="Enter password">
+                                        {# <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span> #}
+                                        {#<div class="input-group-append">
+                                            
+                                            <span class="input-group-text">
+                                                <a href="#" class="float-right"><i class="mdi mdi-eye-off-outline font-16"></i></a>
+                                            </span>
+                                            
+                                            
+                                        </div>#}
+                                        {# <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password"></span> #}
                                     </div>                                
                                 </div>
     
                                 <div class="form-group row mt-4">
                                     <div class="col-sm-6">
-                                        <div class="custom-control custom-checkbox">
+                                        {#<div class="custom-control custom-checkbox">
                                             <input type="checkbox" class="custom-control-input" id="customControlInline">
                                             <label class="custom-control-label" for="customControlInline">Remember me</label>
-                                        </div>
+                                        </div>#}
+                                        <span toggle="#password-field" class="fa fa-fw fa-eye-slash toggle-password mr-2"></span><span id="showPwd">Show</span> password
                                     </div>
                                     <div class="col-sm-6 text-right">
-                                        <a href="pages-recoverpw-2.html" class="text-muted font-13"><i class="mdi mdi-lock"></i> Forgot your password?</a>                                    
+                                        <a href="#" class="text-muted font-13"><i class="mdi mdi-lock"></i> Forgot your password?</a>                                    
                                     </div>
                                 </div>
     
                                 <div class="form-group mb-0 row">
-                                    <div class="col-12 mt-2">
-                                        <button class="btn btn-primary btn-block waves-effect waves-light" type="submit">Log In <i class="fas fa-sign-in-alt ml-1"></i></button>
+                                    <div class="col-12 mt-2" id="divBtn">
+                                        <button class="btn btn-primary btn-block waves-effect waves-light disabled" id="LogInBtn" type="submit" >
+                                            <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                                            Log In <i class="fas fa-sign-in-alt ml-1"></i>
+                                            
+                                        </button>
                                     </div>
                                 </div>                            
                             </form>
                         </div>
-                        <!--
+                        {#<!--
                         <div class="account-social text-center">
                             <h6 class="my-4">Or Login With</h6>
                             <ul class="list-inline mb-4">
@@ -114,13 +162,14 @@
                             <p class="font-13">Join <span>Frogetor</span> Now</p>
                             <a href="#" class="btn btn-primary btn-round waves-effect waves-light">Free Resister</a>                
                         </div>
-                           -->                     
+                           -->    #}                 
                     </div>
                 </div>
             </div>
             <div class="col-lg-9 p-0 d-flex justify-content-center">
                 <div class="accountbg d-flex align-items-center"> 
                     <div class="account-title text-white text-center">
+                        {#
                         <!-- <img src="/img/logo-CLETech.png" alt="" height="200" class="logo logo-admin "> -->
                         <!-- <svg class="icon-sprite icon">
                             <use class="glow" fill="url(#radial-glow)" xlink:href="/img/icons-sprite.svg#glow"/> 
@@ -130,7 +179,7 @@
                         <!-- <div class="border w-25 mx-auto border-primary"></div> -->
                         <!-- <h1 class="">My Energy CLEVER make your energy BETTER</h1> -->
                         <!-- <p class="font-14 mt-3">Don't have an account ? <a href="" class="text-primary">Sign up</a></p> -->
-                       
+                       #}
                     </div>
                 </div>
             </div>
@@ -147,6 +196,46 @@
 
         <!-- App js -->
         <script src="/js/app.js"></script>
+
+        <script>
+            $(".toggle-password").click(function() {
+
+                $(this).toggleClass("fa-eye-slash fa-eye");
+                var input = $($(this).attr("toggle"));
+                if (input.attr("type") == "password") {
+                    input.attr("type", "text");
+                    $('#showPwd').html('Hide');
+                } else {
+                    input.attr("type", "password");
+                    $('#showPwd').html('Show');
+                }
+            });
+
+            /*$('input[type="checkbox"]').click(function(){
+                var input = $($(".toggle-password").attr("toggle"));
+                if($(this).prop("checked") == true){
+                    console.log("Checkbox is checked.");
+                    //$(".toggle-password").toggleClass("fa-eye-slash fa-eye");
+                    
+                    if (input.attr("type") == "password") {
+                        input.attr("type", "text");
+                    } 
+                }
+                else if($(this).prop("checked") == false){
+                    console.log("Checkbox is unchecked.");
+                    if(input.attr("type") == "text") {
+                        input.attr("type", "password");
+                    }
+                }
+            });*/
+
+            $('#LogInBtn').click(function(){
+                //block of code that runs when the click event triggers
+                $(this).children('i').addClass('d-none');
+                $(this).children('span').removeClass('d-none');
+                //$('#LogInBtn').prop('disabled', true);
+            });
+        </script>
 
     </body>
 </html>
