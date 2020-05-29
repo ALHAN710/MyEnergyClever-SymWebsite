@@ -24,7 +24,16 @@
         //console.log(nbColGrid);
     </script>
 {% endblock %}
-    
+{% block breadcrumb %}
+    <div class="">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">Site Subscription</li>
+            <li class="breadcrumb-item active">{{site.subscription}}</li>
+            <li class="breadcrumb-item">Power Subscription</li>
+            <li class="breadcrumb-item active">{{site.psous}} kVA</li>
+        </ol>
+    </div>
+{% endblock %}
 {% block body %}
     {% set modGrid = [] %}
     {% set modFuel = [] %}

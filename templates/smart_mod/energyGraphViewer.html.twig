@@ -19,6 +19,14 @@
 {% block pageTitle %}
     <h4 class="page-title mb-2"><i class="mdi mdi-chart-areaspline mr-2"></i>{{smartMod.modName}} Graphs Report</h4> 
 {% endblock %}  
+{% block breadcrumb %}
+    <div class="">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0);">{{smartMod.site.name}}</a></li>
+            <li class="breadcrumb-item active">{{smartMod.modName}}</li>
+        </ol>
+    </div>
+{% endblock %}
 {% set isGrid = 0 %}
     
 {% block body %}  
