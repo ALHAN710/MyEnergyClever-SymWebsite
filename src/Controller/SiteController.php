@@ -168,7 +168,7 @@ class SiteController extends ApplicationController
         //Tableau de données du mois passé
         $precEA       = [];
         $precER       = [];
-        $precCost     = [];
+        //$precCost     = [];
         $precCosphi   = [];
         $precSmax     = [];
         $precSmoy     = [];
