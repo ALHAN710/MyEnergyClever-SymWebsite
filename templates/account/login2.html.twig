@@ -73,7 +73,13 @@
                             </div>  
 
                             {% if hasError %}
-                              <div class="alert alert-danger">An error has occurred, the username or password is invalid</div>
+                              {#<div class="alert alert-danger">An error has occurred, the username or password is invalid</div>#}
+                              <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true"><i class="mdi mdi-close"></i></span>
+                                    </button>
+                                    <strong>An error has occurred, the username or password is invalid</strong> Change a few things up and try submitting again.
+                              </div>
                             {% endif %}                        
                             
                             <form class="form-horizontal my-4" action="{{ path("account_login2") }}" method="POST" >

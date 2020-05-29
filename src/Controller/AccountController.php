@@ -179,7 +179,7 @@ class AccountController extends AbstractController
 
             $this->addFlash(
                 'success',
-                "Les Modifications du profil ont été enregistrées avec succès"
+                "Profile changes have been successfully saved."
             );
         }
 

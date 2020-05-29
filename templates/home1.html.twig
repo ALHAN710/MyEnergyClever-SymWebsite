@@ -69,6 +69,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <div class="page-title-box">
+                            {% block pickDate %}
                             <div class="float-right align-item-center mt-2">
                                 <div >
                                     <div class="form-group ">
@@ -82,6 +83,7 @@
                                     </div>
                                 </div>
                             </div>
+                            {% endblock %}
                                      
                             {% block pageTitle %}
                             <h4 class="page-title mb-2"><i class="mdi mdi-monitor mr-2"></i>Site {{site.name}} Dashboard</h4>  
@@ -105,6 +107,39 @@
                 <!-- Page Content-->
                 <div class="page-content">
                     <div class="container-fluid">
+                        {% for label, messages in app.flashes %}
+                            {#<div class="container mt-3 text-center">
+                                <div class="alert-{{label}} h-25"> 
+                                    <div class="col-2">
+                                        <i class="fas fa-check fa-2x pull-left py-1"></i>
+                                    </div>
+                                    <div class="col-10">
+                                        {% for message in messages %}
+                                            <p style="font-size: 25px;">{{ message | raw }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>#}
+                            <div class="alert icon-custom-alert alert-outline-success alert-success-shadow alert-dismissible fade show" role="alert">
+                                <i class="mdi mdi-check-all alert-icon"></i>
+                                <div class="alert-text">
+                                    {% for message in messages %}
+                                        <strong>{{ message | raw }}</strong>.
+                                    {% endfor %}
+                                </div>    
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true"><i class="mdi mdi-close"></i></span>
+                                </button>                                        
+                            </div>
+                            {#<div class="alert alert-outline-warning alert-warning-shadow mb-0 alert-dismissible fade show" role="alert">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true"><i class="mdi mdi-close"></i></span>
+                                </button>
+                                <strong>Oh snap!</strong> Change a few things up and try submitting again.
+                            </div>   #}                                      
+                                    
+
+                        {% endfor %}
                         {% block body %} 
                         <div class="row">
                             <div class="col-lg-4">
@@ -625,7 +660,7 @@
         -->
         <script src="/plugins/moment/moment.js"></script>
         
-        <!-- <script src="/vendors/moment/min/moment.min.js"></script> -->
+        {#<!-- <script src="/vendors/moment/min/moment.min.js"></script> -->
 
         <!--
         <script src="/plugins/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
@@ -638,6 +673,7 @@
         <script src="https://apexcharts.com/samples/assets/ohlc.js"></script> 
         <script src="/pages/jquery.dashboard.init.js"></script> 
         -->
+        #}
 
         <!--  bootstrap-datetimepicker -->
         <script src="/js/bootstrap-datetimepicker.min.js"></script>
