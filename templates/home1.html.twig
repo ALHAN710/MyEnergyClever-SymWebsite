@@ -688,6 +688,8 @@
             $('#datetimepicker10').datetimepicker({
                 viewMode: 'years',
                 {% block datetimeFormat %} format: 'DD/MM/YYYY', {% endblock %}
+                minDate: "01-01-2020 00:00:00",
+                //startDate: new Date("01-01-2020 00:00:00"),
                 defaultDate: moment(),
                 
             });
