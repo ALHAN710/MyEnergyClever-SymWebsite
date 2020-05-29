@@ -214,8 +214,8 @@
                     scales: {
                         xAxes: [
                             {
-                                barPercentage: 0.8,
-                                categoryPercentage: 0.4,
+                                barPercentage: 1,
+                                categoryPercentage: 0.65,
                                 display: true,
                                 type: 'time',
                                 time: {
@@ -255,25 +255,25 @@
                     datasets: [{
                         type: 'bar',
                         yAxisID: 'B',//any with same group will appear in the same axis, also this can be anything as long as you always refer to it with the same name
-                        label: "Working Time",
-                        backgroundColor: "rgb(252, 184, 183, 0.8)",//"rgba(135, 197, 255, 0.31)",//38, 185, 154,
+                        label: "Operating Time",
+                        backgroundColor: "rgba(230, 22, 78, 0.8)",//"rgb(252, 184, 183, 0.8)",//"rgba(135, 197, 255, 0.31)",//38, 185, 154,
                         fill: false,
                         data: [],
                     }, {
                         type: 'line',
                         yAxisID: 'L',//any with same group will appear in the same axis, also this can be anything as long as you always refer to it with the same name
-                        label: "Conso carburant",
-                        backgroundColor: "rgb(255, 255, 255, 0.0)",//"rgba(55, 159, 255, 0.3)",
-                        borderColor: "rgba(58, 169, 244, 0.8)",//"rgba(163, 199, 231, 255)",
-                        borderWidth: 1,
-                        pointBorderColor: "rgba(58, 169, 244, 0.8)",//"rgba(163, 199, 231, 255)",
-                        pointBackgroundColor: "rgba(58, 169, 244, 0.8)",//"rgba(163, 199, 231, 255)",
+                        label: "Fuel Consumption",
+                        fill: false,
+                        backgroundColor: "rgba(55, 159, 255, 0.3)",
+                        borderColor: "rgba(58, 169, 244, 255)",//"rgba(163, 199, 231, 255)",
+                        borderWidth: 2,
+                        pointBorderColor: "rgba(58, 169, 244, 255)",//"rgba(163, 199, 231, 255)",
+                        pointBackgroundColor: "rgba(58, 169, 244, 255)",//"rgba(163, 199, 231, 255)",
                         pointHoverBackgroundColor: "#fff",
                         pointHoverBorderColor: "rgba(55, 159, 255,1)",//151,187,205,
-                        pointBorderWidth: 1,
-                        pointRadius: 1.5,
+                        //pointBorderWidth: 0,
+                        pointRadius: 2.5,
                         pointStyle: 'circle',
-                        fill: false,
                         data: [],
                     }],
 
@@ -319,7 +319,7 @@
                             display: true,
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Temps de fonctionnement(mins)'
+                                labelString: 'Operating Time(mins)'
                             },
                             gridLines: {
                                 display: false,
@@ -339,7 +339,7 @@
                             },
                             scaleLabel: {
                                 display: true,
-                                labelString: 'Conso carburant(Litre)'
+                                labelString: 'Fuel Consumption (Liter)'
                             },
 
                         }]
@@ -354,7 +354,7 @@
                         }
                     }
                 };
-                this.respChart($("#CourbeCroisé"), Obj, 'Bar', barChart, barOpts);
+                this.respChart($("#CourbeCroisé"), Obj, 'Bar', lineChart, lineOpts);
                 CourbeCroisé_BarLinechart = Obj.chart;
 
                 //creating linechart
