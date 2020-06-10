@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -61,9 +60,7 @@
                         
                         <div class="px-3">
                             <div class="media">
-                                <a href="index.html" class="logo logo-admin"><img src="/img/logo-CLETech.png" height="200" alt="logo" class="my-0"></a>
-                                
-                                
+                                <a href="#" class="logo logo-admin"><img src="/img/logo-CLETech.png" height="200" alt="logo" class="my-0"></a> 
                             </div> 
                             <div class="text-center">                                                                                                                       
                                 <h6 class="text-muted mt-0 mb-3">Welcome to My Energy CLEVER Portal</h6>
@@ -80,7 +77,22 @@
                                     </button>
                                     <strong>An error has occurred, the username or password is invalid</strong> Change a few things up and try submitting again.
                               </div>
-                            {% endif %}                        
+                            {% endif %}     
+
+                             {% for label, messages in app.flashes %}
+                                <div class="alert icon-custom-alert alert-outline-{{label}} alert-{{label}}-shadow alert-dismissible fade show" role="alert">
+                                    {% if label == 'success' %}<i class="mdi mdi-check-all alert-icon"></i>{% endif %}
+                                    <div class="alert-text">
+                                        {% for message in messages %}
+                                            <strong>{{ message | raw }}</strong>.
+                                        {% endfor %}
+                                    </div>    
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true"><i class="mdi mdi-close"></i></span>
+                                    </button>                                        
+                                </div>
+                                
+                            {% endfor %}                   
                             
                             <form class="form-horizontal my-4" action="{{ path("account_login2") }}" method="POST" >
     
@@ -127,13 +139,13 @@
                                         <span toggle="#password-field" class="fa fa-fw fa-eye-slash toggle-password mr-2"></span><span id="showPwd">Show</span> password
                                     </div>
                                     <div class="col-sm-6 text-right">
-                                        <a href="#" class="text-muted font-13"><i class="mdi mdi-lock"></i> Forgot your password?</a>                                    
+                                        <a href="{{path('account_recoverpw')}}" class="text-muted font-13"><i class="mdi mdi-lock"></i> Forgot your password?</a>                                    
                                     </div>
                                 </div>
     
                                 <div class="form-group mb-0 row">
                                     <div class="col-12 mt-2" id="divBtn">
-                                        <button class="btn btn-primary btn-block waves-effect waves-light disabled" id="LogInBtn" type="submit" >
+                                        <button class="btn btn-primary btn-block waves-effect waves-light " id="LogInBtn" type="submit" >
                                             <span class="spinner-border spinner-border-sm mr-1 d-none" role="status" aria-hidden="true"></span>
                                             Log In <i class="fas fa-sign-in-alt ml-1"></i>
                                             

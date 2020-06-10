@@ -121,8 +121,8 @@
                                     </div>
                                 </div>
                             </div>#}
-                            <div class="alert icon-custom-alert alert-outline-success alert-success-shadow alert-dismissible fade show" role="alert">
-                                <i class="mdi mdi-check-all alert-icon"></i>
+                            <div class="alert icon-custom-alert alert-outline-{{label}} alert-{{label}}-shadow alert-dismissible fade show" role="alert">
+                                {% if label == 'success' %}<i class="mdi mdi-check-all alert-icon"></i>{% endif %}
                                 <div class="alert-text">
                                     {% for message in messages %}
                                         <strong>{{ message | raw }}</strong>.
@@ -685,16 +685,14 @@
 
         <script type="text/javascript">
             $(function () {
-            $('#datetimepicker10').datetimepicker({
-                viewMode: 'years',
-                {% block datetimeFormat %} format: 'DD/MM/YYYY', {% endblock %}
-                minDate: "01-01-2020 00:00:00",
-                //startDate: new Date("01-01-2020 00:00:00"),
-                defaultDate: moment(),
-                
-            });
-
-            
+                $('#datetimepicker10').datetimepicker({
+                    viewMode: 'years',
+                    {% block datetimeFormat %} format: 'DD/MM/YYYY', {% endblock %}
+                    minDate: moment("01-01-2020", "DD/MM/YYYY"),//"01-01-2020",
+                    //startDate: new Date("01-01-2020 00:00:00"),
+                    defaultDate: moment(),
+                    
+                });
             });
         </script>
 
@@ -702,6 +700,14 @@
 
         <!-- App js -->
         <script src="/js/app.js"></script>
+
+        <script>
+            $('#notif').click(function(){
+                //block of code that runs when the click event triggers
+                $(this).children('span').addClass('d-none');
+                
+            });        
+        </script>
 
     </body>
 </html>

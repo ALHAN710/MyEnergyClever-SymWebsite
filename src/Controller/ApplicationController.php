@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Component\Mime\Email;
 use phpDocumentor\Reflection\Types\Boolean;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -71,5 +72,32 @@ class ApplicationController extends AbstractController
         }
 
         return  $paramJSON;
+    }
+    /**
+     * Permet d'envoyer les emails
+     *
+     * @param [MailerInterface] $mailer
+     * @param [string] $addressMail
+     * @param  $object
+     * @param [string] $mess
+     * @return void
+     */
+    public function sendEmail($mailer, $addressMail, $object, $mess)
+    {
+        $email = (new Email())
+            ->from('donotreply@portal-myenergyclever.com')
+            ->to($addressMail)
+            //->addTo('cabrelmbakam@gmail.com')
+            //->cc('cabrelmbakam@gmail.com')
+            //->bcc('bcc@example.com')
+            //->replyTo('fabien@example.com')
+            //->priority(Email::PRIORITY_HIGH)
+            ->subject($object)
+            ->text($mess);
+        //->html('<p>See Twig integration for better HTML integration!</p>');
+
+        $mailer->send($email);
+
+        // ...
     }
 }

@@ -68,6 +68,9 @@ class AccueilController extends AbstractController
                 'site'  => $user->getSites()[0],
 
             ]);*/
+            if ($user->getRoles()[0] === 'ROLE_ADMIN') {
+                return $this->redirectToRoute('admin_dashboard');
+            }
             return $this->redirectToRoute('sites_show', [
                 'slug' => $user->getSites()[0]->getSlug()
             ]);
