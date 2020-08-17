@@ -362,6 +362,26 @@ class DataMod
      */
     private $iddmoy;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $fpmna;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $fpmnb;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $fpmnc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $fpmn3ph;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1191,6 +1211,54 @@ class DataMod
     public function setIddmoy(?float $iddmoy): self
     {
         $this->iddmoy = $iddmoy;
+
+        return $this;
+    }
+
+    public function getFpmna(): ?float
+    {
+        return $this->fpmna;
+    }
+
+    public function setFpmna(?float $fpmna): self
+    {
+        $this->fpmna = $fpmna;
+
+        return $this;
+    }
+
+    public function getFpmnb(): ?float
+    {
+        return $this->fpmnb;
+    }
+
+    public function setFpmnb(?float $fpmnb): self
+    {
+        $this->fpmnb = $fpmnb;
+
+        return $this;
+    }
+
+    public function getFpmnc(): ?float
+    {
+        return $this->fpmnc;
+    }
+
+    public function setFpmnc(?float $fpmnc): self
+    {
+        $this->fpmnc = $fpmnc;
+
+        return $this;
+    }
+
+    public function getFpmn3ph(): ?float
+    {
+        return $this->fpmn3ph;
+    }
+
+    public function setFpmn3ph(?float $fpmn3ph): self
+    {
+        $this->fpmn3ph = $fpmn3ph;
 
         return $this;
     }
