@@ -382,6 +382,21 @@ class DataMod
      */
     private $fpmn3ph;
 
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $vab;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $vbc;
+
+    /**
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $vca;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1259,6 +1274,42 @@ class DataMod
     public function setFpmn3ph(?float $fpmn3ph): self
     {
         $this->fpmn3ph = $fpmn3ph;
+
+        return $this;
+    }
+
+    public function getVab(): ?float
+    {
+        return $this->vab;
+    }
+
+    public function setVab(?float $vab): self
+    {
+        $this->vab = $vab;
+
+        return $this;
+    }
+
+    public function getVbc(): ?float
+    {
+        return $this->vbc;
+    }
+
+    public function setVbc(?float $vbc): self
+    {
+        $this->vbc = $vbc;
+
+        return $this;
+    }
+
+    public function getVca(): ?float
+    {
+        return $this->vca;
+    }
+
+    public function setVca(?float $vca): self
+    {
+        $this->vca = $vca;
 
         return $this;
     }
