@@ -218,7 +218,7 @@ class DataMod
     private $qmoy3ph;
 
     /**
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $cosmin3ph;
 
